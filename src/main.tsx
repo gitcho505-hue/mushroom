@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Site } from './site';
 import './styles.css';
+import './readability.css';
 
 const app = <React.StrictMode><BrowserRouter><Site /></BrowserRouter></React.StrictMode>;
 const root = document.getElementById('root')!;

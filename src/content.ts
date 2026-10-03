@@ -1,5 +1,5 @@
-export const locales = ['bg', 'en', 'it'] as const;
-export type Locale = (typeof locales)[number];
+import { extraCopy, locales, pageSlugs, type Locale } from './i18n';
+export { languageMeta, locales, type Locale } from './i18n';
 
 export type PageKey =
   | 'home'
@@ -17,13 +17,7 @@ export type PageKey =
   | `truffle:${string}`
   | `article:${string}`;
 
-export const languageMeta: Record<Locale, { label: string; flag: string; hreflang: string }> = {
-  bg: { label: 'Български', flag: '🇧🇬', hreflang: 'bg-BG' },
-  en: { label: 'English', flag: '🇬🇧', hreflang: 'en' },
-  it: { label: 'Italiano', flag: '🇮🇹', hreflang: 'it-IT' },
-};
-
-export const copy = {
+const baseCopy = {
   bg: {
     nav: { home: 'Начало', products: 'Продукти', truffles: 'Трюфели', wholesale: 'За ресторанти', about: 'За нас', blog: 'Журнал', contact: 'Контакт' },
     cta: 'B2B запитване',
@@ -212,6 +206,7 @@ export const copy = {
   },
 } as const;
 
+export const copy = { ...baseCopy, ...extraCopy } as const;
 export type Copy = (typeof copy)[Locale];
 
 type LocalizedPage = { slug: string; title: string; description: string; body: string };
@@ -238,6 +233,18 @@ export const truffles: Record<Locale, Record<TruffleId, LocalizedPage & { season
     'summer-truffle': { slug: 'tartufo-estivo', title: 'Tartufo estivo', description: 'Più delicato, con note di nocciola e bosco fresco: ideale nei mesi più caldi.', body: 'Il tartufo estivo ha una stagione più lunga e un sapore gentile. A lamelle sottili oppure in un burro aromatico, è un ottimo primo incontro con il mondo dei tartufi.', season: 'Tarda primavera · estate', image: 'summer-truffle', note: 'Carattere gentile e nocciolato' },
     'burgundy-truffle': { slug: 'tartufo-di-borgogna', title: 'Tartufo di Borgogna', description: 'Un elegante tartufo autunnale, dal profumo di nocciola e carattere equilibrato.', body: 'Il tartufo di Borgogna, detto anche tartufo nero autunnale, ha un aroma riconoscibile e una grande versatilità. Si abbina a risotti, patate, selvaggina e formaggi aromatici.', season: 'Fine estate · autunno', image: 'burgundy-truffle', note: 'Equilibrato e avvolgente' },
   },
+  fr: {
+    'black-truffle': { slug: 'truffe-noire', title: 'Truffe noire', description: 'Profonde et terreuse, la truffe noire évoque la forêt, la noisette et les sous-bois.', body: 'La truffe noire révèle toute sa complexité avec une chaleur douce. Râpée sur des pâtes fraîches, des œufs ou des légumes de saison, elle apporte de la profondeur sans masquer le plat.', season: 'Automne · hiver', image: 'black-truffle', note: 'Arôme profond, douceur délicate' },
+    'white-truffle': { slug: 'truffe-blanche', title: 'Truffe blanche', description: 'Rare et délicate, elle exprime pleinement son parfum sans cuisson.', body: 'La truffe blanche se sert crue, en fines lamelles au dernier moment. Son parfum délicat accompagne les plats chauds et simples qui lui laissent toute sa place.', season: 'Automne · début d’hiver', image: 'white-truffle', note: 'Parfum fin, à servir cru' },
+    'summer-truffle': { slug: 'truffe-d-ete', title: 'Truffe d’été', description: 'Plus douce, aux notes de noisette et de terre fraîche, elle accompagne les beaux jours.', body: 'La truffe d’été bénéficie d’une saison plus longue et d’un goût délicat. En fines lamelles ou mêlée au beurre, elle est une belle introduction à l’univers des truffes.', season: 'Fin du printemps · été', image: 'summer-truffle', note: 'Caractère doux et gourmand' },
+    'burgundy-truffle': { slug: 'truffe-de-bourgogne', title: 'Truffe de Bourgogne', description: 'Une truffe d’automne élégante, aux notes de noisette et à l’équilibre subtil.', body: 'La truffe de Bourgogne, aussi appelée truffe de la Saint-Jean, offre un parfum net et une belle polyvalence. Elle accompagne risottos, pommes de terre, gibier et fromages affinés.', season: 'Fin d’été · automne', image: 'burgundy-truffle', note: 'Équilibre fin, notes chaleureuses' },
+  },
+  de: {
+    'black-truffle': { slug: 'schwarze-trueffel', title: 'Schwarze Trüffel', description: 'Erdig und vielschichtig, mit Noten von Waldboden, Haselnuss und Wärme.', body: 'Bei sanfter Wärme entfaltet die schwarze Trüffel ihr vielschichtiges Aroma. Fein gehobelt über frischer Pasta, Ei oder saisonalem Gemüse bringt sie Tiefe, ohne den Eigengeschmack des Gerichts zu überdecken.', season: 'Herbst · Winter', image: 'black-truffle', note: 'Kräftiges Aroma, feine Süße' },
+    'white-truffle': { slug: 'weisse-trueffel', title: 'Weiße Trüffel', description: 'Selten und fein im Aroma; am besten ohne Hitze serviert.', body: 'Weiße Trüffel wird roh und erst kurz vor dem Servieren in feinen Scheiben gehobelt. Ihr Duft passt zu warmen, schlichten Gerichten, die dem Produkt Raum lassen.', season: 'Herbst · Frühwinter', image: 'white-truffle', note: 'Feines Aroma, roh serviert' },
+    'summer-truffle': { slug: 'sommertrueffel', title: 'Sommertrüffel', description: 'Milder mit nussigen Noten und frischem Waldboden, ideal für die warme Jahreszeit.', body: 'Sommertrüffel hat eine längere Saison und ein zurückhaltenderes Aroma als Winterarten. Fein gehobelt oder in Butter und Saucen entfaltet sie ihren eigenen, sanften Charakter.', season: 'Spätfrühling · Sommer', image: 'summer-truffle', note: 'Mild und nussig' },
+    'burgundy-truffle': { slug: 'burgundertrueffel', title: 'Burgundertrüffel', description: 'Eine elegante Herbsttrüffel mit nussigem Duft und ausgewogenem Charakter.', body: 'Die Burgundertrüffel, auch Herbsttrüffel genannt, ist aromatisch und vielseitig. Sie passt zu Risotto, Kartoffeln, Wild und würzigem Käse.', season: 'Spätsommer · Herbst', image: 'burgundy-truffle', note: 'Ausgewogen mit warmen Noten' },
+  },
 };
 
 export const articles: Record<Locale, Record<string, LocalizedPage & { date: string; image: string; paragraphs: string[] }>> = {
@@ -256,6 +263,16 @@ export const articles: Record<Locale, Record<string, LocalizedPage & { date: str
     'black-and-white': { slug: 'tartufo-nero-e-bianco', title: 'Tartufo nero e bianco: qual è la differenza?', description: 'Due tartufi pregiati, profumi distinti e modi diversi di servirli.', body: 'Due caratteri, entrambi stagionali', date: '03 ott 2025', image: 'photo-1551183053-bf91a1d81141', paragraphs: ['La differenza tra tartufo nero e bianco non è solo nel colore. Profumo, stagione e utilizzo in cucina contano nella scelta.', 'Il tartufo nero si presta a un calore delicato e regala profondità a pasta e salse. Il bianco è più delicato e si serve di solito crudo, a lamelle su un piatto caldo.', 'Non esiste una scelta migliore in assoluto: stagione, freschezza e ricetta sono le guide più utili.'] },
     'balkan-truffles': { slug: 'tartufi-dei-balcani', title: 'I tartufi dei Balcani', description: 'Territori diversi, boschi antichi e un lavoro attento nel cuore della natura.', body: 'Un sapore che nasce dal territorio', date: '21 ott 2025', image: 'photo-1448375240586-882707db888b', paragraphs: ['La penisola balcanica unisce terreni calcarei, boschi diversi e condizioni climatiche che cambiano dalla valle alla montagna.', 'I tartufi crescono in simbiosi naturale con alcune specie arboree. Per trovarli servono conoscenza del territorio, stagione giusta e un cane addestrato.', 'La storia di ogni tartufo comincia dal terreno. Provenienza chiara e selezione attenta aiutano lo chef a scegliere l’ingrediente giusto per il menu e il momento.'] },
   },
+  fr: {
+    storage: { slug: 'conserver-truffes-fraiches', title: 'Comment conserver les truffes fraîches', description: 'La fraîcheur fait partie du caractère de la truffe. Voici comment préserver son parfum chez vous.', body: 'Quelques gestes pour préserver le parfum', date: '12 sept. 2025', image: 'summer-truffle', paragraphs: ['La truffe fraîche se conserve peu de temps : son parfum est le plus expressif juste après la récolte. À la maison, placez-la au réfrigérateur dans un petit récipient en verre fermé.', 'Posez-la sur du papier absorbant propre et changez-le chaque jour pour limiter l’humidité. Ne la lavez pas à l’avance ; brossez-la délicatement juste avant de la préparer.', 'Le meilleur conseil est simple : dégustez-la rapidement. Quelques lamelles sur des pâtes chaudes ou des œufs suffisent à la mettre en valeur.'] },
+    'black-and-white': { slug: 'truffe-noire-ou-blanche', title: 'Truffe noire ou blanche : quelles différences ?', description: 'Deux variétés recherchées, des parfums et des usages bien distincts.', body: 'Deux variétés, deux façons de les servir', date: '3 oct. 2025', image: 'black-truffle', paragraphs: ['La différence entre truffe noire et truffe blanche ne tient pas seulement à la couleur. Le parfum, la saison et la préparation comptent aussi.', 'La truffe noire supporte une chaleur douce et apporte de la profondeur aux pâtes et aux sauces. Plus délicate, la truffe blanche est généralement servie crue, en fines lamelles.', 'Il n’existe pas de meilleur choix dans l’absolu : la saison, la fraîcheur et le plat guident la sélection.'] },
+    'balkan-truffles': { slug: 'truffes-des-balkans', title: 'Les truffes des Balkans', description: 'Des terroirs variés, des forêts anciennes et un savoir-faire proche de la nature.', body: 'Un goût façonné par le lieu', date: '21 oct. 2025', image: 'photo-1448375240586-882707db888b', paragraphs: ['La péninsule balkanique réunit sols calcaires, forêts diverses et climats qui changent d’une vallée à l’autre.', 'Les truffes vivent en symbiose naturelle avec certains arbres. Leur recherche demande une bonne connaissance du terrain, la bonne saison et un chien dressé.', 'L’histoire de chaque truffe commence dans son sol. Une origine claire et une sélection attentive aident les chefs à choisir le bon produit pour leur menu.'] },
+  },
+  de: {
+    storage: { slug: 'frische-trueffel-aufbewahren', title: 'Frische Trüffel richtig aufbewahren', description: 'Frische gehört zum Charakter der Trüffel. So bleibt ihr Aroma zu Hause möglichst lange erhalten.', body: 'So bleibt das Aroma erhalten', date: '12. Sep. 2025', image: 'summer-truffle', paragraphs: ['Frische Trüffel sind nur kurz haltbar; ihr Aroma ist direkt nach der Ernte am ausgeprägtesten. Zu Hause lagern Sie die Trüffel im Kühlschrank in einem kleinen, geschlossenen Glasbehälter.', 'Legen Sie sie auf sauberes Küchenpapier und wechseln Sie dieses täglich, damit sich keine Feuchtigkeit staut. Waschen Sie die Trüffel nicht vorab, sondern bürsten Sie sie erst unmittelbar vor der Verwendung vorsichtig ab.', 'Am besten genießen Sie sie bald. Fein über warme Pasta oder Ei gehobelt, braucht frische Trüffel nur wenig Vorbereitung.'] },
+    'black-and-white': { slug: 'schwarze-oder-weisse-trueffel', title: 'Schwarze oder weiße Trüffel: der Unterschied', description: 'Zwei begehrte Sorten mit unterschiedlichem Aroma und Einsatz in der Küche.', body: 'Zwei Sorten, zwei Arten des Genießens', date: '3. Okt. 2025', image: 'black-truffle', paragraphs: ['Schwarze und weiße Trüffel unterscheiden sich nicht nur in der Farbe. Aroma, Saison und Zubereitung sind ebenfalls verschieden.', 'Schwarze Trüffel entfaltet ihr erdiges Aroma auch bei sanfter Wärme und passt zu Pasta und Saucen. Die feinere weiße Trüffel wird meist roh über warme Gerichte gehobelt.', 'Die passende Wahl hängt von Erntezeit, Frische und dem Gericht ab, das Sie servieren möchten.'] },
+    'balkan-truffles': { slug: 'trueffel-vom-balkan', title: 'Trüffel vom Balkan', description: 'Vielfältige Böden, alte Wälder und sorgfältige Arbeit im Einklang mit der Natur.', body: 'Aroma, geprägt von seiner Herkunft', date: '21. Okt. 2025', image: 'photo-1448375240586-882707db888b', paragraphs: ['Die Balkanhalbinsel vereint kalkhaltige Böden, unterschiedliche Waldlandschaften und ein Klima, das sich von Tal zu Tal verändert.', 'Trüffel wachsen in natürlicher Partnerschaft mit bestimmten Baumarten. Ihre Suche verlangt Ortskenntnis, den richtigen Zeitpunkt und einen ausgebildeten Hund.', 'Die Geschichte jeder Trüffel beginnt im Boden. Eine nachvollziehbare Herkunft und sorgfältige Auswahl helfen Küchen, passend zur Saison einzukaufen.'] },
+  },
 };
 
 const staticKeys: PageKey[] = ['home', 'products', 'wholesale', 'about', 'truffles', 'blog', 'contact', 'faq', 'privacy', 'terms', 'cookies'];
@@ -267,9 +284,9 @@ export function allPageKeys(): PageKey[] {
 export function pathFor(locale: Locale, key: PageKey): string {
   if (key === 'home') return `/${locale}/`;
   const [group, id] = key.split(':');
-  if (group === 'product' || group === 'truffle') return `/${locale}/${group === 'product' ? 'products' : 'truffles'}/${truffles[locale][id as TruffleId].slug}`;
-  if (group === 'article') return `/${locale}/blog/${articles[locale][id].slug}`;
-  return `/${locale}/${key}`;
+  if (group === 'product' || group === 'truffle') return `/${locale}/${group === 'product' ? pageSlugs[locale].products : pageSlugs[locale].truffles}/${truffles[locale][id as TruffleId].slug}`;
+  if (group === 'article') return `/${locale}/${pageSlugs[locale].blog}/${articles[locale][id].slug}`;
+  return `/${locale}/${pageSlugs[locale][key] ?? key}`;
 }
 
 export function keyForPath(pathname: string): { locale: Locale; key: PageKey } | null {
@@ -293,12 +310,19 @@ export function titleFor(key: PageKey, locale: Locale): string {
   const t = copy[locale];
   const product = truffleFor(key, locale);
   const article = articleFor(key, locale);
+  const legalTitles = {
+    bg: { privacy: 'Поверителност', terms: 'Общи условия', cookies: 'Бисквитки' },
+    en: { privacy: 'Privacy policy', terms: 'Terms & conditions', cookies: 'Cookie policy' },
+    it: { privacy: 'Privacy', terms: 'Termini e condizioni', cookies: 'Cookie' },
+    fr: { privacy: 'Confidentialité', terms: 'Conditions générales', cookies: 'Cookies' },
+    de: { privacy: 'Datenschutz', terms: 'AGB', cookies: 'Cookies' },
+  } satisfies Record<Locale, Record<'privacy' | 'terms' | 'cookies', string>>;
   if (product) return product.title;
   if (article) return article.title;
   const titles: Record<string, string> = {
     home: 'Wild Balkan truffles', products: t.productsTitle, wholesale: t.wholesaleTitle, about: t.aboutTitle,
     truffles: t.trufflesTitle, blog: t.blogTitle, contact: t.contactTitle,
-    faq: t.faqPageTitle, privacy: 'Privacy', terms: 'Terms', cookies: 'Cookies',
+    faq: t.faqPageTitle, privacy: legalTitles[locale].privacy, terms: legalTitles[locale].terms, cookies: legalTitles[locale].cookies,
   };
   return titles[key] ?? t.heroTitle;
 }
