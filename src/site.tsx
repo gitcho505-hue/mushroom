@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Check, ChevronDown, Compass, Globe, Leaf, Menu, MoveUpRight, ShieldCheck, Sparkles, X } from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, Compass, Leaf, Menu, MoveUpRight, ShieldCheck, Sparkles, X } from 'lucide-react';
 import { articles, copy, imageUrl, keyForPath, languageMeta, locales, pathFor, titleFor, truffleFor, truffleIds, type Copy, type Locale, type PageKey } from './content';
 import { localeUi } from './i18n';
 import { renderHead } from './seo';
@@ -58,7 +58,7 @@ function Layout({ locale, pageKey, t, children }: { locale: Locale; pageKey: Pag
       </Link>
       <button className="icon-button mobile-menu-toggle" aria-label={menuOpen ? localeUi[locale].menuClose : localeUi[locale].menuOpen} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
       <nav className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label={localeUi[locale].navigation}>
-        {(['products', 'wholesale', 'truffles'] as const).map((item) => <Link key={item} to={pathFor(locale, item)} aria-current={pageKey === item ? 'page' : undefined}>{t.nav[item]}</Link>)}
+        {(['home', 'products', 'wholesale', 'truffles', 'about', 'blog', 'contact'] as const).map((item) => <Link key={item} to={pathFor(locale, item)} aria-current={pageKey === item ? 'page' : undefined}>{t.nav[item]}</Link>)}
         <div className="mobile-nav-tools"><LanguagePicker locale={locale} pageKey={pageKey} compact /><Link className="button button-gold" to={pathFor(locale, 'wholesale')}>{t.cta} <ArrowUpRight size={15} /></Link></div>
       </nav>
       <div className="header-tools"><LanguagePicker locale={locale} pageKey={pageKey} /><Link className="button button-gold header-cta" to={pathFor(locale, 'wholesale')}>{t.cta} <ArrowUpRight size={15} /></Link></div>
@@ -71,8 +71,8 @@ function Layout({ locale, pageKey, t, children }: { locale: Locale; pageKey: Pag
 function LanguagePicker({ locale, pageKey, compact = false }: { locale: Locale; pageKey: PageKey; compact?: boolean }) {
   const [open, setOpen] = useState(false);
   return <div className={`language-picker ${compact ? 'language-picker-compact' : ''}`}>
-    <button className="language-trigger" aria-expanded={open} aria-label={`${languageMeta[locale].label}: ${localeUi[locale].chooseLanguage}`} onClick={() => setOpen(!open)}><Globe size={16} /><ChevronDown size={13} /></button>
-    {open && <div className="language-menu">{locales.map((option) => <Link key={option} to={pathFor(option, pageKey)} lang={option} hrefLang={languageMeta[option].hreflang} aria-current={option === locale ? 'page' : undefined}><span>{languageMeta[option].flag}</span> {option.toUpperCase()} <small>{languageMeta[option].label}</small></Link>)}</div>}
+    <button className="language-trigger" aria-expanded={open} aria-label={`${languageMeta[locale].label}: ${localeUi[locale].chooseLanguage}`} onClick={() => setOpen(!open)}><span className="language-code">{locale.toUpperCase()}</span><ChevronDown size={13} /></button>
+    {open && <div className="language-menu">{locales.map((option) => <Link key={option} to={pathFor(option, pageKey)} lang={option} hrefLang={languageMeta[option].hreflang} aria-current={option === locale ? 'page' : undefined}>{languageMeta[option].label}</Link>)}</div>}
   </div>;
 }
 
@@ -82,7 +82,7 @@ function Footer({ locale, t }: { locale: Locale; t: Copy }) {
       <div className="footer-brand"><Link className="brand brand-light" to={pathFor(locale, 'home')}><img src="/images/brand-logo.png" width="50" height="50" alt="" /><span><strong>TRUFFLE</strong><small>B A L K A N S</small></span></Link><p>{t.footerText}</p><a className="social-link" href="https://www.instagram.com/" aria-label="Instagram"><MoveUpRight size={16} /> Instagram</a></div>
       <div className="footer-column"><h2>{t.navMore}</h2>{(['products', 'wholesale', 'truffles', 'about', 'blog'] as const).map((item) => <Link key={item} to={pathFor(locale, item)}>{t.nav[item]}</Link>)}</div>
       <div className="footer-column"><h2>{t.nav.contact}</h2><Link to={pathFor(locale, 'contact')}>{t.nav.contact}</Link><Link to={pathFor(locale, 'faq')}>{t.faqTitle}</Link><p>{t.contactNote}</p></div>
-      <div className="footer-column"><h2>{localeUi[locale].legal}</h2><Link to={pathFor(locale, 'privacy')}>{localeUi[locale].privacy}</Link><Link to={pathFor(locale, 'terms')}>{localeUi[locale].terms}</Link><Link to={pathFor(locale, 'cookies')}>{localeUi[locale].cookies}</Link><div className="footer-languages">{locales.map((lang) => <Link key={lang} to={pathFor(lang, 'home')}>{languageMeta[lang].flag} {lang.toUpperCase()}</Link>)}</div></div>
+      <div className="footer-column"><h2>{localeUi[locale].legal}</h2><Link to={pathFor(locale, 'privacy')}>{localeUi[locale].privacy}</Link><Link to={pathFor(locale, 'terms')}>{localeUi[locale].terms}</Link><Link to={pathFor(locale, 'cookies')}>{localeUi[locale].cookies}</Link><div className="footer-languages">{locales.map((lang) => <Link key={lang} to={pathFor(lang, 'home')}>{lang.toUpperCase()}</Link>)}</div></div>
     </div>
     <details className="image-credits"><summary>{t.imageCredits}</summary><div><a href="https://commons.wikimedia.org/wiki/File:Diamant_noir_Tuber_melanosporum.jpg" target="_blank" rel="noreferrer">Black truffle · sgillies · CC BY-SA 2.0</a><a href="https://commons.wikimedia.org/wiki/File:Tuber_Magnatum_Pico.jpg" target="_blank" rel="noreferrer">White truffle · Lucarelli · Public domain</a><a href="https://commons.wikimedia.org/wiki/File:Black.summer.truffle.arp.jpg" target="_blank" rel="noreferrer">Summer truffle · Adrian Pingstone · Public domain</a><a href="https://commons.wikimedia.org/wiki/File:Truffes_de_Bourgogne_-_Tuber_uncinatum.JPG" target="_blank" rel="noreferrer">Burgundy truffle · Arnaud 25 · CC BY-SA 3.0</a><a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noreferrer">CC BY-SA 2.0</a><a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noreferrer">CC BY-SA 3.0</a></div></details>
     <div className="footer-bottom"><span>© {new Date().getFullYear()} Truffle Balkans</span><span>Wild by nature. Balkan by origin.</span></div>
@@ -119,11 +119,7 @@ function Home({ locale, t }: { locale: Locale; t: Copy }) {
       <div className="hero-copy"><p className="eyebrow"><span />{t.heroEyebrow}</p><h1>{t.heroTitle}</h1><p className="hero-description">{t.heroText}</p><Link className="button button-gold" to={pathFor(locale, 'products')}>{t.discover}<ArrowRight size={17} /></Link></div>
       <div className="hero-caption"><span>42° 41′ N</span><span>{t.origin}</span><span>23° 19′ E</span></div>
       <a className="scroll-cue" href="#seasonal"><ArrowDown size={15} /> <span>{localeUi[locale].scroll}</span></a>
-      <div className="hero-controls" role="group" aria-label={t.origin}>
-        <button className="hero-control" type="button" aria-label={localeUi[locale].previousPhoto} onClick={() => setActiveSlide((activeSlide + heroSlides.length - 1) % heroSlides.length)}><ArrowLeft size={17} /></button>
-        <div className="hero-pagination">{heroSlides.map((slide, index) => <button key={slide.slug} type="button" className={activeSlide === index ? 'is-active' : ''} aria-label={`${localeUi[locale].photo} ${index + 1}: ${slide.title}`} aria-pressed={activeSlide === index} onClick={() => setActiveSlide(index)} />)}</div>
-        <button className="hero-control" type="button" aria-label={localeUi[locale].nextPhoto} onClick={() => setActiveSlide((activeSlide + 1) % heroSlides.length)}><ArrowRight size={17} /></button>
-      </div>
+      <div className="hero-pagination" role="group" aria-label={t.origin}>{heroSlides.map((slide, index) => <button key={slide.slug} type="button" className={activeSlide === index ? 'is-active' : ''} aria-label={`${localeUi[locale].photo} ${index + 1}: ${slide.title}`} aria-pressed={activeSlide === index} onClick={() => setActiveSlide(index)} />)}</div>
       <div className="hero-stamp"><Compass size={21} /><span>WILD<br />BY NATURE</span></div>
     </section>
     <section id="seasonal" className="section featured-section"><SectionHeading eyebrow={t.origin} title={t.featured} intro={t.featuredIntro} /><div className="product-grid">{truffleIds.slice(0, 3).map((id, index) => <ProductCard key={id} locale={locale} t={t} id={id} number={`0${index + 1}`} />)}</div><div className="section-link"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div></section>
