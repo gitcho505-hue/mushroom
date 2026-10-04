@@ -5,13 +5,24 @@ The admin uses Supabase Auth, Postgres Row Level Security, and Supabase Storage.
 ## Configure Supabase
 
 1. Create a Supabase project and run [`supabase/schema.sql`](../supabase/schema.sql) in the SQL Editor.
-2. Create the administrator in **Authentication → Users**. Disable public sign-ups.
-3. Copy the user's UUID and add it to the admin allowlist in the SQL Editor:
+2. Disable public sign-ups. The two admin usernames currently map to one Supabase Auth account, `gitcho505@gmail.com`:
+
+| Admin username | Internal Supabase Auth email |
+| --- | --- |
+| `ESI_ADMIN` | `gitcho505@gmail.com` |
+| `KOSIO_ADMIN` | `gitcho505@gmail.com` |
+
+Set the password for `gitcho505@gmail.com` in Supabase Auth. Both usernames use that same password and share one Auth user ID. Separate passwords require separate email accounts.
+
+3. Add only these two users to the admin allowlist in the SQL Editor:
 
 ```sql
 insert into public.admin_users (user_id)
-values ('REPLACE_WITH_AUTH_USER_UUID');
+select id from auth.users where lower(email) = 'gitcho505@gmail.com'
+on conflict (user_id) do nothing;
 ```
+
+The allowlist now contains only the `gitcho505@gmail.com` Auth user. The old Ivan membership was removed from `public.admin_users`; his Auth account and all product data remain intact.
 
 4. Copy the project URL and anon/publishable key to `.env.local`:
 
@@ -21,10 +32,10 @@ VITE_SUPABASE_ANON_KEY=your-public-anon-key
 ```
 
 5. Add the same two variables to the Vercel project and redeploy.
-6. Open `/admin` and sign in with the Supabase user email and password.
+6. Open `/admin` and sign in as `ESI_ADMIN` or `KOSIO_ADMIN` with the password for `gitcho505@gmail.com`.
 
 The anon key is designed to be public. RLS policies and the `admin_users` allowlist protect product edits and photo uploads. Never put a Supabase service-role key in a `VITE_*` variable or client bundle.
 
-The first successful admin sign-in seeds the four built-in truffle varieties if the catalog table is empty. From `/admin`, add a mushroom, edit its localized name and descriptions, record package weight and harvested stock in grams, and set its price per kilogram (or an optional package price). Save a product before uploading its main photo. Photos are stored in the `truffle-photos` bucket; admins can replace or remove a product photo and delete products. New products are hidden until **Published in site** is enabled, then appear in the public catalog and wholesale enquiry form.
+The first successful admin sign-in seeds the four built-in varieties if the catalog table is empty. The admin edits availability, description, stock in grams, package weight, price per kilogram, and photos for these four fixed varieties; it does not create or delete varieties. Save a product before uploading its main photo. Photos are stored in the `truffle-photos` bucket and can be replaced or removed. Hidden varieties stay out of the public catalog.
 
-Product IDs are generated from the product name and are not restricted to the four built-in varieties. When upgrading an existing Supabase project, rerun the updated `supabase/schema.sql` to add `price_per_kg`, remove the old ID restriction, and refresh the RLS policies.
+The four fixed product IDs are `black-truffle`, `white-truffle`, `summer-truffle`, and `burgundy-truffle`. When upgrading an existing Supabase project, rerun the updated `supabase/schema.sql` to add `price_per_kg` and refresh the RLS policies.

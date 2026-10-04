@@ -9,13 +9,24 @@ import './admin-crud.css';
 
 type AdminAccess = 'loading' | 'allowed' | 'denied';
 type LocalizedField = 'title_by_locale' | 'description_by_locale' | 'body_by_locale' | 'season_by_locale' | 'note_by_locale';
+type AdminUsername = 'ESI_ADMIN' | 'KOSIO_ADMIN';
+
+const adminAuthAliases: Record<AdminUsername, string> = {
+  ESI_ADMIN: 'gitcho505@gmail.com',
+  KOSIO_ADMIN: 'gitcho505@gmail.com',
+};
+
+function adminUsernameForEmail(email: string | undefined) {
+  return Object.values(adminAuthAliases).includes(email?.toLowerCase() ?? '') ? 'ESI_ADMIN' : null;
+}
 
 export function HarvestAdminPage() {
   const supabase = getSupabaseClient();
   const [session, setSession] = useState<Session | null>(null);
   const [authReady, setAuthReady] = useState(false);
   const [adminAccess, setAdminAccess] = useState<AdminAccess>('loading');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [signedInUsername, setSignedInUsername] = useState<AdminUsername | null>(null);
   const [password, setPassword] = useState('');
   const [catalog, setCatalog] = useState<CatalogProduct[]>([]);
   const [selectedId, setSelectedId] = useState('black-truffle');
@@ -55,6 +66,11 @@ export function HarvestAdminPage() {
     }
     let active = true;
     setAdminAccess('loading');
+    if (!adminUsernameForEmail(session.user.email)) {
+      setError('Този профил не е ESI_ADMIN или KOSIO_ADMIN.');
+      setAdminAccess('denied');
+      return () => { active = false; };
+    }
     void supabase.from('admin_users').select('user_id').eq('user_id', session.user.id).maybeSingle()
       .then(({ data, error: accessError }) => {
         if (!active) return;
@@ -115,10 +131,17 @@ export function HarvestAdminPage() {
   async function signIn(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!supabase) return;
+    const loginName = username.trim().toUpperCase();
+    const emailAlias = Object.entries(adminAuthAliases).find(([allowedUsername]) => allowedUsername === loginName)?.[1];
+    if (!emailAlias) {
+      setError('Използвай ESI_ADMIN или KOSIO_ADMIN.');
+      return;
+    }
     setSaving(true);
     setError('');
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
-    if (signInError) setError('Неуспешен вход. Провери имейла и паролата.');
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email: emailAlias, password });
+    if (signInError) setError('Неуспешен вход. Провери username-а и паролата.');
+    else setSignedInUsername(loginName as AdminUsername);
     setSaving(false);
   }
 
@@ -127,6 +150,7 @@ export function HarvestAdminPage() {
     await supabase.auth.signOut();
     setCatalog([]);
     setPassword('');
+    setSignedInUsername(null);
     setAdminAccess('denied');
   }
 
@@ -209,7 +233,7 @@ export function HarvestAdminPage() {
 
   if (!authReady || (session && adminAccess === 'loading')) return <main className="admin-state"><span className="admin-spinner" /><p>Проверяваме достъпа…</p></main>;
   if (!supabase) return <AdminSetup />;
-  if (!session) return <main className="admin-login-page"><section className="admin-login"><Link className="admin-mark" to="/bg/"><img src="/images/brand-logo.png" alt="" /><span><strong>TRUFFLE BALKANS</strong><small>ADMIN WORKSPACE</small></span></Link><p className="admin-eyebrow">SECURE SIGN IN</p><h1>Вход в администрацията</h1><p className="admin-intro">Гъби, снимки, описания, наличности и цени.</p><form onSubmit={signIn}><label>Имейл<input type="email" autoComplete="username" value={email} onChange={(event) => setEmail(event.target.value)} required /></label><label>Парола<input type="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} required /></label>{error && <p className="admin-error" role="alert">{error}</p>}<button className="admin-primary" type="submit" disabled={saving}>{saving ? 'Влизане…' : 'Влез в администрацията'}</button></form><Link className="admin-back" to="/bg/">← Към сайта</Link></section><div className="admin-login-aside"><img src={imageUrl('black-truffle', 1400)} alt="Трюфел" /></div></main>;
+  if (!session) return <main className="admin-login-page"><section className="admin-login"><Link className="admin-mark" to="/bg/"><img src="/images/brand-logo.png" alt="" /><span><strong>TRUFFLE BALKANS</strong><small>ADMIN WORKSPACE</small></span></Link><p className="admin-eyebrow">SECURE SIGN IN</p><h1>Вход в администрацията</h1><p className="admin-intro">Гъби, снимки, описания, наличности и цени.</p><form onSubmit={signIn}><label>Потребителско име<input type="text" autoComplete="username" autoCapitalize="characters" value={username} onChange={(event) => setUsername(event.target.value)} placeholder="ESI_ADMIN или KOSIO_ADMIN" required /></label><label>Парола<input type="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} required /></label>{error && <p className="admin-error" role="alert">{error}</p>}<button className="admin-primary" type="submit" disabled={saving}>{saving ? 'Влизане…' : 'Влез в администрацията'}</button></form><Link className="admin-back" to="/bg/">← Към сайта</Link></section><div className="admin-login-aside"><img src={imageUrl('black-truffle', 1400)} alt="Трюфел" /></div></main>;
   if (adminAccess === 'denied') return <main className="admin-state"><ShieldCheck size={34} /><h1>Нямаш администраторски достъп</h1><p>{error || 'Профилът няма достъп до продуктовия каталог.'}</p><button className="admin-secondary" onClick={signOut}>Излез от профила</button></main>;
   return (
     <main className="admin-shell">
@@ -226,7 +250,7 @@ export function HarvestAdminPage() {
         <div className="admin-sidebar-bottom"><Link to="/bg/" className="admin-back"><ArrowLeft size={15} />Към сайта</Link><button className="admin-signout" onClick={signOut}><LogOut size={15} />Изход</button></div>
       </aside>
       <section className="admin-workspace">
-        <header className="admin-topbar"><div><p className="admin-eyebrow">УПРАВЛЕНИЕ НА РЕКОЛТАТА</p><h1>Гъби и цени</h1></div><span className="admin-user">{session.user.email}</span></header>
+        <header className="admin-topbar"><div><p className="admin-eyebrow">УПРАВЛЕНИЕ НА РЕКОЛТАТА</p><h1>Гъби и цени</h1></div><span className="admin-user">{signedInUsername ?? adminUsernameForEmail(session.user.email) ?? 'ADMIN'}</span></header>
         {loadingCatalog ? <div className="admin-state"><span className="admin-spinner" /><p>Зареждаме продуктите…</p></div> : selected ? (
           <form className="admin-editor" onSubmit={saveProduct}>
             <div className="admin-editor-heading">
