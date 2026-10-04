@@ -22,6 +22,16 @@ for (const locale of server.locales) {
   }
 }
 
+const adminPath = resolve(clientDir, 'admin', 'index.html');
+await mkdir(dirname(adminPath), { recursive: true });
+const adminHtml = template
+  .replace(/<html lang="[^"]*">/, '<html lang="bg">')
+  .replace(/<title>.*?<\/title>/, '<title>Truffle Balkans Admin</title>')
+  .replace('</head>', '<meta name="robots" content="noindex,nofollow" />\n  </head>')
+  .replace('<!--app-html-->', server.render('/admin'));
+await writeFile(adminPath, adminHtml);
+
+
 const rootHtml = template
   .replace('</head>', '<meta name="robots" content="noindex,follow" /><meta http-equiv="refresh" content="0;url=/bg/" />\n  </head>')
   .replace('<!--app-html-->', server.render('/'));

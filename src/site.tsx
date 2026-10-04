@@ -1,9 +1,79 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { createContext, useContext, useEffect, useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, Compass, Leaf, Menu, MoveUpRight, ShieldCheck, Sparkles, X } from 'lucide-react';
 import { articles, copy, imageUrl, keyForPath, languageMeta, locales, pathFor, titleFor, truffleFor, truffleIds, type Copy, type Locale, type PageKey } from './content';
 import { localeUi } from './i18n';
 import { renderHead } from './seo';
+import { AdminPage } from './admin';
+import { getSupabaseClient, type CatalogProduct } from './catalog';
+
+const CatalogContext = createContext<Record<string, CatalogProduct>>({});
+
+type ProductView = NonNullable<ReturnType<typeof truffleFor>> & {
+  origin?: string;
+  weight_grams?: number | null;
+  price?: number | null;
+  currency?: string;
+  available?: boolean;
+  stock_grams?: number | null;
+};
+
+function productFor(id: string, locale: Locale, catalog: Record<string, CatalogProduct>): ProductView | undefined {
+  const product = truffleFor(`product:${id}`, locale);
+  if (!product) return undefined;
+  const managed = catalog[id];
+  if (!managed) return product;
+  return {
+    ...product,
+    title: managed.title_by_locale[locale] || product.title,
+    description: managed.description_by_locale[locale] || product.description,
+    body: managed.body_by_locale[locale] || product.body,
+    season: managed.season_by_locale[locale] || product.season,
+    note: managed.note_by_locale[locale] || product.note,
+    image: managed.image_url || product.image,
+    origin: managed.origin,
+    weight_grams: managed.weight_grams,
+    price: managed.price,
+    currency: managed.currency,
+    available: managed.available,
+    stock_grams: managed.stock_grams,
+  };
+}
+
+function productImage(product: { image: string }, width: number) {
+  return product.image.startsWith('http') ? product.image : imageUrl(product.image, width);
+}
+
+function formatProductPrice(price: number, currency: string, locale: Locale) {
+  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(price);
+}
+
+function updateManagedProductMeta(locale: Locale, product: CatalogProduct) {
+  const title = `${product.title_by_locale[locale] || product.title_by_locale.en} | Truffle Balkans`;
+  const description = product.description_by_locale[locale] || product.description_by_locale.en;
+  document.title = title;
+  for (const selector of ['meta[data-truffle-seo][name="description"]', 'meta[data-truffle-seo][property="og:description"]', 'meta[data-truffle-seo][name="twitter:description"]']) {
+    document.head.querySelector<HTMLMetaElement>(selector)?.setAttribute('content', description);
+  }
+  for (const selector of ['meta[data-truffle-seo][property="og:title"]', 'meta[data-truffle-seo][name="twitter:title"]']) {
+    document.head.querySelector<HTMLMetaElement>(selector)?.setAttribute('content', title);
+  }
+  const schema = document.head.querySelector<HTMLScriptElement>('script[data-truffle-seo][type="application/ld+json"]');
+  if (!schema) return;
+  try {
+    const graph = JSON.parse(schema.textContent || '[]') as Array<Record<string, unknown>>;
+    const productSchema = graph.find((entry) => entry['@type'] === 'Product');
+    if (!productSchema) return;
+    productSchema.name = product.title_by_locale[locale] || product.title_by_locale.en;
+    productSchema.description = description;
+    productSchema.image = product.image_url;
+    if (product.price != null) productSchema.offers = { '@type': 'Offer', price: product.price, priceCurrency: product.currency, availability: product.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' };
+    else delete productSchema.offers;
+    schema.textContent = JSON.stringify(graph);
+  } catch {
+    return;
+  }
+}
 
 function localizedMeta(locale: Locale, key: PageKey) {
   const fragment = renderHead(locale, key);
@@ -21,15 +91,35 @@ function localizedMeta(locale: Locale, key: PageKey) {
 
 export function Site() {
   const { pathname } = useLocation();
+  const isAdminPath = pathname === '/admin' || pathname === '/admin/' || pathname.startsWith('/admin/');
   const current = keyForPath(pathname);
   const locale = current?.locale ?? (pathname.split('/')[1] as Locale) ?? 'bg';
   const key = current?.key ?? 'home';
   const t = copy[locale] ?? copy.bg;
-  useEffect(() => { localizedMeta(locale, key); }, [locale, key]);
+  const [catalog, setCatalog] = useState<Record<string, CatalogProduct>>({});
+  useEffect(() => {
+    if (isAdminPath) return;
+    const client = getSupabaseClient();
+    if (!client) return;
+    let active = true;
+    void client.from('truffle_products').select('*').then(({ data }) => {
+      if (active && data) setCatalog(Object.fromEntries((data as CatalogProduct[]).map((product) => [product.id, product])));
+    });
+    return () => { active = false; };
+  }, [isAdminPath]);
+  useEffect(() => {
+    if (isAdminPath) return;
+    localizedMeta(locale, key);
+    if (key.startsWith('product:')) {
+      const managed = catalog[key.split(':')[1]];
+      if (managed) updateManagedProductMeta(locale, managed);
+    }
+  }, [catalog, isAdminPath, locale, key]);
 
+  if (isAdminPath) return <AdminPage />;
   if (!current && pathname !== '/') return <NotFound locale={locale} />;
   if (pathname === '/') return <RedirectHome />;
-  return <Layout locale={locale} pageKey={key} t={t}><Page locale={locale} pageKey={key} t={t} /></Layout>;
+  return <CatalogContext.Provider value={catalog}><Layout locale={locale} pageKey={key} t={t}><Page locale={locale} pageKey={key} t={t} /></Layout></CatalogContext.Provider>;
 }
 
 function RedirectHome() {
@@ -103,8 +193,8 @@ function Page({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; t: Cop
 }
 
 function Home({ locale, t }: { locale: Locale; t: Copy }) {
-  const heroImage = 'black-truffle';
-  const heroSlides = truffleIds.map((id) => truffleFor(`product:${id}`, locale)!);
+  const catalog = useContext(CatalogContext);
+  const heroSlides = truffleIds.map((id) => productFor(id, locale, catalog)!);
   const [activeSlide, setActiveSlide] = useState(0);
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -112,8 +202,8 @@ function Home({ locale, t }: { locale: Locale; t: Copy }) {
     return () => window.clearInterval(timer);
   }, [heroSlides.length]);
   return <>
-    <section className="hero" style={{ '--hero-image': `url("${imageUrl(heroImage, 2000)}")` } as React.CSSProperties}>
-      {heroSlides.map((slide, index) => <img key={slide.slug} className={`hero-photo ${activeSlide === index ? 'is-active' : ''}`} src={imageUrl(slide.image, 1280)} alt="" aria-hidden="true" loading={index === 0 ? 'eager' : 'lazy'} />)}
+    <section className="hero" style={{ '--hero-image': `url("${productImage(heroSlides[0], 2000)}")` } as React.CSSProperties}>
+      {heroSlides.map((slide, index) => <img key={slide.slug} className={`hero-photo ${activeSlide === index ? 'is-active' : ''}`} src={productImage(slide, 1280)} alt="" aria-hidden="true" loading={index === 0 ? 'eager' : 'lazy'} />)}
       <div className="hero-shade" />
       <div className="hero-copy"><p className="eyebrow"><span />{t.heroEyebrow}</p><h1>{t.heroTitle}</h1><p className="hero-description">{t.heroText}</p><Link className="button button-gold" to={pathFor(locale, 'products')}>{t.discover}<ArrowRight size={17} /></Link></div>
       <div className="hero-caption"><span>42° 41′ N</span><span>{t.origin}</span><span>23° 19′ E</span></div>
@@ -136,8 +226,14 @@ function SectionHeading({ eyebrow, title, intro }: { eyebrow: string; title: str
 }
 
 function ProductCard({ locale, t, id, number }: { locale: Locale; t: Copy; id: typeof truffleIds[number]; number?: string }) {
-  const product = truffleFor(`product:${id}`, locale)!;
-  return <article className="product-card"><Link to={pathFor(locale, `product:${id}`)} className="product-image"><img src={imageUrl(product.image, 820)} alt={`${product.title} — ${product.note}`} loading="lazy" width="820" height="940" /><span className="product-number">{number ?? '01'} / 04</span><span className="product-arrow"><ArrowUpRight size={19} /></span></Link><div className="product-meta"><span>{product.season}</span><span>{product.note}</span></div><h3><Link to={pathFor(locale, `product:${id}`)}>{product.title}</Link></h3><p>{product.description}</p><Link className="text-link product-link" to={pathFor(locale, 'wholesale')} state={{ productId: id }}>{t.inquire}<ArrowRight size={15} /></Link></article>;
+  const product = productFor(id, locale, useContext(CatalogContext))!;
+  const offer = product.price != null ? formatProductPrice(product.price, product.currency ?? 'EUR', locale) : t.inquire;
+  return <article className="product-card">
+    <Link to={pathFor(locale, `product:${id}`)} className="product-image"><img src={productImage(product, 820)} alt={`${product.title} — ${product.note}`} loading="lazy" width="820" height="940" /><span className="product-number">{number ?? '01'} / 04</span><span className="product-arrow"><ArrowUpRight size={19} /></span></Link>
+    <div className="product-meta"><span>{product.season}</span><span>{product.note}</span></div>
+    <div className="catalog-offer-meta"><span className={product.available === false ? 'is-unavailable' : ''}>{product.available === false ? t.outOfStock : product.available === true ? t.inStock : t.availability}</span>{product.weight_grams != null && <span>{product.weight_grams} g</span>}<strong>{offer}</strong></div>
+    <h3><Link to={pathFor(locale, `product:${id}`)}>{product.title}</Link></h3><p>{product.description}</p><Link className="text-link product-link" to={pathFor(locale, 'wholesale')} state={{ productId: id }}>{t.inquire}<ArrowRight size={15} /></Link>
+  </article>;
 }
 
 function PageIntro({ eyebrow, title, text }: { eyebrow: string; title: string; text: string }) {
@@ -146,6 +242,7 @@ function PageIntro({ eyebrow, title, text }: { eyebrow: string; title: string; t
 
 function WholesalePage({ locale, t }: { locale: Locale; t: Copy }) {
   const location = useLocation();
+  const catalog = useContext(CatalogContext);
   const productId = (location.state as { productId?: string } | null)?.productId ?? '';
   const [status, setStatus] = useState<'missingEmail' | 'opened' | null>(null);
 
@@ -175,7 +272,7 @@ function WholesalePage({ locale, t }: { locale: Locale; t: Copy }) {
       <form className="wholesale-form" onSubmit={submit}>
         <div className="form-row"><label>{t.form.name}<input name="name" autoComplete="name" required /></label><label>{t.form.company}<input name="company" autoComplete="organization" required /></label></div>
         <div className="form-row"><label>{t.form.email}<input name="email" type="email" autoComplete="email" required /></label><label>{t.form.phone}<input name="phone" type="tel" autoComplete="tel" /></label></div>
-        <div className="form-row"><label>{t.form.product}<select name="product" defaultValue={productId} required><option value="" disabled>{t.form.selectProduct}</option>{truffleIds.map((id) => <option key={id} value={id}>{truffleFor(`product:${id}`, locale)?.title}</option>)}</select></label><label>{t.form.quantity}<input name="quantity" placeholder={t.form.quantityHint} required /></label></div>
+        <div className="form-row"><label>{t.form.product}<select name="product" defaultValue={productId} required><option value="" disabled>{t.form.selectProduct}</option>{truffleIds.map((id) => <option key={id} value={id}>{productFor(id, locale, catalog)?.title}</option>)}</select></label><label>{t.form.quantity}<input name="quantity" placeholder={t.form.quantityHint} required /></label></div>
         <div className="form-row"><label>{t.form.country}<input name="country" autoComplete="country-name" /></label><label>{t.form.delivery}<input name="deliveryDate" type="date" /></label></div>
         <label>{t.form.message}<textarea name="message" rows={4} /></label>
         <button className="button button-dark" type="submit">{t.form.send}<ArrowUpRight size={16} /></button>
@@ -192,14 +289,17 @@ function ProductIndex({ locale, t }: { locale: Locale; t: Copy }) {
 }
 
 function TruffleIndex({ locale, t }: { locale: Locale; t: Copy }) {
-  return <><PageIntro eyebrow={t.origin} title={t.trufflesTitle} text={t.speciesText} /><section className="section catalog-section"><div className="truffle-list">{truffleIds.map((id, index) => { const item = truffleFor(`truffle:${id}`, locale)!; return <Link to={pathFor(locale, `truffle:${id}`)} className="truffle-list-item" key={id}><span className="list-count">0{index + 1}</span><img src={imageUrl(item.image, 600)} alt={item.title} loading="lazy" width="600" height="400" /><div><span className="eyebrow">{item.season}</span><h2>{item.title}</h2><p>{item.description}</p></div><ArrowUpRight className="list-arrow" /></Link>; })}</div></section><CallToAction locale={locale} t={t} /></>;
+  const catalog = useContext(CatalogContext);
+  return <><PageIntro eyebrow={t.origin} title={t.trufflesTitle} text={t.speciesText} /><section className="section catalog-section"><div className="truffle-list">{truffleIds.map((id, index) => { const item = productFor(id, locale, catalog)!; return <Link to={pathFor(locale, `truffle:${id}`)} className="truffle-list-item" key={id}><span className="list-count">0{index + 1}</span><img src={productImage(item, 600)} alt={item.title} loading="lazy" width="600" height="400" /><div><span className="eyebrow">{item.season}</span><h2>{item.title}</h2><p>{item.description}</p></div><ArrowUpRight className="list-arrow" /></Link>; })}</div></section><CallToAction locale={locale} t={t} /></>;
 }
 
 function DetailPage({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; t: Copy }) {
-  const item = truffleFor(pageKey, locale)!;
+  const catalog = useContext(CatalogContext);
   const productMode = pageKey.startsWith('product:');
   const id = pageKey.split(':')[1];
-  return <><div className="detail-hero"><div className="detail-visual"><img src={imageUrl(item.image, 1500)} alt={`${item.title} from the Balkans`} loading="eager" /></div><div className="detail-copy"><Link className="back-link" to={pathFor(locale, productMode ? 'products' : 'truffles')}>← {t.back}</Link><p className="eyebrow"><span />{productMode ? t.availability : t.origin}</p><h1>{item.title}</h1><p className="detail-lede">{item.description}</p><div className="detail-facts"><div><span>{t.season}</span><strong>{item.season}</strong></div><div><span>{t.originLabel}</span><strong>Balkans</strong></div><div><span>{t.grade}</span><strong>{item.note}</strong></div></div><Link className="button button-dark" to={pathFor(locale, 'wholesale')} state={{ productId: id }}>{t.inquire}<ArrowUpRight size={16} /></Link></div></div><section className="section detail-story"><div><p className="eyebrow">{t.landscapeEyebrow}</p><h2>{item.title}, at its best</h2></div><div className="detail-prose"><p>{item.body}</p><h3>{t.season}</h3><p>{item.season}. Availability, size and grade depend on the current harvest. Contact us for the latest selection and handling guidance.</p></div></section><FaqPreview locale={locale} t={t} /><section className="section related-section"><SectionHeading eyebrow={t.nav.truffles} title={t.related} /><div className="product-grid">{truffleIds.filter((candidate) => candidate !== id).slice(0, 3).map((candidate, index) => <ProductCard key={candidate} locale={locale} t={t} id={candidate} number={`0${index + 1}`} />)}</div></section><CallToAction locale={locale} t={t} /></>;
+  const item = productFor(id, locale, catalog)!;
+  const offer = item.price != null ? formatProductPrice(item.price, item.currency ?? 'EUR', locale) : t.inquire;
+  return <><div className="detail-hero"><div className="detail-visual"><img src={productImage(item, 1500)} alt={`${item.title} from ${item.origin ?? 'the Balkans'}`} loading="eager" /></div><div className="detail-copy"><Link className="back-link" to={pathFor(locale, productMode ? 'products' : 'truffles')}>← {t.back}</Link><p className="eyebrow"><span />{productMode ? item.available === false ? t.outOfStock : t.availability : t.origin}</p><h1>{item.title}</h1><p className="detail-lede">{item.description}</p><div className="detail-facts"><div><span>{t.season}</span><strong>{item.season}</strong></div><div><span>{t.originLabel}</span><strong>{item.origin ?? 'Balkans'}</strong></div><div><span>{t.grade}</span><strong>{item.note}</strong></div>{item.weight_grams != null && <div><span>{t.form.quantity}</span><strong>{item.weight_grams} g</strong></div>}{item.available !== undefined && <div><span>{t.availability}</span><strong>{item.available ? t.inStock : t.outOfStock}{item.stock_grams != null ? ` · ${item.stock_grams} g` : ''}</strong></div>}</div><Link className="button button-dark" to={pathFor(locale, 'wholesale')} state={{ productId: id }}>{offer}<ArrowUpRight size={16} /></Link></div></div><section className="section detail-story"><div><p className="eyebrow">{t.landscapeEyebrow}</p><h2>{item.title}, at its best</h2></div><div className="detail-prose"><p>{item.body}</p><h3>{t.season}</h3><p>{item.season}. Availability, size and grade depend on the current harvest. Contact us for the latest selection and handling guidance.</p></div></section><FaqPreview locale={locale} t={t} /><section className="section related-section"><SectionHeading eyebrow={t.nav.truffles} title={t.related} /><div className="product-grid">{truffleIds.filter((candidate) => candidate !== id).slice(0, 3).map((candidate, index) => <ProductCard key={candidate} locale={locale} t={t} id={candidate} number={`0${index + 1}`} />)}</div></section><CallToAction locale={locale} t={t} /></>;
 }
 
 function AboutPage({ locale, t }: { locale: Locale; t: Copy }) {

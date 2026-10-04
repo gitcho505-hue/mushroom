@@ -53,7 +53,7 @@ export const extraCopy = {
     trufflesTitle: 'À la découverte des truffes', blogTitle: 'Notes de forêt et de cuisine', contactTitle: 'Parlons truffes.',
     contactText: 'Pour les disponibilités, calibres ou demandes de gros, écrivez-nous.', faqPageTitle: 'Vos questions sur les truffes',
     form: { name: 'Nom et prénom', email: 'E-mail professionnel', phone: 'Téléphone', company: 'Restaurant / entreprise', message: 'Précisions sur votre demande', send: 'Demander un devis', sent: 'Votre demande est prête.', product: 'Variété recherchée', quantity: 'Quantité estimée', quantityHint: 'ex. 500 g par livraison', country: 'Pays de livraison', delivery: 'Date de livraison souhaitée', selectProduct: 'Choisir une variété' },
-    availability: 'Disponibilité saisonnière', originLabel: 'Origine', season: 'Saison', grade: 'Sélection', inquire: 'Demander un tarif', learn: 'En savoir plus',
+    availability: 'Disponibilité saisonnière', inStock: 'Disponible', outOfStock: 'Temporairement indisponible', originLabel: 'Origine', season: 'Saison', grade: 'Sélection', inquire: 'Demander un tarif', learn: 'En savoir plus',
     back: 'Retour à la sélection', related: 'À découvrir également', freshness: 'La fraîcheur suit les saisons', navMore: 'Explorer', allProducts: 'Produits', contactNote: 'Chaque disponibilité est confirmée personnellement selon la récolte.',
   },
   de: {
@@ -83,7 +83,7 @@ export const extraCopy = {
     trufflesTitle: 'Die Welt der Trüffel', blogTitle: 'Notizen aus Wald und Küche', contactTitle: 'Sprechen wir über Trüffel.',
     contactText: 'Für Verfügbarkeit, Größen und Anfragen für Gastronomie schreiben Sie uns.', faqPageTitle: 'Fragen rund um Trüffel',
     form: { name: 'Vor- und Nachname', email: 'Geschäftliche E-Mail', phone: 'Telefon', company: 'Restaurant / Unternehmen', message: 'Anmerkungen zur Anfrage', send: 'Angebot anfragen', sent: 'Ihre Anfrage ist vorbereitet.', product: 'Trüffelsorte', quantity: 'Ungefähre Menge', quantityHint: 'z. B. 500 g je Lieferung', country: 'Lieferland', delivery: 'Gewünschter Liefertermin', selectProduct: 'Sorte auswählen' },
-    availability: 'Saisonale Verfügbarkeit', originLabel: 'Herkunft', season: 'Saison', grade: 'Sortierung', inquire: 'Preis anfragen', learn: 'Mehr erfahren',
+    availability: 'Saisonale Verfügbarkeit', inStock: 'Verfügbar', outOfStock: 'Derzeit nicht verfügbar', originLabel: 'Herkunft', season: 'Saison', grade: 'Sortierung', inquire: 'Preis anfragen', learn: 'Mehr erfahren',
     back: 'Zurück zur Auswahl', related: 'Das könnte Sie interessieren', freshness: 'Frische hat Saison', navMore: 'Entdecken', allProducts: 'Produkte', contactNote: 'Wir bestätigen jede Verfügbarkeit persönlich anhand der aktuellen Ernte.',
   },
 } as const;
