@@ -25,4 +25,6 @@ VITE_SUPABASE_ANON_KEY=your-public-anon-key
 
 The anon key is designed to be public. RLS policies and the `admin_users` allowlist protect product edits and photo uploads. Never put a Supabase service-role key in a `VITE_*` variable or client bundle.
 
-The first successful admin sign-in seeds the four built-in truffle varieties if the catalog table is empty. Product text is stored for all five site locales; weight, price, stock, availability, and photo are shared catalog fields.
+The first successful admin sign-in seeds the four built-in truffle varieties if the catalog table is empty. From `/admin`, add a mushroom, edit its localized name and descriptions, record package weight and harvested stock in grams, and set its price per kilogram (or an optional package price). Save a product before uploading its main photo. Photos are stored in the `truffle-photos` bucket; admins can replace or remove a product photo and delete products. New products are hidden until **Published in site** is enabled, then appear in the public catalog and wholesale enquiry form.
+
+Product IDs are generated from the product name and are not restricted to the four built-in varieties. When upgrading an existing Supabase project, rerun the updated `supabase/schema.sql` to add `price_per_kg`, remove the old ID restriction, and refresh the RLS policies.

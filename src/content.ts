@@ -1,4 +1,5 @@
 import { extraCopy, locales, pageSlugs, type Locale } from './i18n';
+import { harvestPhotos } from './harvest-photos';
 export { languageMeta, locales, type Locale } from './i18n';
 
 export type PageKey =
@@ -341,18 +342,21 @@ export function seoFor(locale: Locale, key: PageKey) {
   return { title, description };
 }
 
-const commonsImages: Record<string, { directory: string; file: string }> = {
-  'black-truffle': { directory: 'e/e5', file: 'Diamant_noir_Tuber_melanosporum.jpg' },
-  'white-truffle': { directory: '5/51', file: 'Tuber_Magnatum_Pico.jpg' },
-  'summer-truffle': { directory: '2/2b', file: 'Black.summer.truffle.arp.jpg' },
-  'burgundy-truffle': { directory: 'c/ca', file: 'Truffes_de_Bourgogne_-_Tuber_uncinatum.JPG' },
-  'photo-1551183053-bf91a1d81141': { directory: 'e/e5', file: 'Diamant_noir_Tuber_melanosporum.jpg' },
+const ownedImages: Record<string, string> = {
+  'black-truffle': harvestPhotos[0],
+  'white-truffle': harvestPhotos[45],
+  'summer-truffle': harvestPhotos[16],
+  'burgundy-truffle': harvestPhotos[24],
+  'photo-1551183053-bf91a1d81141': harvestPhotos[32],
+  'photo-1448375240586-882707db888b': harvestPhotos[4],
+  'photo-1472396961693-142e6e269027': harvestPhotos[12],
+  'photo-1500535697-b586d89ba3ee': harvestPhotos[20],
 };
 
-export function imageUrl(id: string, width = 1200) {
-  const commonsImage = commonsImages[id];
-  if (commonsImage) {
-    return `https://upload.wikimedia.org/wikipedia/commons/thumb/${commonsImage.directory}/${commonsImage.file}/1280px-${commonsImage.file}`;
-  }
-  return `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=82`;
+export function imageUrl(id: string, _width = 1200) {
+  if (id.startsWith('/snimki/')) return id;
+  const ownedImage = ownedImages[id];
+  if (ownedImage) return ownedImage;
+  const hash = [...id].reduce((sum, character) => sum + character.charCodeAt(0), 0);
+  return harvestPhotos[hash % harvestPhotos.length];
 }

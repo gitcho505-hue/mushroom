@@ -4,7 +4,7 @@ create table if not exists public.admin_users (
 );
 
 create table if not exists public.truffle_products (
-  id text primary key check (id in ('black-truffle', 'white-truffle', 'summer-truffle', 'burgundy-truffle')),
+  id text primary key,
   title_by_locale jsonb not null,
   description_by_locale jsonb not null,
   body_by_locale jsonb not null,
@@ -15,11 +15,15 @@ create table if not exists public.truffle_products (
   image_path text,
   weight_grams integer check (weight_grams is null or weight_grams > 0),
   price numeric(12, 2) check (price is null or price >= 0),
+  price_per_kg numeric(12, 2) check (price_per_kg is null or price_per_kg >= 0),
   currency text not null default 'EUR' check (currency in ('EUR', 'BGN', 'USD')),
   available boolean not null default true,
   stock_grams integer check (stock_grams is null or stock_grams >= 0),
   updated_at timestamptz not null default now()
 );
+
+alter table public.truffle_products drop constraint if exists truffle_products_id_check;
+alter table public.truffle_products add column if not exists price_per_kg numeric(12, 2) check (price_per_kg is null or price_per_kg >= 0);
 
 create or replace function public.is_truffle_admin()
 returns boolean

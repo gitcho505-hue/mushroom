@@ -3,6 +3,11 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ isSsrBuild }) => ({
   plugins: [react()],
+  server: {
+    watch: {
+      ignored: ['**/snimki/**'],
+    },
+  },
   build: {
     assetsInlineLimit: 0,
     ...(isSsrBuild ? {} : {

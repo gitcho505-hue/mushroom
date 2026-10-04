@@ -1,7 +1,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { imageUrl, locales, truffleIds, truffles, type Locale } from './content';
 
-export type TruffleId = (typeof truffleIds)[number];
+export type TruffleId = string;
 
 export type CatalogProduct = {
   id: TruffleId;
@@ -15,6 +15,7 @@ export type CatalogProduct = {
   image_path: string | null;
   weight_grams: number | null;
   price: number | null;
+  price_per_kg: number | null;
   currency: string;
   available: boolean;
   stock_grams: number | null;
@@ -33,7 +34,14 @@ export function getSupabaseClient() {
   return client;
 }
 
-function localizedValue(field: 'title' | 'description' | 'body' | 'season' | 'note', id: TruffleId) {
+export function safeCatalogImage(image: string, fallbackId: string, width = 1200) {
+  if (image.startsWith('/snimki/')) return image;
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim().replace(/\/$/, '');
+  if (supabaseUrl && image.startsWith(`${supabaseUrl}/storage/v1/object/public/truffle-photos/`)) return image;
+  return imageUrl(fallbackId, width);
+}
+
+function localizedValue(field: 'title' | 'description' | 'body' | 'season' | 'note', id: (typeof truffleIds)[number]) {
   return Object.fromEntries(locales.map((locale) => [locale, truffles[locale][id][field]])) as Record<Locale, string>;
 }
 
@@ -50,6 +58,7 @@ export function createCatalogSeeds(): CatalogProduct[] {
     image_path: null,
     weight_grams: null,
     price: null,
+    price_per_kg: null,
     currency: 'EUR',
     available: true,
     stock_grams: null,
