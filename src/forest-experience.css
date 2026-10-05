@@ -45,6 +45,35 @@ body {
   color: var(--copper);
 }
 
+.site-header .language-menu {
+  color: var(--ink);
+  background: #fffefa;
+  border-color: #d2d4c9;
+}
+
+.site-header .language-menu a {
+  min-height: 44px;
+  color: #18261d;
+  font-weight: 500;
+}
+
+.site-header .language-menu a[aria-current='page'] {
+  color: #10271d;
+  background: #e6ebdd;
+  font-weight: 700;
+}
+
+.site-header .language-menu a:hover,
+.site-header .language-menu a:focus-visible {
+  color: #fbfaf2;
+  background: #203b2a;
+}
+
+.site-header .language-menu a:focus-visible {
+  outline: 2px solid var(--copper);
+  outline-offset: 2px;
+}
+
 .hero {
   height: calc(100svh - 80px);
   min-height: 650px;
