@@ -282,16 +282,46 @@ export function allPageKeys(): PageKey[] {
 export function pathFor(locale: Locale, key: PageKey): string {
   if (key === 'home') return `/${locale}/`;
   const [group, id] = key.split(':');
-  if (group === 'product' || group === 'truffle') return `/${locale}/${group === 'product' ? pageSlugs[locale].products : pageSlugs[locale].truffles}/${truffles[locale][id as TruffleId].slug}`;
+  if (group === 'product' || group === 'truffle') {
+    const productSlug = truffles[locale][id as TruffleId]?.slug ?? id;
+    return `/${locale}/${group === 'product' ? pageSlugs[locale].products : pageSlugs[locale].truffles}/${encodeURIComponent(productSlug)}`;
+  }
   if (group === 'article') return `/${locale}/${pageSlugs[locale].blog}/${articles[locale][id].slug}`;
   return `/${locale}/${pageSlugs[locale][key] ?? key}`;
 }
 
-export function keyForPath(pathname: string): { locale: Locale; key: PageKey } | null {
+export type CatalogRoute = { id: string; slug_by_locale?: Partial<Record<Locale, string>> };
+
+export function catalogProductPath(locale: Locale, id: string, slugByLocale?: Partial<Record<Locale, string>>): string {
+  const slug = slugByLocale?.[locale]?.trim() || truffles[locale][id as TruffleId]?.slug || id;
+  return `/${locale}/${pageSlugs[locale].products}/${encodeURIComponent(slug)}`;
+}
+
+export function isCatalogProductPath(pathname: string): boolean {
+  const cleanPath = pathname.replace(/\/+$/, '');
+  const locale = cleanPath.split('/')[1] as Locale;
+  if (!locales.includes(locale)) return false;
+  const prefix = `/${locale}/${pageSlugs[locale].products}/`;
+  const slug = cleanPath.slice(prefix.length);
+  return cleanPath.startsWith(prefix) && Boolean(slug) && (!slug.includes('/') || /^item\/[^/]+$/.test(slug));
+}
+
+export function keyForPath(pathname: string, catalogProducts: readonly CatalogRoute[] = []): { locale: Locale; key: PageKey } | null {
   const cleanPath = pathname.replace(/\/+$/, '') || '/';
   const locale = cleanPath.split('/')[1] as Locale;
   if (!locales.includes(locale)) return null;
   for (const key of allPageKeys()) if (pathFor(locale, key).replace(/\/+$/, '') === cleanPath) return { locale, key };
+  const prefix = `/${locale}/${pageSlugs[locale].products}/`;
+  if (!cleanPath.startsWith(prefix)) return null;
+  const slug = decodeURIComponent(cleanPath.slice(prefix.length));
+  if (slug.startsWith('item/')) {
+    const legacyId = slug.slice('item/'.length);
+    const legacyProduct = catalogProducts.find((item) => item.id === legacyId);
+    return legacyProduct ? { locale, key: `product:${legacyProduct.id}` } : null;
+  }
+  if (!slug || slug.includes('/')) return null;
+  const product = catalogProducts.find((item) => (item.slug_by_locale?.[locale] || item.id) === slug || item.id === slug);
+  if (product) return { locale, key: `product:${product.id}` };
   return null;
 }
 

@@ -1,0 +1,322 @@
+.admin-harvest-card {
+	margin-top: 18px;
+}
+
+.admin-sidebar-heading,
+.admin-harvest-heading-actions,
+.admin-harvest-form-actions {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.admin-sidebar-heading {
+	justify-content: space-between;
+	margin: 20px 4px 8px;
+}
+
+.admin-sidebar-heading .admin-sidebar-label {
+	margin: 0;
+}
+
+@media (min-width: 641px) {
+	.admin-sidebar {
+		min-height: 0;
+	}
+
+	.admin-product-list {
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow-x: hidden;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		scrollbar-width: thin;
+		scrollbar-color: #647365 #202b23;
+	}
+
+	.admin-sidebar-bottom {
+		flex: 0 0 auto;
+	}
+}
+
+.admin-add-product {
+	width: 34px;
+	height: 34px;
+	display: grid;
+	place-items: center;
+	border: 1px solid #536153;
+	background: transparent;
+	color: #f3f2ed;
+	cursor: pointer;
+}
+
+.admin-add-product:hover {
+	background: #344034;
+}
+
+.admin-add-product:disabled {
+	opacity: .55;
+	cursor: wait;
+}
+
+.admin-harvest-heading-actions {
+	justify-content: flex-end;
+}
+
+.admin-harvest-total {
+	color: #42513e;
+	font-size: 12px;
+	font-weight: 700;
+}
+
+.admin-harvest-form {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	align-items: end;
+	gap: 12px;
+}
+
+.admin-harvest-form label {
+	min-width: 0;
+}
+
+.admin-harvest-form > .admin-primary {
+	min-height: 42px;
+}
+
+.admin-harvest-form-actions {
+	grid-column: 1 / -1;
+	justify-content: flex-end;
+}
+
+.admin-harvest-file {
+	position: relative;
+	min-height: 42px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	overflow: hidden;
+	padding: 0 12px;
+	border: 1px solid #d8d8ce;
+	background: #fffefa;
+	color: #344034;
+	font-size: 11px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.admin-harvest-file input {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.admin-harvest-list {
+	display: grid;
+	margin-top: 18px;
+}
+
+.admin-harvest-row {
+	display: grid;
+	grid-template-columns: 70px minmax(0, 1fr) auto auto auto;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 0;
+	border-top: 1px solid #e2e2d9;
+}
+
+.admin-harvest-row > img,
+.admin-harvest-no-image {
+	width: 70px;
+	height: 58px;
+	object-fit: cover;
+	background: #efeee8;
+}
+
+.admin-harvest-no-image {
+	display: grid;
+	place-items: center;
+	color: #687365;
+}
+
+.admin-harvest-row > div {
+	display: grid;
+	gap: 5px;
+	min-width: 0;
+}
+
+.admin-harvest-row > div strong {
+	font-size: 12px;
+}
+
+.admin-harvest-row > div small {
+	overflow-wrap: anywhere;
+	color: #788076;
+	font-size: 10px;
+}
+
+.admin-harvest-toggle {
+	margin: 0;
+}
+
+.admin-harvest-toggle input {
+	width: 18px;
+	min-height: 18px;
+	accent-color: #42513e;
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.harvest-stock {
+	padding-top: 36px;
+}
+
+.harvest-stock-heading {
+	display: flex;
+	justify-content: space-between;
+	align-items: end;
+	gap: 24px;
+	margin-bottom: 22px;
+}
+
+.harvest-stock-heading h2 {
+	margin: 8px 0 0;
+	font-family: 'Playfair Display', serif;
+	font-size: 34px;
+	font-weight: 400;
+}
+
+.harvest-stock-heading > strong {
+	color: #42513e;
+	font-size: 13px;
+}
+
+.harvest-stock-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 14px;
+}
+
+.harvest-stock-item {
+	display: grid;
+	grid-template-columns: minmax(110px, 38%) 1fr;
+	min-width: 0;
+	border-top: 1px solid #d9d9cf;
+	background: #f5f4ee;
+}
+
+.harvest-stock-item > img {
+	width: 100%;
+	height: 100%;
+	min-height: 150px;
+	object-fit: cover;
+}
+
+.harvest-stock-copy {
+	display: grid;
+	align-content: start;
+	gap: 10px;
+	padding: 14px;
+}
+
+.harvest-stock-copy time,
+.harvest-stock-copy span {
+	color: #696d65;
+	font-size: 11px;
+}
+
+.harvest-stock-copy div {
+	display: flex;
+	justify-content: space-between;
+	gap: 8px;
+}
+
+.harvest-stock-copy strong {
+	font-size: 13px;
+}
+
+.harvest-stock-copy p {
+	margin: 0;
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+	.admin-harvest-form {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.admin-harvest-row {
+		grid-template-columns: 58px minmax(0, 1fr) auto;
+		gap: 8px;
+	}
+
+	.admin-harvest-row > img,
+	.admin-harvest-no-image {
+		width: 58px;
+		height: 52px;
+	}
+
+	.admin-harvest-toggle {
+		grid-column: 2;
+		grid-row: 2;
+	}
+
+	.admin-harvest-row > .admin-icon-button {
+		grid-column: 3;
+	}
+
+	.admin-harvest-edit {
+		grid-row: 1;
+	}
+
+	.admin-harvest-delete {
+		grid-row: 2;
+	}
+
+	.admin-harvest-heading-actions {
+		width: 100%;
+		justify-content: space-between;
+	}
+
+	.harvest-stock-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 420px) {
+	.admin-harvest-form {
+		grid-template-columns: 1fr;
+	}
+
+	.harvest-stock-heading {
+		align-items: start;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.harvest-stock-heading h2 {
+		font-size: 28px;
+	}
+}
+
+.admin-slug-preview {
+	margin: -10px 0 8px;
+	color: #788076;
+	font-size: 10px;
+	line-height: 1.5;
+	word-break: break-word;
+}

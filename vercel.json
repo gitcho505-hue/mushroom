@@ -4,6 +4,16 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist/client",
   "rewrites": [
-    { "source": "/admin", "destination": "/admin/" }
+    { "source": "/admin", "destination": "/admin/" },
+    { "source": "/bg/produkti/:slug", "destination": "/index.html" },
+    { "source": "/en/products/:slug", "destination": "/index.html" },
+    { "source": "/it/prodotti/:slug", "destination": "/index.html" },
+    { "source": "/fr/produits/:slug", "destination": "/index.html" },
+    { "source": "/de/produkte/:slug", "destination": "/index.html" },
+    { "source": "/bg/produkti/item/:id", "destination": "/index.html" },
+    { "source": "/en/products/item/:id", "destination": "/index.html" },
+    { "source": "/it/prodotti/item/:id", "destination": "/index.html" },
+    { "source": "/fr/produits/item/:id", "destination": "/index.html" },
+    { "source": "/de/produkte/item/:id", "destination": "/index.html" }
   ]
 }
