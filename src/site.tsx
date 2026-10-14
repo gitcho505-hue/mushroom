@@ -6,7 +6,8 @@ import { localeUi } from './i18n';
 import { renderHead } from './seo';
 import { HarvestAdminPage as AdminPage } from './harvest-admin-crud';
 import { createCatalogSeeds, getSupabaseClient, loadCatalogProducts, loadHarvestRecords, safeCatalogImage, type CatalogProduct, type HarvestRecord } from './catalog';
-import { harvestGalleryCopy, harvestPhotos, heroHarvestPhotos, homeGalleryPhotos, homeStoryPhoto } from './harvest-photos';
+import { harvestGalleryCopy, harvestPhotos, heroHarvestPhotos, homeStoryPhoto } from './harvest-photos';
+import { HarvestLightbox } from './harvest-lightbox';
 import { knowledgeCopy, knowledgeArticleIds } from './knowledge';
 import { AboutPage, ContactPage, RestaurantPage } from './business-pages';
 import './harvest-gallery.css';
@@ -285,7 +286,7 @@ function HomeHarvestRibbon({ locale, t }: { locale: Locale; t: Copy }) {
       <h2 id="home-harvest-title">{gallery.title}</h2>
       <p>{gallery.description}</p>
     </div>
-    <div className="home-harvest-ribbon__grid">{homeGalleryPhotos.map((src, index) => <figure className="home-harvest-ribbon__tile" key={src}><img src={src} alt={`${gallery.imageLabel} ${index + 1}`} loading="lazy" width="900" height="700" /><figcaption>{String(index + 1).padStart(2, '0')}</figcaption></figure>)}</div>
+    <HarvestLightbox locale={locale} />
     <div className="home-harvest-ribbon__footer"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div>
   </section>;
 }

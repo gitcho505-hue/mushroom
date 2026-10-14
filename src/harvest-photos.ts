@@ -34,7 +34,29 @@ export const homeGalleryPhotos = [
   '/snimki/IMG_7283.jpeg',
   '/snimki/IMG_7296.jpeg',
   '/snimki/IMG_7311.jpeg',
+  '/snimki/IMG_7274.jpeg',
+  '/snimki/IMG_7281.jpeg',
+  '/snimki/IMG_7282.jpeg',
+  '/snimki/IMG_7284.jpeg',
+  '/snimki/IMG_7288.jpeg',
+  '/snimki/IMG_7298.jpeg',
+  '/snimki/IMG_7299.jpeg',
+  '/snimki/IMG_7304.jpeg',
+  '/snimki/IMG_7305.jpeg',
+  '/snimki/IMG_7307.jpeg',
+  '/snimki/IMG_7310.jpeg',
+  '/snimki/IMG_7313.jpeg',
+  '/snimki/IMG_7316.jpeg',
+  '/snimki/IMG_7320.jpeg',
 ] as const;
+
+export const galleryViewerCopy: Record<Locale, { open: string; close: string; hint: string; viewerHint: string; loading: string; error: string }> = {
+  bg: { open: 'Отвори снимката', close: 'Затвори галерията', hint: 'Натиснете снимка, за да я разгледате. Използвайте стрелките или плъзнете наляво и надясно.', viewerHint: 'Използвайте стрелките или плъзнете наляво и надясно. Затворете с × или Esc.', loading: 'Зареждане на снимката…', error: 'Снимката не се зареди. Опитайте да я отворите отново.' },
+  en: { open: 'Open photograph', close: 'Close gallery', hint: 'Select a photograph to view it. Use the arrows or swipe left and right.', viewerHint: 'Use the arrows or swipe left and right. Close with × or Esc.', loading: 'Loading photograph…', error: 'The photograph could not load. Try opening it again.' },
+  it: { open: 'Apri la foto', close: 'Chiudi la galleria', hint: 'Seleziona una foto per ingrandirla. Usa le frecce o scorri a destra e sinistra.', viewerHint: 'Usa le frecce o scorri a destra e sinistra. Chiudi con × o Esc.', loading: 'Caricamento della foto…', error: 'La foto non è stata caricata. Prova ad aprirla di nuovo.' },
+  fr: { open: 'Ouvrir la photo', close: 'Fermer la galerie', hint: 'Sélectionnez une photo pour l’agrandir. Utilisez les flèches ou balayez vers la gauche et la droite.', viewerHint: 'Utilisez les flèches ou balayez vers la gauche et la droite. Fermez avec × ou Échap.', loading: 'Chargement de la photo…', error: 'La photo n’a pas pu être chargée. Essayez de l’ouvrir à nouveau.' },
+  de: { open: 'Foto öffnen', close: 'Galerie schließen', hint: 'Wählen Sie ein Foto zum Vergrößern. Verwenden Sie die Pfeile oder wischen Sie nach links und rechts.', viewerHint: 'Verwenden Sie die Pfeile oder wischen Sie nach links und rechts. Schließen mit × oder Esc.', loading: 'Foto wird geladen…', error: 'Das Foto konnte nicht geladen werden. Öffnen Sie es erneut.' },
+};
 
 export const harvestGalleryCopy: Record<Locale, { eyebrow: string; title: string; description: string; imageLabel: string }> = {
   bg: { eyebrow: 'НАШАТА РЕКОЛТА', title: 'От гората до подбора', description: 'Истински моменти от терена, събирането и сортирането на сезонните гъби.', imageLabel: 'Снимка от реколтата' },
