@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useRef, useState, type FormEvent } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, Compass, Leaf, Menu, MoveUpRight, ShieldCheck, Sparkles, X } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check, ChevronDown, Menu, MoveUpRight, Sparkles, X } from 'lucide-react';
 import { articles, catalogProductPath, copy, faqItems, imageUrl, isCatalogProductPath, keyForPath, languageMeta, locales, pathFor, titleFor, truffleFor, truffleIds as defaultTruffleIds, type Copy, type Locale, type PageKey } from './content';
 import { localeUi } from './i18n';
 import { renderHead } from './seo';
@@ -8,6 +8,7 @@ import { HarvestAdminPage as AdminPage } from './harvest-admin-crud';
 import { createCatalogSeeds, getSupabaseClient, loadCatalogProducts, loadHarvestRecords, safeCatalogImage, type CatalogProduct, type HarvestRecord } from './catalog';
 import { harvestGalleryCopy, harvestPhotos, heroHarvestPhotos, homeGalleryPhotos, homeStoryPhoto } from './harvest-photos';
 import { knowledgeCopy, knowledgeArticleIds } from './knowledge';
+import { AboutPage, ContactPage, RestaurantPage } from './business-pages';
 import './harvest-gallery.css';
 import './harvest-inventory.css';
 
@@ -99,10 +100,9 @@ function updateManagedProductMeta(locale: Locale, product: CatalogProduct) {
 
 function localizedMeta(locale: Locale, key: PageKey) {
   const fragment = renderHead(locale, key);
-  document.title = fragment.match(/<title>(.*?)<\/title>/)?.[1] ?? 'Truffle Balkans';
   document.documentElement.lang = locale;
   const parsed = new DOMParser().parseFromString(`<head>${fragment}</head>`, 'text/html').head;
-  const owned = document.head.querySelectorAll('[data-truffle-seo]');
+  const owned = document.head.querySelectorAll('title, meta[name="description"], [data-truffle-seo]');
   owned.forEach((element) => element.remove());
   [...parsed.children].forEach((element) => {
     const clone = element.cloneNode(true) as HTMLElement;
@@ -240,7 +240,7 @@ function Page({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; t: Cop
   if (pageKey === 'wholesale') return <WholesalePage locale={locale} t={t} />;
   if (pageKey === 'truffles') return <TruffleIndex locale={locale} t={t} />;
   if (pageKey === 'about') return <AboutPage locale={locale} t={t} />;
-  if (pageKey === 'contact') return <ContactPage t={t} />;
+  if (pageKey === 'contact') return <ContactPage locale={locale} t={t} />;
   if (pageKey === 'faq') return <FaqPage locale={locale} t={t} />;
   if (pageKey === 'blog') return <BlogPage locale={locale} t={t} />;
   if (pageKey.startsWith('product:') || pageKey.startsWith('truffle:')) return <DetailPage locale={locale} pageKey={pageKey} t={t} />;
@@ -261,20 +261,16 @@ function Home({ locale, t }: { locale: Locale; t: Copy }) {
   }, [activeSlide, heroSlides.length]);
   return <>
     <section className="hero">
-      {heroSlides.map((slide, index) => <img key={slide.slug} className={`hero-photo ${activeSlide === index ? 'is-active' : ''}`} src={slide.image} style={{ objectPosition: slide.position }} alt="" aria-hidden="true" loading={index === 0 ? 'eager' : 'lazy'} />)}
-      <div className="hero-shade" />
+      <div className="hero-visual">{heroSlides.map((slide, index) => <img key={slide.slug} className={`hero-photo ${activeSlide === index ? 'is-active' : ''}`} src={slide.image} style={{ objectPosition: slide.position }} alt="" aria-hidden="true" loading={index === 0 ? 'eager' : 'lazy'} />)}</div>
       <div className="hero-copy"><p className="eyebrow"><span />{t.heroEyebrow}</p><h1>{t.heroTitle}</h1><p className="hero-description">{t.heroText}</p><Link className="button button-gold" to={pathFor(locale, 'products')}>{t.discover}<ArrowRight size={17} /></Link></div>
-      <div className="hero-caption"><span>42° 41′ N</span><span>{t.origin}</span><span>23° 19′ E</span></div>
-      <a className="scroll-cue" href="#seasonal"><ArrowDown size={15} /> <span>{localeUi[locale].scroll}</span></a>
-      <div className="hero-stamp"><Compass size={21} /><span>WILD<br />BY NATURE</span></div>
     </section>
     <div className="hero-slide-indicator" aria-label={t.origin}>
       <div className="hero-slide-progress" role="group" aria-label={t.origin}>{heroSlides.map((slide, index) => <button type="button" className={activeSlide === index ? 'is-active' : ''} key={slide.slug} aria-label={`${localeUi[locale].photo} ${index + 1}`} aria-pressed={activeSlide === index} onClick={() => setActiveSlide(index)} />)}</div>
       <span className="hero-slide-count" aria-live="polite">{String(activeSlide + 1).padStart(2, '0')} / {String(heroSlides.length).padStart(2, '0')}</span>
     </div>
     <section id="seasonal" className="section featured-section"><SectionHeading eyebrow={t.origin} title={t.featured} intro={t.featuredIntro} /><div className="product-grid">{productIds.map((id, index) => <ProductCard key={id} locale={locale} t={t} id={id} number={`0${index + 1}`} />)}</div><div className="section-link"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div></section>
-    <section className="species-band"><div className="species-copy"><p className="eyebrow">{t.reasonsEyebrow}</p><h2>{t.species}</h2><p>{t.speciesText}</p><Link className="text-link text-link-light" to={pathFor(locale, 'truffles')}>{t.learn}<ArrowRight size={16} /></Link></div><div className="species-image" role="img" aria-label={t.origin} style={{ backgroundImage: 'url(/snimki/IMG_7286.jpeg)' }} /><div className="species-index">01 <span>/</span> 04</div></section>
     <HomeHarvestRibbon locale={locale} t={t} />
+    <section className="species-band"><div className="species-copy"><p className="eyebrow">{t.nav.truffles}</p><h2>{t.species}</h2><p>{t.speciesText}</p><Link className="text-link text-link-light" to={pathFor(locale, 'truffles')}>{t.learn}<ArrowRight size={16} /></Link></div><figure className="species-image"><img src="/snimki/IMG_7286.jpeg" alt={t.species} loading="lazy" width="828" height="1097" /></figure></section>
     <HomeStory t={t} />
     <KnowledgePreview locale={locale} t={t} />
     <FaqPreview locale={locale} t={t} /><CallToAction locale={locale} t={t} />
@@ -349,45 +345,9 @@ function WholesalePage({ locale, t }: { locale: Locale; t: Copy }) {
   const location = useLocation();
   const catalog = useContext(CatalogContext);
   const catalogLoaded = useContext(CatalogLoadedContext);
-  const productId = (location.state as { productId?: string } | null)?.productId ?? '';
-  const [status, setStatus] = useState<'missingEmail' | 'opened' | null>(null);
-
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const email = import.meta.env.VITE_CONTACT_EMAIL?.trim();
-    if (!email) {
-      setStatus('missingEmail');
-      return;
-    }
-    const values = Object.fromEntries(new FormData(event.currentTarget).entries());
-    const body = Object.entries(values).map(([key, value]) => `${key}: ${value}`).join('\n');
-    const subject = encodeURIComponent(`Wholesale enquiry — ${values.company}`);
-    window.location.href = `mailto:${email}?subject=${subject}&body=${encodeURIComponent(body)}`;
-    setStatus('opened');
-  }
-
-  return <>
-    <PageIntro eyebrow={t.wholesaleEyebrow} title={t.wholesaleTitle} text={t.wholesaleIntro} />
-    <section className="wholesale-section">
-      <div className="wholesale-aside">
-        <p className="eyebrow">TRUFFLE BALKANS · B2B</p>
-        <h2>{t.wholesaleFormTitle}</h2>
-        <p>{t.wholesaleFormText}</p>
-        <div className="wholesale-points">{t.wholesalePoints.map(([title, text], index) => <article key={title}><span>0{index + 1}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div>
-      </div>
-      <form className="wholesale-form" onSubmit={submit}>
-        <div className="form-row"><label>{t.form.name}<input name="name" autoComplete="name" required /></label><label>{t.form.company}<input name="company" autoComplete="organization" required /></label></div>
-        <div className="form-row"><label>{t.form.email}<input name="email" type="email" autoComplete="email" required /></label><label>{t.form.phone}<input name="phone" type="tel" autoComplete="tel" /></label></div>
-        <div className="form-row"><label>{t.form.product}<select name="product" defaultValue={productId} required><option value="" disabled>{t.form.selectProduct}</option>{catalogProductIds(catalog, catalogLoaded).map((id) => <option key={id} value={id}>{productFor(id, locale, catalog)?.title}</option>)}</select></label><label>{t.form.quantity}<input name="quantity" placeholder={t.form.quantityHint} required /></label></div>
-        <div className="form-row"><label>{t.form.country}<input name="country" autoComplete="country-name" /></label><label>{t.form.delivery}<input name="deliveryDate" type="date" /></label></div>
-        <label>{t.form.message}<textarea name="message" rows={4} /></label>
-        <button className="button button-dark" type="submit">{t.form.send}<ArrowUpRight size={16} /></button>
-        {status === 'missingEmail' && <p className="form-notice" role="status">{t.quoteMissingEmail}</p>}
-        {status === 'opened' && <p className="form-success" role="status">{t.quoteOpened}</p>}
-      </form>
-    </section>
-    <CallToAction locale={locale} t={t} />
-  </>;
+  const initialProduct = (location.state as { productId?: string } | null)?.productId ?? '';
+  const products = catalogProductIds(catalog, catalogLoaded).map((id) => ({ id, title: productFor(id, locale, catalog)?.title ?? id }));
+  return <RestaurantPage locale={locale} t={t} products={products} initialProduct={initialProduct} />;
 }
 
 function ProductIndex({ locale, t }: { locale: Locale; t: Copy }) {
@@ -428,10 +388,6 @@ function DetailPage({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; 
   return <><div className="detail-hero"><div className="detail-visual"><img src={productImage(item, 1500)} alt={`${item.title} from ${item.origin ?? 'the Balkans'}`} loading="eager" /></div><div className="detail-copy"><Link className="back-link" to={pathFor(locale, productMode ? 'products' : 'truffles')}>← {t.back}</Link><p className="eyebrow"><span />{productMode ? item.available === false ? t.outOfStock : t.availability : t.origin}</p><h1>{item.title}</h1><p className="detail-lede">{item.description}</p><div className="detail-facts"><div><span>{t.season}</span><strong>{item.season}</strong></div><div><span>{t.originLabel}</span><strong>{item.origin ?? 'Balkans'}</strong></div><div><span>{t.grade}</span><strong>{item.note}</strong></div>{item.weight_grams != null && <div><span>{t.form.quantity}</span><strong>{item.weight_grams} g</strong></div>}{item.available !== undefined && <div><span>{t.availability}</span><strong>{item.available ? t.inStock : t.outOfStock}{item.stock_grams != null ? ` · ${item.stock_grams} g` : ''}</strong></div>}</div><Link className="button button-dark" to={pathFor(locale, 'wholesale')} state={{ productId: id }}>{offer}<ArrowUpRight size={16} /></Link></div></div><section className="section detail-story"><div><p className="eyebrow">{t.landscapeEyebrow}</p><h2>{item.title}, at its best</h2></div><div className="detail-prose"><p>{item.body}</p><h3>{t.season}</h3><p>{item.season}. Availability, size and grade depend on the current harvest. Contact us for the latest selection and handling guidance.</p></div></section><FaqPreview locale={locale} t={t} /><section className="section related-section"><SectionHeading eyebrow={t.nav.truffles} title={t.related} /><div className="product-grid">{truffleIds.filter((candidate) => candidate !== id).slice(0, 3).map((candidate, index) => <ProductCard key={candidate} locale={locale} t={t} id={candidate} number={`0${index + 1}`} />)}</div></section><CallToAction locale={locale} t={t} /></>;
 }
 
-function AboutPage({ locale, t }: { locale: Locale; t: Copy }) {
-  return <><PageIntro eyebrow="TRUFFLE BALKANS" title={t.aboutTitle} text={t.aboutText} /><section className="about-visual" style={{ backgroundImage: `url(${imageUrl('photo-1448375240586-882707db888b', 1800)})` }}><span>{t.landscapeEyebrow}</span></section><section className="section about-story"><div><p className="eyebrow">{t.reasonsEyebrow}</p><h2>{t.landscapeTitle}</h2></div><div><p>{t.landscapeText}</p><p>{t.processText}</p><p>{t.qualityText}</p></div></section><section className="section philosophy-section"><SectionHeading eyebrow={t.reasonsEyebrow} title={t.reasonsTitle} intro={t.reasonsText} /><div className="reason-grid">{t.reasons.map(([title, text], index) => <article className="reason" key={title}><span className="reason-number">0{index + 1}</span><div className="reason-icon">{index === 0 ? <Leaf /> : index === 1 ? <ShieldCheck /> : <Sparkles />}</div><h3>{title}</h3><p>{text}</p></article>)}</div></section><CallToAction locale={locale} t={t} /></>;
-}
-
 function BlogPage({ locale, t }: { locale: Locale; t: Copy }) {
   return <><PageIntro eyebrow={t.nav.blog} title={t.blogTitle} text={t.landscapeText} /><section className="section blog-grid-section"><div className="blog-grid">{Object.entries(articles[locale]).map(([id, article], index) => <article className={`blog-card ${index === 0 ? 'blog-card-featured' : ''}`} key={id}><Link to={pathFor(locale, `article:${id}`)} className="blog-image"><img src={imageUrl(article.image, 1000)} alt={article.title} loading="lazy" width="1000" height="700" /></Link><p className="blog-date">{article.date} <span>·</span> Truffle Balkans</p><h2><Link to={pathFor(locale, `article:${id}`)}>{article.title}</Link></h2><p>{article.description}</p><Link className="text-link" to={pathFor(locale, `article:${id}`)}>{t.learn}<ArrowRight size={15} /></Link></article>)}</div></section></>;
 }
@@ -444,15 +400,6 @@ function ArticlePage({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey;
 
 function BlogCards({ locale, t, skip }: { locale: Locale; t: Copy; skip?: string }) {
   return <div className="blog-grid">{Object.entries(articles[locale]).filter(([id]) => id !== skip).slice(0, 2).map(([id, article]) => <article className="blog-card" key={id}><Link to={pathFor(locale, `article:${id}`)} className="blog-image"><img src={imageUrl(article.image, 800)} alt={article.title} loading="lazy" width="800" height="600" /></Link><p className="blog-date">{article.date} · Truffle Balkans</p><h2><Link to={pathFor(locale, `article:${id}`)}>{article.title}</Link></h2><p>{article.description}</p><Link className="text-link" to={pathFor(locale, `article:${id}`)}>{t.learn}<ArrowRight size={15} /></Link></article>)}</div>;
-}
-
-function ContactPage({ t }: { t: Copy }) {
-  const [sent, setSent] = useState(false);
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSent(true);
-  }
-  return <><PageIntro eyebrow={t.nav.contact} title={t.contactTitle} text={t.contactText} /><section className="contact-section"><div className="contact-aside"><span className="contact-index">01 / {t.nav.contact}</span><h2>{t.origin}</h2><p>{t.contactNote}</p><div className="contact-fact"><span>{t.availability}</span><strong>{t.freshness}</strong></div><div className="contact-fact"><span>{t.nav.products}</span><strong>{t.productsIntro}</strong></div></div><form className="contact-form" onSubmit={submit}><div className="form-row"><label>{t.form.name}<input name="name" autoComplete="name" required /></label><label>{t.form.email}<input name="email" type="email" autoComplete="email" required /></label></div><div className="form-row"><label>{t.form.phone}<input name="phone" type="tel" autoComplete="tel" /></label><label>{t.form.company}<input name="company" autoComplete="organization" /></label></div><label>{t.form.message}<textarea name="message" rows={5} required /></label><button className="button button-dark" type="submit">{sent ? <>{t.form.sent}<Check size={16} /></> : <>{t.form.send}<ArrowRight size={16} /></>}</button>{sent && <p className="form-success" role="status">{t.contactNote}</p>}</form></section></>;
 }
 
 function FaqPreview({ locale, t }: { locale: Locale; t: Copy }) {

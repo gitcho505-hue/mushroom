@@ -1,6 +1,7 @@
 import { extraCopy, locales, pageSlugs, type Locale } from './i18n';
 import { harvestPhotos } from './harvest-photos';
 import { knowledgeCopy, questionGuides, type GuideArticle } from './knowledge';
+import { businessCopy } from './business-copy';
 export { languageMeta, locales, type Locale } from './i18n';
 
 export type PageKey =
@@ -355,8 +356,8 @@ export function titleFor(key: PageKey, locale: Locale): string {
   if (product) return product.title;
   if (article) return article.title;
   const titles: Record<string, string> = {
-    home: 'Wild Balkan truffles', products: t.productsTitle, wholesale: t.wholesaleTitle, about: t.aboutTitle,
-    truffles: t.trufflesTitle, blog: t.blogTitle, contact: t.contactTitle,
+    home: 'Wild Balkan truffles', products: t.productsTitle, wholesale: businessCopy[locale].wholesale.title, about: businessCopy[locale].about.title,
+    truffles: t.trufflesTitle, blog: t.blogTitle, contact: businessCopy[locale].contact.title,
     faq: t.faqPageTitle, privacy: legalTitles[locale].privacy, terms: legalTitles[locale].terms, cookies: legalTitles[locale].cookies,
   };
   return titles[key] ?? t.heroTitle;
@@ -370,9 +371,9 @@ export function seoFor(locale: Locale, key: PageKey) {
   const description = product?.description ?? article?.description ?? (
     key === 'home' ? copy[locale].heroText :
     key === 'products' ? copy[locale].productsIntro :
-    key === 'wholesale' ? copy[locale].wholesaleIntro :
-    key === 'about' ? copy[locale].aboutText :
-    key === 'contact' ? copy[locale].contactText :
+    key === 'wholesale' ? businessCopy[locale].wholesale.intro :
+    key === 'about' ? businessCopy[locale].about.intro :
+    key === 'contact' ? businessCopy[locale].contact.intro :
     key === 'truffles' ? copy[locale].speciesText :
     key === 'blog' ? knowledgeCopy[locale].intro :
     copy[locale].faqTitle

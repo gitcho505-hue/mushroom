@@ -10,12 +10,12 @@ export const harvestPhotos = [
   'IMG_7315.png', 'IMG_7316.jpeg', 'IMG_7317.jpeg', 'IMG_7318.jpeg', 'IMG_7319.jpeg', 'IMG_7320.jpeg',
 ].map((fileName) => `/snimki/${fileName}`);
 
-/** Hero carousel — full-resolution field frames, ordered by the homepage sequence. */
+/** Portrait originals shown without enlargement to fill a landscape screen. */
 export const heroHarvestPhotos = [
-  { src: '/snimki/IMG_7306.jpeg', position: 'center 58%' },
-  { src: '/snimki/IMG_7302.jpeg', position: 'center 52%' },
-  { src: '/snimki/IMG_7308.jpeg', position: 'center 55%' },
-  { src: '/snimki/IMG_7301.jpeg', position: 'center 52%' },
+  { src: '/images/truffle-field-restored.jpg', position: 'center' },
+  { src: '/snimki/IMG_7301.jpeg', position: 'center' },
+  { src: '/snimki/IMG_7302.jpeg', position: 'center' },
+  { src: '/snimki/IMG_7308.jpeg', position: 'center' },
 ] as const;
 
 export const featuredHarvestPhotos = [
@@ -31,7 +31,7 @@ export const homeGalleryPhotos = [
   '/snimki/IMG_7276.jpeg',
   '/snimki/IMG_7280.jpeg',
   '/snimki/IMG_7290.jpeg',
-  '/snimki/IMG_7294.jpeg',
+  '/snimki/IMG_7283.jpeg',
   '/snimki/IMG_7296.jpeg',
   '/snimki/IMG_7311.jpeg',
 ] as const;
