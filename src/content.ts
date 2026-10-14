@@ -2,6 +2,7 @@ import { extraCopy, locales, pageSlugs, type Locale } from './i18n';
 import { harvestPhotos } from './harvest-photos';
 import { knowledgeCopy, questionGuides, type GuideArticle } from './knowledge';
 import { businessCopy } from './business-copy';
+import { homeIntroCopy } from './home-intro-copy';
 export { languageMeta, locales, type Locale } from './i18n';
 
 export type PageKey =
@@ -206,7 +207,13 @@ const baseCopy = {
   },
 } as const;
 
-export const copy = { ...baseCopy, ...extraCopy } as const;
+const allCopy = { ...baseCopy, ...extraCopy } as const;
+export const copy = Object.fromEntries(locales.map((locale) => [locale, {
+  ...allCopy[locale],
+  heroEyebrow: homeIntroCopy[locale].eyebrow,
+  heroTitle: homeIntroCopy[locale].title,
+  heroText: homeIntroCopy[locale].text,
+}])) as { [L in Locale]: Omit<(typeof allCopy)[L], 'heroEyebrow' | 'heroTitle' | 'heroText'> & { heroEyebrow: string; heroTitle: string; heroText: string } };
 export type Copy = (typeof copy)[Locale];
 
 type LocalizedPage = { slug: string; title: string; description: string; body: string };

@@ -6,11 +6,13 @@ import { localeUi } from './i18n';
 import { renderHead, siteUrl } from './seo';
 import { HarvestAdminPage as AdminPage } from './harvest-admin-crud';
 import { createCatalogSeeds, getSupabaseClient, loadCatalogProducts, loadHarvestRecords, safeCatalogImage, type CatalogProduct, type HarvestRecord } from './catalog';
-import { harvestGalleryCopy, harvestPhotos, heroHarvestPhotos, homeStoryPhoto } from './harvest-photos';
+import { harvestGalleryCopy, harvestPhotos, homeStoryPhoto } from './harvest-photos';
 import { HarvestLightbox } from './harvest-lightbox';
 import { knowledgeCopy, knowledgeArticleIds } from './knowledge';
 import { AboutPage, ContactPage, RestaurantPage } from './business-pages';
 import { ProductDetail } from './product-detail';
+import { HomeIntro } from './home-intro';
+import { homeIntroCopy } from './home-intro-copy';
 import './harvest-gallery.css';
 import './harvest-inventory.css';
 
@@ -217,17 +219,17 @@ function Layout({ locale, pageKey, t, children }: { locale: Locale; pageKey: Pag
 
   return <>
     <a className="skip-link" href="#main">{localeUi[locale].skip}</a>
-    <header className="site-header">
+    <header className={`site-header${pageKey === 'home' ? ' site-header-home' : ''}`}>
       <Link className="brand" to={pathFor(locale, 'home')} aria-label="Truffle Balkans home">
         <img src="/images/brand-logo.png" width="55" height="55" alt="" />
         <span><strong>TRUFFLE</strong><small>B A L K A N S</small></span>
       </Link>
       <button ref={menuToggle} type="button" className="icon-button mobile-menu-toggle" aria-label={menuOpen ? localeUi[locale].menuClose : localeUi[locale].menuOpen} aria-controls="main-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
       <nav id="main-navigation" className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label={localeUi[locale].navigation}>
-        {(['home', 'products', 'wholesale', 'truffles', 'about', 'blog', 'contact'] as const).map((item) => <Link key={item} to={pathFor(locale, item)} onClick={() => setMenuOpen(false)} aria-current={pageKey === item ? 'page' : undefined}>{t.nav[item]}</Link>)}
-        <div className="mobile-nav-tools"><LanguagePicker locale={locale} pageKey={pageKey} compact /><Link className="button button-gold" to={pathFor(locale, 'wholesale')}>{t.cta} <ArrowUpRight size={15} /></Link></div>
+        {(pageKey === 'home' ? (['home', 'products', 'wholesale', 'about', 'contact'] as const) : (['home', 'products', 'wholesale', 'truffles', 'about', 'blog', 'contact'] as const)).map((item) => <Link key={item} to={pathFor(locale, item)} onClick={() => setMenuOpen(false)} aria-current={pageKey === item ? 'page' : undefined}>{t.nav[item]}</Link>)}
+        <div className="mobile-nav-tools"><LanguagePicker locale={locale} pageKey={pageKey} compact /><Link className="button button-gold" to={pathFor(locale, 'wholesale')}>{pageKey === 'home' ? homeIntroCopy[locale].enquiry : t.cta} <ArrowUpRight size={15} /></Link></div>
       </nav>
-      <div className="header-tools"><LanguagePicker locale={locale} pageKey={pageKey} /><Link className="button button-gold header-cta" to={pathFor(locale, 'wholesale')}>{t.cta} <ArrowUpRight size={15} /></Link></div>
+      <div className="header-tools"><LanguagePicker locale={locale} pageKey={pageKey} /><Link className="button button-gold header-cta" to={pathFor(locale, 'wholesale')}>{pageKey === 'home' ? homeIntroCopy[locale].enquiry : t.cta} <ArrowUpRight size={15} /></Link></div>
     </header>
     <main id="main">{children}</main>
     <Footer locale={locale} t={t} />
@@ -274,22 +276,8 @@ function Home({ locale, t }: { locale: Locale; t: Copy }) {
   const catalog = useContext(CatalogContext);
   const catalogLoaded = useContext(CatalogLoadedContext);
   const productIds = catalogProductIds(catalog, catalogLoaded);
-  const heroSlides = heroHarvestPhotos.map((slide, index) => ({ slug: `harvest-${index + 1}`, image: slide.src, position: slide.position }));
-  const [activeSlide, setActiveSlide] = useState(0);
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const timer = window.setInterval(() => setActiveSlide((current) => (current + 1) % heroSlides.length), 6500);
-    return () => window.clearInterval(timer);
-  }, [activeSlide, heroSlides.length]);
   return <>
-    <section className="hero">
-      <div className="hero-visual">{heroSlides.map((slide, index) => <img key={slide.slug} className={`hero-photo ${activeSlide === index ? 'is-active' : ''}`} src={slide.image} style={{ objectPosition: slide.position }} alt="" aria-hidden="true" loading={index === 0 ? 'eager' : 'lazy'} />)}</div>
-      <div className="hero-copy"><p className="eyebrow"><span />{t.heroEyebrow}</p><h1>{t.heroTitle}</h1><p className="hero-description">{t.heroText}</p><Link className="button button-gold" to={pathFor(locale, 'products')}>{t.discover}<ArrowRight size={17} /></Link></div>
-    </section>
-    <div className="hero-slide-indicator" aria-label={t.origin}>
-      <div className="hero-slide-progress" role="group" aria-label={t.origin}>{heroSlides.map((slide, index) => <button type="button" className={activeSlide === index ? 'is-active' : ''} key={slide.slug} aria-label={`${localeUi[locale].photo} ${index + 1}`} aria-pressed={activeSlide === index} onClick={() => setActiveSlide(index)} />)}</div>
-      <span className="hero-slide-count" aria-live="polite">{String(activeSlide + 1).padStart(2, '0')} / {String(heroSlides.length).padStart(2, '0')}</span>
-    </div>
+    <HomeIntro locale={locale} />
     <section id="seasonal" className="section featured-section"><SectionHeading eyebrow={t.origin} title={t.featured} intro={t.featuredIntro} /><div className="product-grid">{productIds.map((id, index) => <ProductCard key={id} locale={locale} t={t} id={id} number={`0${index + 1}`} />)}</div><div className="section-link"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div></section>
     <HomeHarvestRibbon locale={locale} t={t} />
     <section className="species-band"><div className="species-copy"><p className="eyebrow">{t.nav.truffles}</p><h2>{t.species}</h2><p>{t.speciesText}</p><Link className="text-link text-link-light" to={pathFor(locale, 'truffles')}>{t.learn}<ArrowRight size={16} /></Link></div><figure className="species-image"><img src="/snimki/IMG_7286.jpeg" alt={t.species} loading="lazy" width="828" height="1097" /></figure></section>

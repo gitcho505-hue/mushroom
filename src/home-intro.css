@@ -1,0 +1,175 @@
+.site-header-home {
+  border-bottom: 1px solid #d7a75c;
+}
+
+.site-header-home .brand img {
+  width: 126px;
+  height: 56px;
+  filter: none;
+}
+
+.site-header-home .brand span { display: none; }
+
+.site-header-home .header-cta,
+.site-header-home .mobile-nav-tools .button {
+  border: 1px solid #d7a75c;
+  box-shadow: none;
+  min-height: 46px;
+  padding-inline: 20px;
+  font-size: 14px;
+}
+
+.site-header-home .main-nav > a[aria-current='page'] {
+  position: relative;
+  color: #dfb870;
+}
+
+.site-header-home .main-nav > a[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 28px;
+  height: 1px;
+  background: #d7a75c;
+}
+
+.home-intro {
+  color: #f5f2e8;
+  background: #071f15;
+  padding: clamp(32px, 4vw, 58px) var(--page-pad);
+}
+
+.home-intro-inner {
+  max-width: 1320px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1.23fr 1fr;
+  align-items: center;
+  gap: clamp(28px, 4vw, 64px);
+}
+
+.home-intro-copy { min-width: 0; }
+
+#main .home-intro-copy .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 20px;
+  font-size: 11px;
+  letter-spacing: .13em;
+  color: #dfbe83;
+}
+
+.home-intro-copy .eyebrow > span {
+  width: 28px;
+  height: 1px;
+  flex: none;
+  background: #d7a75c;
+}
+
+.home-intro h1 {
+  margin: 0 0 20px;
+  max-width: 720px;
+  font-family: var(--display);
+  font-size: clamp(36px, 4.1vw, 58px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+
+#main .home-intro-description {
+  max-width: 610px;
+  margin: 0 0 26px;
+  color: #e1e6db;
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.home-intro-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+#main .home-intro-actions .button {
+  min-height: 54px;
+  padding: 13px 20px;
+  gap: 14px;
+  border: 1px solid #d7a75c;
+  font-size: 14px;
+  box-shadow: none;
+  transform: none;
+}
+
+.home-intro-primary { background: #dfb467; color: #10271d; }
+.home-intro-primary:hover { background: #edc681; }
+.home-intro-whatsapp { color: #f5f2e8; background: transparent; }
+.home-intro-whatsapp:hover { background: #ffffff0d; }
+.home-intro-actions svg { flex: none; }
+
+.home-intro-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 0;
+  margin: 28px 0 38px;
+  padding: 0;
+  list-style: none;
+}
+
+.home-intro-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding-inline: 20px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #e1e6db;
+}
+
+.home-intro-benefits li:first-child { padding-left: 0; }
+.home-intro-benefits li + li { border-left: 1px solid #dfbe833d; }
+.home-intro-benefits svg { flex: none; stroke-width: 1.4; color: #dfbe83; }
+#main .home-intro-discover { color: #dfbe83; font-size: 14px; border-color: #a58b5c; }
+
+.home-intro-photo {
+  width: 100%;
+  max-width: 510px;
+  margin: 0 0 0 auto;
+  aspect-ratio: .91;
+  overflow: hidden;
+  border: 1px solid #d7a75c55;
+  border-radius: 4px;
+  background: #10271d;
+}
+
+.home-intro-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  filter: none;
+}
+
+@media (max-width: 1080px) {
+  .home-intro-inner { gap: 28px; grid-template-columns: 1.2fr 1fr; }
+  .home-intro h1 { font-size: clamp(34px, 4.1vw, 44px); }
+  .home-intro-benefits { gap: 14px 18px; }
+  .home-intro-benefits li { padding: 0; }
+  .home-intro-benefits li + li { border-left: 0; }
+  .site-header-home .main-nav > a[aria-current='page']::after { display: none; }
+}
+
+@media (max-width: 700px) {
+  .home-intro { padding-block: 36px 40px; }
+  .home-intro-inner { grid-template-columns: 1fr; gap: 30px; }
+  .home-intro h1 { font-size: clamp(35px, 8.6vw, 52px); }
+  #main .home-intro-copy .eyebrow { font-size: 10px; gap: 10px; letter-spacing: .09em; margin-bottom: 18px; }
+  #main .home-intro-description { font-size: 16px; margin-bottom: 24px; }
+  .home-intro-actions { display: grid; grid-template-columns: 1fr; }
+  #main .home-intro-actions .button { min-height: 54px; font-size: 15px; padding-inline: 16px; }
+  .home-intro-benefits { margin: 24px 0 26px; gap: 15px 22px; }
+  .home-intro-benefits li { font-size: 13px; gap: 9px; }
+  .home-intro-photo { max-width: 440px; margin: 0 auto; }
+}
