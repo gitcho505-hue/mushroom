@@ -10,28 +10,22 @@ export type GuideArticle = {
   image: string;
   paragraphs: string[];
   sections?: { title: string; paragraphs: string[] }[];
-  sources?: { title: string; url: string }[];
 };
 
 export const knowledgeArticleIds = ['storage', 'price', 'season', 'black-and-white', 'cooking', 'balkan-truffles'] as const;
 
-export const knowledgeCopy: Record<Locale, { eyebrow: string; title: string; intro: string; read: string; all: string; sources: string }> = {
-  bg: { eyebrow: 'ПОЛЕЗНО ЗА ТРЮФЕЛИТЕ', title: 'Вашите въпроси. Нашият наръчник.', intro: 'От първата поръчка до последните фини резени — практични отговори за избора, сезона и работата с пресни трюфели.', read: 'Прочетете отговора', all: 'Всички статии', sources: 'Допълнително четене' },
-  en: { eyebrow: 'THE TRUFFLE NOTEBOOK', title: 'Your questions. Our guide.', intro: 'From the first order to the final shavings: practical answers about choosing, sourcing and using fresh truffles.', read: 'Read the answer', all: 'All articles', sources: 'Further reading' },
-  it: { eyebrow: 'IL TACCUINO DEI TARTUFI', title: 'Le vostre domande. La nostra guida.', intro: 'Dal primo ordine alle ultime lamelle: risposte pratiche sulla scelta, la stagione e l’uso dei tartufi freschi.', read: 'Leggi la risposta', all: 'Tutti gli articoli', sources: 'Per approfondire' },
-  fr: { eyebrow: 'LE CARNET DES TRUFFES', title: 'Vos questions. Notre guide.', intro: 'De la première commande aux dernières lamelles : des réponses pratiques sur le choix, la saison et l’utilisation des truffes fraîches.', read: 'Lire la réponse', all: 'Tous les articles', sources: 'Pour aller plus loin' },
-  de: { eyebrow: 'DAS TRÜFFEL-NOTIZBUCH', title: 'Ihre Fragen. Unser Ratgeber.', intro: 'Von der ersten Bestellung bis zu den letzten Scheiben: praktische Antworten zu Auswahl, Saison und Verwendung frischer Trüffel.', read: 'Antwort lesen', all: 'Alle Artikel', sources: 'Weiterführende Informationen' },
+export const knowledgeCopy: Record<Locale, { eyebrow: string; title: string; intro: string; read: string; all: string }> = {
+  bg: { eyebrow: 'ПОЛЕЗНО ЗА ТРЮФЕЛИТЕ', title: 'Вашите въпроси. Нашият наръчник.', intro: 'От първата поръчка до последните фини резени — практични отговори за избора, сезона и работата с пресни трюфели.', read: 'Прочетете отговора', all: 'Всички статии' },
+  en: { eyebrow: 'THE TRUFFLE NOTEBOOK', title: 'Your questions. Our guide.', intro: 'From the first order to the final shavings: practical answers about choosing, sourcing and using fresh truffles.', read: 'Read the answer', all: 'All articles' },
+  it: { eyebrow: 'IL TACCUINO DEI TARTUFI', title: 'Le vostre domande. La nostra guida.', intro: 'Dal primo ordine alle ultime lamelle: risposte pratiche sulla scelta, la stagione e l’uso dei tartufi freschi.', read: 'Leggi la risposta', all: 'Tutti gli articoli' },
+  fr: { eyebrow: 'LE CARNET DES TRUFFES', title: 'Vos questions. Notre guide.', intro: 'De la première commande aux dernières lamelles : des réponses pratiques sur le choix, la saison et l’utilisation des truffes fraîches.', read: 'Lire la réponse', all: 'Tous les articles' },
+  de: { eyebrow: 'DAS TRÜFFEL-NOTIZBUCH', title: 'Ihre Fragen. Unser Ratgeber.', intro: 'Von der ersten Bestellung bis zu den letzten Scheiben: praktische Antworten zu Auswahl, Saison und Verwendung frischer Trüffel.', read: 'Antwort lesen', all: 'Alle Artikel' },
 };
 
-function guide(locale: Locale, slug: string, title: string, description: string, body: string, image: string, sections: NonNullable<GuideArticle['sections']>, sources: GuideArticle['sources'] = []): GuideArticle {
-  return { slug, title, description, body, image, sections, sources, paragraphs: [], published: '2026-10-14', date: new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date('2026-10-14T12:00:00+03:00')) };
+function guide(locale: Locale, slug: string, title: string, description: string, body: string, image: string, sections: NonNullable<GuideArticle['sections']>): GuideArticle {
+  return { slug, title, description, body, image, sections, paragraphs: [], published: '2026-10-14', date: new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date('2026-10-14T12:00:00+03:00')) };
 }
 
-const seasonSources = [
-  { title: 'TruffleHunter — The Truffle Guide', url: 'https://www.truffle-hunter.com/pages/the-truffle-guide' },
-  { title: 'Tartufo del Poggio — Truffle Varieties', url: 'https://www.tartufodelpoggio.com/en/truffle-varieties/' },
-];
-const cookingSources = [{ title: 'Urbani — Handling and serving fresh truffles', url: 'https://urbani.com/pages/faq' }];
 
 export const questionGuides: Record<Locale, Record<string, GuideArticle>> = {
   bg: {
@@ -44,12 +38,12 @@ export const questionGuides: Record<Locale, Record<string, GuideArticle>> = {
       { title: 'Кой вид да търсите през различните сезони?', paragraphs: ['В Европа Tuber aestivum е летният ориентир, Tuber uncinatum се свързва с есента, а Tuber melanosporum — със зимата. Белият Tuber magnatum е характерен за есента и началото на зимата. Това е общ ориентир за избор, а не календар с гарантирана наличност.'] },
       { title: 'Защо календарът не е достатъчен?', paragraphs: ['Районът и условията през годината имат значение. Сезонът на един и същ вид не означава еднакво количество, размер и качество във всяка партида. За конкретна дата разгледайте публикуваните наличности и поискайте потвърждение.', 'Периодите в международните справочници описват техните райони. За поръчка от Балканите уточнете произхода и конкретния вид, вместо да пренасяте чужд календар директно към местната реколта.'] },
       { title: 'Как да планирате сезонно меню?', paragraphs: ['Посочете датата на сервиране още при запитването. Ако менюто ви е за по-дълъг период, обсъдете подходящ сезонен вид и вариант за промяна на ястието според наличността. За дегустационно меню е полезно да направите проба с конкретната партида, преди да заложите постоянна порция.'] },
-    ], seasonSources),
+    ]),
     cooking: guide('bg', 'kak-da-izpolzvame-presni-tryufeli', 'Как да използваме пресни трюфели в кухнята?', 'Фини резени, подходяща температура и правилно подбрано ястие: как да дадете място на аромата на пресния трюфел.', 'Започнете с просто ястие и малка пробна порция. Избраният вид трябва да води подготовката.', '/snimki/IMG_7316.jpeg', [
       { title: 'Кога се добавя трюфелът?', paragraphs: ['Белият трюфел обичайно се завършва суров върху готовото топло ястие. Черният може да се използва с умерено затопляне. Продължителната силна топлина не е добър подход за запазване на деликатния аромат.'] },
       { title: 'С кое ястие да започнете?', paragraphs: ['За първа проба изберете паста с масло, яйца или семпло ризото. Пригответе малка порция от избраното ястие, добавете фини резени и преценете дали другите съставки оставят достатъчно място на трюфела.', 'За ресторантско меню записвайте използваните грамове за пробната порция и вкусовия резултат. Така следващата заявка се основава на вашето ястие и конкретния вид, а не на универсална доза, която може да не пасне на кухнята ви.'] },
       { title: 'Какво да уточните преди поръчката?', paragraphs: ['Кажете дали ще правите фини резени на масата, сос или друга подготовка. Това помага при избора на форма и размер. Планирайте използването близо до доставката и прочетете наръчника за съхранение. За наличност и подбор изпратете запитване с вида, количеството и датата.'] },
-    ], cookingSources),
+    ]),
   },
   en: {
     price: guide('en', 'what-determines-truffle-prices', 'What determines the price of truffles?', 'Compare species, grade, weight and delivery terms before comparing prices. A practical guide to requesting a restaurant quote.', 'A useful price comparison starts with the same species, grade and unit of weight.', '/snimki/IMG_7274.jpeg', [
@@ -61,12 +55,12 @@ export const questionGuides: Record<Locale, Record<string, GuideArticle>> = {
       { title: 'Which species suits the season?', paragraphs: ['In Europe, Tuber aestivum is associated with summer, Tuber uncinatum with autumn and Tuber melanosporum with winter. White Tuber magnatum belongs mainly to autumn and early winter. These are broad guides, not promises of stock.'] },
       { title: 'Why a calendar is only a starting point', paragraphs: ['Origin and conditions during the year matter. A species being in season does not mean every batch has the same quantity, size or quality. Check the published stock and request confirmation for a specific delivery.', 'International guides describe their own regions. For a Balkan order, confirm the origin and species rather than applying another region’s calendar directly to the local harvest.'] },
       { title: 'Plan a menu around actual availability', paragraphs: ['Include the service date in your enquiry. For a longer-running menu, discuss a seasonal choice and a possible dish adjustment when availability changes. A tasting with the particular batch helps you settle the portion before adding it to a regular menu.'] },
-    ], seasonSources),
+    ]),
     cooking: guide('en', 'how-to-use-fresh-truffles', 'How do you use fresh truffles in cooking?', 'Choose a simple dish, fine shavings and a suitable temperature to give a fresh truffle’s aroma room to shine.', 'Start with a simple dish and a small tasting portion. Let the species guide the preparation.', '/snimki/IMG_7316.jpeg', [
       { title: 'When should you add the truffle?', paragraphs: ['White truffle is usually shaved raw over the finished warm dish. Black truffles can suit gentle warming. Prolonged high heat is a poor choice when preserving a delicate aroma.'] },
       { title: 'Choose your first tasting dish', paragraphs: ['Try buttered pasta, eggs or a simple risotto. Prepare a small portion, add fine shavings and consider whether the other ingredients leave enough room for the truffle.', 'For a restaurant menu, record the grams used and the tasting result. This makes your next order specific to your dish and species, rather than relying on a universal serving amount.'] },
       { title: 'What should you tell your supplier?', paragraphs: ['Mention whether you need table-side shavings, a sauce or another preparation, as this helps with size and shape selection. Plan to use the batch close to delivery and read the storage guide. Include the species, weight and date in your availability enquiry.'] },
-    ], cookingSources),
+    ]),
   },
   it: {
     price: guide('it', 'come-si-determina-il-prezzo-dei-tartufi', 'Come si determina il prezzo dei tartufi?', 'Specie, selezione, peso e condizioni di consegna: come confrontare un’offerta e chiedere un preventivo per il ristorante.', 'Un confronto utile parte dalla stessa specie, dalla stessa selezione e dalla stessa unità di peso.', '/snimki/IMG_7274.jpeg', [
@@ -78,12 +72,12 @@ export const questionGuides: Record<Locale, Record<string, GuideArticle>> = {
       { title: 'Quale specie scegliere?', paragraphs: ['In Europa, Tuber aestivum è associato all’estate, Tuber uncinatum all’autunno e Tuber melanosporum all’inverno. Il bianco Tuber magnatum è tipico dell’autunno e dell’inizio dell’inverno. Sono indicazioni generali, non garanzie di disponibilità.'] },
       { title: 'Il calendario è un punto di partenza', paragraphs: ['Origine e condizioni dell’anno contano. Essere in stagione non significa che ogni partita abbia quantità, dimensioni e qualità identiche. Verifica le disponibilità pubblicate e chiedi conferma per una data precisa.', 'Le guide internazionali descrivono le proprie regioni. Per un ordine dai Balcani, chiarisci specie e provenienza senza applicare automaticamente un calendario di un altro territorio.'] },
       { title: 'Organizzare un menu stagionale', paragraphs: ['Comunica la data del servizio già nella richiesta. Per un menu continuativo, valuta una specie stagionale e un possibile adattamento del piatto. Una prova con la partita scelta aiuta a definire la porzione prima di inserirla nel menu.'] },
-    ], seasonSources),
+    ]),
     cooking: guide('it', 'come-usare-i-tartufi-freschi', 'Come usare i tartufi freschi in cucina?', 'Lamelle sottili, temperatura adatta e un piatto semplice: come lasciare spazio al profumo del tartufo fresco.', 'Inizia con un piatto semplice e una piccola prova. La specie scelta deve guidare la preparazione.', '/snimki/IMG_7316.jpeg', [
       { title: 'Quando aggiungere il tartufo?', paragraphs: ['Il tartufo bianco si serve generalmente crudo sul piatto caldo già pronto. Il nero può essere valorizzato da un calore delicato. Una lunga esposizione ad alte temperature non aiuta a preservare un profumo delicato.'] },
       { title: 'Il primo piatto di prova', paragraphs: ['Prova pasta al burro, uova o un risotto semplice. Prepara una piccola porzione, aggiungi lamelle sottili e valuta se gli altri ingredienti lasciano spazio al tartufo.', 'Per il ristorante, annota i grammi usati e il risultato dell’assaggio. Il prossimo ordine sarà così legato al tuo piatto e alla specie, senza affidarsi a una dose universale.'] },
       { title: 'Cosa indicare nell’ordine?', paragraphs: ['Specifica se desideri lamelle al tavolo, una salsa o un’altra preparazione: aiuta nella scelta di forma e pezzatura. Pianifica l’uso vicino alla consegna e consulta la guida alla conservazione. Includi specie, peso e data nella richiesta.'] },
-    ], cookingSources),
+    ]),
   },
   fr: {
     price: guide('fr', 'comment-se-determine-le-prix-des-truffes', 'Comment se détermine le prix des truffes ?', 'Espèce, sélection, poids et livraison : les points à comparer avant de demander un devis pour votre restaurant.', 'Pour comparer des prix, commencez par une même espèce, une même sélection et une même unité de poids.', '/snimki/IMG_7274.jpeg', [
@@ -95,12 +89,12 @@ export const questionGuides: Record<Locale, Record<string, GuideArticle>> = {
       { title: 'Quelle espèce choisir ?', paragraphs: ['En Europe, Tuber aestivum est associé à l’été, Tuber uncinatum à l’automne et Tuber melanosporum à l’hiver. La blanche Tuber magnatum appartient surtout à l’automne et au début de l’hiver. Ce sont des repères, pas des garanties de stock.'] },
       { title: 'Le calendrier ne suffit pas', paragraphs: ['L’origine et les conditions de l’année comptent. Une espèce en saison ne donne pas des lots identiques en quantité, calibre ou qualité. Consultez les disponibilités et demandez confirmation pour une date précise.', 'Les guides internationaux décrivent leurs propres régions. Pour une commande des Balkans, précisez espèce et provenance plutôt que de transposer directement le calendrier d’un autre territoire.'] },
       { title: 'Préparer une carte saisonnière', paragraphs: ['Mentionnez la date du service dès votre demande. Pour une carte durable, envisagez une espèce saisonnière et une adaptation possible du plat. Une dégustation du lot choisi permet de définir la portion avant de l’inscrire à la carte.'] },
-    ], seasonSources),
+    ]),
     cooking: guide('fr', 'comment-utiliser-les-truffes-fraiches', 'Comment utiliser les truffes fraîches en cuisine ?', 'Lamelles fines, température adaptée et plat simple : comment laisser le parfum de la truffe fraîche s’exprimer.', 'Commencez par un plat simple et une petite dégustation. L’espèce choisie doit guider la préparation.', '/snimki/IMG_7316.jpeg', [
       { title: 'Quand ajouter la truffe ?', paragraphs: ['La truffe blanche se sert généralement crue sur le plat chaud terminé. La noire peut bénéficier d’une chaleur douce. Une exposition prolongée à forte température convient mal à la préservation d’un parfum délicat.'] },
       { title: 'Choisir votre premier essai', paragraphs: ['Essayez des pâtes au beurre, des œufs ou un risotto simple. Préparez une petite portion, ajoutez des lamelles fines et vérifiez que les autres ingrédients laissent de la place à la truffe.', 'Pour le restaurant, notez les grammes utilisés et le résultat de la dégustation. Votre prochaine commande correspondra à votre plat et à l’espèce, sans dépendre d’une dose universelle.'] },
       { title: 'Que préciser au fournisseur ?', paragraphs: ['Indiquez si vous voulez des lamelles à table, une sauce ou une autre préparation : cela aide à choisir forme et calibre. Prévoyez l’utilisation près de la livraison et consultez notre guide de conservation. Précisez espèce, poids et date dans votre demande.'] },
-    ], cookingSources),
+    ]),
   },
   de: {
     price: guide('de', 'wie-entsteht-der-preis-fuer-trueffel', 'Wie entsteht der Preis für Trüffel?', 'Art, Auswahl, Gewicht und Lieferung: So vergleichen Sie Angebote und fragen für Ihr Restaurant an.', 'Ein sinnvoller Preisvergleich beginnt mit derselben Art, Auswahl und Gewichtseinheit.', '/snimki/IMG_7274.jpeg', [
@@ -112,11 +106,11 @@ export const questionGuides: Record<Locale, Record<string, GuideArticle>> = {
       { title: 'Welche Art passt zur Jahreszeit?', paragraphs: ['In Europa steht Tuber aestivum für den Sommer, Tuber uncinatum für den Herbst und Tuber melanosporum für den Winter. Weiße Tuber magnatum gehören vor allem in Herbst und frühen Winter. Dies sind Anhaltspunkte, keine Bestandszusagen.'] },
       { title: 'Warum der Kalender allein nicht reicht', paragraphs: ['Herkunft und Jahresbedingungen spielen eine Rolle. Saison bedeutet nicht, dass jede Partie dieselbe Menge, Größe oder Qualität bietet. Prüfen Sie den veröffentlichten Bestand und lassen Sie einen konkreten Termin bestätigen.', 'Internationale Ratgeber beschreiben ihre eigenen Regionen. Klären Sie für eine Balkanbestellung Art und Herkunft, statt einen fremden Kalender direkt auf die örtliche Ernte zu übertragen.'] },
       { title: 'Ein saisonales Menü planen', paragraphs: ['Nennen Sie den Servicetermin schon in der Anfrage. Für länger laufende Menüs besprechen Sie eine saisonale Art und eine mögliche Anpassung des Gerichts. Eine Verkostung der gewählten Partie hilft, die Portion vor Aufnahme in die Karte festzulegen.'] },
-    ], seasonSources),
+    ]),
     cooking: guide('de', 'wie-verwendet-man-frische-trueffel', 'Wie verwendet man frische Trüffel in der Küche?', 'Dünne Scheiben, passende Temperatur und ein einfaches Gericht: So geben Sie dem Aroma frischer Trüffel Raum.', 'Beginnen Sie mit einem einfachen Gericht und einer kleinen Probe. Die Art bestimmt die Zubereitung.', '/snimki/IMG_7316.jpeg', [
       { title: 'Wann kommen die Trüffel dazu?', paragraphs: ['Weiße Trüffel werden meist roh über das fertige warme Gericht gehobelt. Schwarze können sanfte Wärme vertragen. Lange, starke Hitze eignet sich schlecht zum Erhalten eines feinen Aromas.'] },
       { title: 'Das erste Probegericht', paragraphs: ['Probieren Sie Butterpasta, Eier oder ein einfaches Risotto. Bereiten Sie eine kleine Portion zu, ergänzen Sie dünne Scheiben und prüfen Sie, ob die übrigen Zutaten der Trüffel Raum lassen.', 'Notieren Sie im Restaurant die verwendeten Gramm und das Geschmacksergebnis. So passt die nächste Bestellung zu Gericht und Art, statt von einer allgemeinen Portionsangabe abzuhängen.'] },
       { title: 'Was gehört in die Anfrage?', paragraphs: ['Beschreiben Sie, ob Sie am Tisch hobeln, eine Sauce oder etwas anderes zubereiten möchten. Das hilft bei Form und Größe. Planen Sie die Verwendung nahe am Liefertermin und lesen Sie den Aufbewahrungsratgeber. Nennen Sie Art, Gewicht und Datum in Ihrer Anfrage.'] },
-    ], cookingSources),
+    ]),
   },
 };
