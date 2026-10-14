@@ -13,6 +13,9 @@ import { AboutPage, ContactPage, RestaurantPage } from './business-pages';
 import { ProductDetail } from './product-detail';
 import { HomeIntro } from './home-intro';
 import { homeIntroCopy } from './home-intro-copy';
+import { FooterCampaign } from './footer-campaign';
+import { newsletterCopy } from './newsletter-copy';
+import { whatsappLink } from './whatsapp';
 import './harvest-gallery.css';
 import './harvest-inventory.css';
 
@@ -232,6 +235,7 @@ function Layout({ locale, pageKey, t, children }: { locale: Locale; pageKey: Pag
       <div className="header-tools"><LanguagePicker locale={locale} pageKey={pageKey} /><Link className="button button-gold header-cta" to={pathFor(locale, 'wholesale')}>{pageKey === 'home' ? homeIntroCopy[locale].enquiry : t.cta} <ArrowUpRight size={15} /></Link></div>
     </header>
     <main id="main">{children}</main>
+    <FooterCampaign key={locale} locale={locale} />
     <Footer locale={locale} t={t} />
   </>;
 }
@@ -254,7 +258,7 @@ function Footer({ locale, t }: { locale: Locale; t: Copy }) {
       <div className="footer-column"><h2>{t.nav.contact}</h2><Link to={pathFor(locale, 'contact')}>{t.nav.contact}</Link><Link to={pathFor(locale, 'faq')}>{t.faqTitle}</Link><p>{t.contactNote}</p></div>
       <div className="footer-column"><h2>{localeUi[locale].legal}</h2><Link to={pathFor(locale, 'privacy')}>{localeUi[locale].privacy}</Link><Link to={pathFor(locale, 'terms')}>{localeUi[locale].terms}</Link><Link to={pathFor(locale, 'cookies')}>{localeUi[locale].cookies}</Link><div className="footer-languages">{locales.map((lang) => <Link key={lang} to={pathFor(lang, 'home')}>{lang.toUpperCase()}</Link>)}</div></div>
     </div>
-    <div className="footer-bottom"><span>© {new Date().getFullYear()} Truffle Balkans</span><span>Wild by nature. Balkan by origin.</span></div>
+    <div className="footer-bottom"><span className="footer-copyright"><span>© {new Date().getFullYear()} Truffle Balkans</span><span>Esi Truffle EOOD</span></span><span>Wild by nature. Balkan by origin.</span></div>
   </footer>;
 }
 
@@ -283,7 +287,7 @@ function Home({ locale, t }: { locale: Locale; t: Copy }) {
     <section className="species-band"><div className="species-copy"><p className="eyebrow">{t.nav.truffles}</p><h2>{t.species}</h2><p>{t.speciesText}</p><Link className="text-link text-link-light" to={pathFor(locale, 'truffles')}>{t.learn}<ArrowRight size={16} /></Link></div><figure className="species-image"><img src="/snimki/IMG_7286.jpeg" alt={t.species} loading="lazy" width="828" height="1097" /></figure></section>
     <HomeStory t={t} />
     <KnowledgePreview locale={locale} t={t} />
-    <FaqPreview locale={locale} t={t} /><CallToAction locale={locale} t={t} />
+    <FaqPreview locale={locale} t={t} />
   </>;
 }
 
@@ -376,7 +380,6 @@ function ProductIndex({ locale, t }: { locale: Locale; t: Copy }) {
       <div className="harvest-gallery-heading"><div><p className="eyebrow">{gallery.eyebrow}</p><h2 id="harvest-gallery-title">{gallery.title}</h2></div><p>{gallery.description}</p></div>
       <HarvestLightbox locale={locale} photos={harvestPhotos} />
     </section>
-    <CallToAction locale={locale} t={t} />
   </>;
 }
 
@@ -384,7 +387,7 @@ function TruffleIndex({ locale, t }: { locale: Locale; t: Copy }) {
   const catalog = useContext(CatalogContext);
   const catalogLoaded = useContext(CatalogLoadedContext);
   const ids = catalogProductIds(catalog, catalogLoaded);
-  return <><PageIntro eyebrow={t.origin} title={t.trufflesTitle} text={t.speciesText} /><section className="section catalog-section"><div className="truffle-list">{ids.map((id, index) => { const item = productFor(id, locale, catalog)!; const target = truffleFor(`truffle:${id}`, locale) ? pathFor(locale, `truffle:${id}`) : catalogProductPath(locale, id, catalog[id]?.slug_by_locale); return <Link to={target} className="truffle-list-item" key={id}><span className="list-count">{String(index + 1).padStart(2, '0')}</span><img src={productImage(item, 600)} alt={item.title} loading="lazy" width="600" height="400" /><div><span className="eyebrow">{item.season}</span><h2>{item.title}</h2><p>{item.description}</p></div><ArrowUpRight className="list-arrow" /></Link>; })}</div></section><CallToAction locale={locale} t={t} /></>;
+  return <><PageIntro eyebrow={t.origin} title={t.trufflesTitle} text={t.speciesText} /><section className="section catalog-section"><div className="truffle-list">{ids.map((id, index) => { const item = productFor(id, locale, catalog)!; const target = truffleFor(`truffle:${id}`, locale) ? pathFor(locale, `truffle:${id}`) : catalogProductPath(locale, id, catalog[id]?.slug_by_locale); return <Link to={target} className="truffle-list-item" key={id}><span className="list-count">{String(index + 1).padStart(2, '0')}</span><img src={productImage(item, 600)} alt={item.title} loading="lazy" width="600" height="400" /><div><span className="eyebrow">{item.season}</span><h2>{item.title}</h2><p>{item.description}</p></div><ArrowUpRight className="list-arrow" /></Link>; })}</div></section></>;
 }
 
 function DetailPage({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; t: Copy }) {
@@ -432,15 +435,11 @@ function FaqPreview({ locale, t }: { locale: Locale; t: Copy }) {
 }
 
 function FaqPage({ locale, t }: { locale: Locale; t: Copy }) {
-  return <><PageIntro eyebrow={t.faqTitle} title={t.faqPageTitle} text={t.faqTitle} /><section className="section faq-page-section"><div className="faq-list">{faqItems(locale).map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section><CallToAction locale={locale} t={t} /></>;
+  return <><PageIntro eyebrow={t.faqTitle} title={t.faqPageTitle} text={t.faqTitle} /><section className="section faq-page-section"><div className="faq-list">{faqItems(locale).map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section></>;
 }
 
 function LegalPage({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; t: Copy }) {
   const title = titleFor(pageKey, locale);
   const text = localeUi[locale].legalDisclaimer;
-  return <><PageIntro eyebrow="TRUFFLE BALKANS" title={title} text={text} /><section className="section legal-section"><p>{text}</p><p>{t.contactNote}</p><Link className="text-link" to={pathFor(locale, 'contact')}>{t.nav.contact}<ArrowRight size={15} /></Link></section></>;
-}
-
-function CallToAction({ locale, t }: { locale: Locale; t: Copy }) {
-  return <section className="final-cta"><div className="final-ornament">✳</div><p className="eyebrow">{t.origin}</p><h2>{t.finalTitle}</h2><p>{t.finalText}</p><Link className="button button-gold" to={pathFor(locale, 'wholesale')}>{t.cta}<ArrowUpRight size={16} /></Link></section>;
+  return <><PageIntro eyebrow="TRUFFLE BALKANS" title={title} text={text} /><section className="section legal-section"><p>{text}</p>{pageKey === 'privacy' && <><h2>{newsletterCopy[locale].heading}</h2><p>{newsletterCopy[locale].privacyInfo}</p><a className="text-link" href={whatsappLink(newsletterCopy[locale].unsubscribeMessage)} target="_blank" rel="noopener noreferrer">{newsletterCopy[locale].unsubscribe}<ArrowUpRight size={16} /></a></>}<p>{t.contactNote}</p><Link className="text-link" to={pathFor(locale, 'contact')}>{t.nav.contact}<ArrowRight size={15} /></Link></section></>;
 }

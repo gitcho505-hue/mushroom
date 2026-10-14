@@ -13,7 +13,7 @@ export function structuredData(locale: Locale, key: PageKey) {
   const article = articleId ? articles[locale][articleId] : undefined;
   const image = absoluteImage(product ? imageUrl(product.image) : article ? imageUrl(article.image) : heroImage);
   const data: Record<string, unknown>[] = [
-    { '@context': 'https://schema.org', '@type': 'Organization', name: 'Truffle Balkans', url: siteUrl, logo: `${siteUrl}/images/brand-logo.png`, description: 'Wild truffles selected in the Balkans.' },
+    { '@context': 'https://schema.org', '@type': 'Organization', name: 'Truffle Balkans', legalName: 'Esi Truffle EOOD', url: siteUrl, logo: `${siteUrl}/images/brand-logo.png`, description: 'Wild truffles selected in the Balkans.' },
     { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Truffle Balkans', url: siteUrl, inLanguage: languageMeta[locale].hreflang },
     { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Truffle Balkans', item: `${siteUrl}${pathFor(locale, 'home')}` }, ...(key === 'home' ? [] : [{ '@type': 'ListItem', position: 2, name: title.replace(' | Truffle Balkans', ''), item: canonical }]) ] },
   ];

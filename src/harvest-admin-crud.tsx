@@ -7,6 +7,7 @@ import { pageSlugs } from './i18n';
 import { createEmptyCatalogProduct, getSupabaseClient, loadCatalogProducts, loadHarvestRecords, safeCatalogImage, slugifyProduct, type CatalogProduct, type HarvestRecord } from './catalog';
 import './admin.css';
 import './admin-crud.css';
+import { NewsletterAdmin } from './newsletter-admin';
 
 type AdminAccess = 'loading' | 'allowed' | 'denied';
 type LocalizedField = 'title_by_locale' | 'description_by_locale' | 'body_by_locale' | 'season_by_locale' | 'note_by_locale';
@@ -483,6 +484,7 @@ export function HarvestAdminPage() {
             <p className="admin-save-note">Последна редакция: {selected.updated_at ? new Date(selected.updated_at).toLocaleString('bg-BG') : 'нов продукт'}</p>
           </form>
         ) : <div className="admin-state"><p>Няма главни продукти. Използвай `+`, за да добавиш първия.</p></div>}
+        <NewsletterAdmin client={supabase} />
       </section>
     </main>
   );

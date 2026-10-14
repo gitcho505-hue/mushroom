@@ -34,6 +34,8 @@ VITE_SUPABASE_ANON_KEY=your-public-anon-key
 5. Add the same two variables to the Vercel project and redeploy.
 6. Open `/admin` and sign in as `ESI_ADMIN` or `KOSIO_ADMIN` with the password for `gitcho505@gmail.com`.
 
+7. For newsletter subscriptions, apply [`supabase/newsletter.sql`](../supabase/newsletter.sql) in the same project. See [`docs/NEWSLETTER.md`](NEWSLETTER.md) for activation, subscriber export and removal. This adds subscription storage; it does not send campaigns.
+
 The anon key is designed to be public. RLS policies and the `admin_users` allowlist protect product edits and photo uploads. Never put a Supabase service-role key in a `VITE_*` variable or client bundle.
 
 The catalog is fully managed from `/admin`. Use the `+` beside the product count to add a main product; edit its localized name and descriptions, season, origin, main photo, price, and visibility in the editor. Main products can be deleted together with their child entries. The deployed project currently has four existing varieties, but new products are not limited to that set and deleted products are not reseeded automatically.

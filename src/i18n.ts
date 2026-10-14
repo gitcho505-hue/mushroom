@@ -28,7 +28,7 @@ export const localeUi = {
 export const extraCopy = {
   fr: {
     nav: { home: 'Accueil', products: 'Truffes pour chefs', truffles: 'Guide des truffes', wholesale: 'Restaurants', about: 'Notre histoire', blog: 'Journal', contact: 'Contact' },
-    cta: 'Demande professionnelle', heroEyebrow: 'TRUFFES SAUVAGES POUR CUISINES PROFESSIONNELLES', heroTitle: 'Le goût de la nature.',
+    cta: 'Demande', heroEyebrow: 'TRUFFES SAUVAGES POUR CUISINES PROFESSIONNELLES', heroTitle: 'Le goût de la nature.',
     heroText: 'Des truffes balkaniques de saison pour des menus qui ont du caractère. Nous vous aidons à choisir la variété et le calibre, puis confirmons la disponibilité et le prix.',
     discover: 'Découvrir la sélection', origin: 'Au cœur des Balkans', featured: 'La sélection du moment',
     featuredIntro: 'Quatre variétés de caractère, avec calibre et disponibilité confirmés selon la récolte.', viewAll: 'Voir toutes les truffes',
@@ -58,7 +58,7 @@ export const extraCopy = {
   },
   de: {
     nav: { home: 'Startseite', products: 'Trüffel für Küchen', truffles: 'Trüffelwissen', wholesale: 'Für Restaurants', about: 'Über uns', blog: 'Journal', contact: 'Kontakt' },
-    cta: 'B2B-Anfrage', heroEyebrow: 'WILDE TRÜFFEL FÜR DIE PROFIKÜCHE', heroTitle: 'Der Geschmack der Natur.',
+    cta: 'Anfrage', heroEyebrow: 'WILDE TRÜFFEL FÜR DIE PROFIKÜCHE', heroTitle: 'Der Geschmack der Natur.',
     heroText: 'Saisonale Balkantrüffel für Menüs mit Charakter. Wir stimmen Sorte und Größe auf Ihre Küche ab und bestätigen Verfügbarkeit und Preis persönlich.',
     discover: 'Auswahl entdecken', origin: 'Aus dem Herzen des Balkans', featured: 'Die Auswahl der Saison',
     featuredIntro: 'Vier charaktervolle Sorten, deren Größe und Verfügbarkeit wir mit der aktuellen Ernte abgleichen.', viewAll: 'Alle Trüffel ansehen',
@@ -77,7 +77,7 @@ export const extraCopy = {
     wholesaleTitle: 'Trüffel, passend zu Ihrer Karte.', wholesaleIntro: 'Saisonale Balkantrüffel für Restaurants. Teilen Sie uns Sorte, ungefähre Menge und Termin mit; wir erstellen ein individuelles Angebot.',
     wholesaleEyebrow: 'FÜR RESTAURANTS UND PROFIKÜCHEN',
     wholesalePoints: [['Die passende Sorte', 'Schwarze, weiße, Sommer- und Burgundertrüffel je nach Saison.'], ['Sortierung nach Bedarf', 'Größe und Auswahl stimmen wir mit jeder Anfrage ab.'], ['Angebot nach Ernte', 'Aktueller Bestand und Preis werden vor der Bestellung bestätigt.']],
-    wholesaleFormTitle: 'B2B-Angebot anfragen', wholesaleFormText: 'Teilen Sie uns mit, was Ihre Küche benötigt. Unverbindlich.',
+    wholesaleFormTitle: 'Angebot anfragen', wholesaleFormText: 'Teilen Sie uns mit, was Ihre Küche benötigt. Unverbindlich.',
     quoteStatus: 'Anfrage wird vorbereitet…', quoteMissingEmail: 'Es ist keine Empfängeradresse hinterlegt. Ergänzen Sie VITE_CONTACT_EMAIL in .env.local.', quoteOpened: 'Ein E-Mail-Entwurf mit Ihrer Anfrage ist geöffnet. Bitte prüfen und senden.',
     aboutTitle: 'Menschen, Landschaft und Erfahrung.', aboutText: 'Truffle Balkans verbindet die besonderen Trüffelregionen des Balkans mit Küchen, die Herkunft und Qualität schätzen.',
     trufflesTitle: 'Die Welt der Trüffel', blogTitle: 'Notizen aus Wald und Küche', contactTitle: 'Sprechen wir über Trüffel.',

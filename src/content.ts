@@ -24,7 +24,7 @@ export type PageKey =
 const baseCopy = {
   bg: {
     nav: { home: 'Начало', products: 'Продукти', truffles: 'Трюфели', wholesale: 'За ресторанти', about: 'За нас', blog: 'Журнал', contact: 'Контакт' },
-    cta: 'B2B запитване',
+    cta: 'Запитване',
     heroEyebrow: 'ДИВИ ТРЮФЕЛИ ЗА ПРОФЕСИОНАЛНИ КУХНИ',
     heroTitle: 'Вкусът на дивата природа.',
     heroText: 'Сезонни балкански трюфели за менюта с характер. Подбираме сорта и градацията според кухнята ви, после потвърждаваме наличност и оферта.',
@@ -66,7 +66,7 @@ const baseCopy = {
     wholesaleIntro: 'Снабдяване за ресторанти с пресни трюфели от Балканите. Споделете сорта, ориентировъчното количество и срока; ще отговорим с наличност и индивидуална оферта.',
     wholesaleEyebrow: 'ЗА РЕСТОРАНТИ И ПРОФЕСИОНАЛНИ КУХНИ',
     wholesalePoints: [['Сорт според менюто', 'Черен, бял, летен и бургундски трюфел според сезона.'], ['Градация по заявка', 'Уточняваме калибър и предпочитания с всяка поръчка.'], ['Оферта според реколтата', 'Потвърждаваме реалната наличност и цена преди заявката.']],
-    wholesaleFormTitle: 'Поискайте B2B оферта',
+    wholesaleFormTitle: 'Поискайте оферта',
     wholesaleFormText: 'Споделете нуждите на кухнята си. Запитването е без ангажимент.',
     quoteStatus: 'Подготвяме заявката…',
     quoteMissingEmail: 'Формата е готова, но локалният сайт няма настроен имейл за получаване. Добавете VITE_CONTACT_EMAIL в .env.local.',
@@ -76,7 +76,7 @@ const baseCopy = {
     trufflesTitle: 'Запознайте се с трюфелите',
     blogTitle: 'Бележки от гората и кухнята',
     contactTitle: 'Нека поговорим за трюфели.',
-    contactText: 'За сезонна наличност, размери и B2B предложения, изпратете ни съобщение.',
+    contactText: 'За сезонна наличност, размери и предложения, изпратете ни съобщение.',
     faqPageTitle: 'Вашите въпроси за трюфелите',
     form: { name: 'Име и фамилия', email: 'Работен имейл', phone: 'Телефон', company: 'Ресторант / компания', message: 'Бележка към запитването', send: 'Изпрати запитване', sent: 'Заявката е подготвена.', product: 'Търсен трюфел', quantity: 'Ориентировъчно количество', quantityHint: 'например 500 г на доставка', country: 'Държава за доставка', delivery: 'Желана дата за доставка', selectProduct: 'Изберете вид' },
     availability: 'Сезонна наличност', inStock: 'Налично', outOfStock: 'Временно няма наличност', originLabel: 'Произход', season: 'Сезон', grade: 'Подбор', inquire: 'Запитайте за цена', learn: 'Научете повече',
@@ -85,7 +85,7 @@ const baseCopy = {
   },
   en: {
     nav: { home: 'Home', products: 'Truffles for chefs', truffles: 'Truffle guide', wholesale: 'For restaurants', about: 'Our story', blog: 'Journal', contact: 'Contact' },
-    cta: 'Wholesale enquiry',
+    cta: 'Enquiry',
     heroEyebrow: 'WILD TRUFFLES FOR PROFESSIONAL KITCHENS',
     heroTitle: 'A taste of the wild.',
     heroText: 'Seasonal Balkan truffles for menus with character. Tell us about your kitchen and we will confirm the right species, grade and current availability.',
@@ -146,7 +146,7 @@ const baseCopy = {
   },
   it: {
     nav: { home: 'Home', products: 'Tartufi per chef', truffles: 'Guida ai tartufi', wholesale: 'Per ristoranti', about: 'Chi siamo', blog: 'Diario', contact: 'Contatti' },
-    cta: 'Richiesta B2B',
+    cta: 'Richiesta',
     heroEyebrow: 'TARTUFI SELVATICI PER CUCINE PROFESSIONALI',
     heroTitle: 'Il sapore della natura.',
     heroText: 'Tartufi balcanici di stagione per menu dal carattere distintivo. Raccontaci la tua cucina: confermeremo varietà, calibro e disponibilità.',
@@ -188,7 +188,7 @@ const baseCopy = {
     wholesaleIntro: 'Tartufi freschi dei Balcani per ristoranti. Indicaci varietà, quantità orientativa e tempi; ti risponderemo con disponibilità e un preventivo dedicato.',
     wholesaleEyebrow: 'PER RISTORANTI E CUCINE PROFESSIONALI',
     wholesalePoints: [['La varietà per il tuo menu', 'Tartufo nero, bianco, estivo e di Borgogna secondo la stagione.'], ['Calibro su richiesta', 'Concordiamo dimensioni e selezione con ogni richiesta.'], ['Preventivo secondo il raccolto', 'Disponibilità e prezzo attuali si confermano prima dell’ordine.']],
-    wholesaleFormTitle: 'Richiedi un preventivo B2B',
+    wholesaleFormTitle: 'Richiedi un preventivo',
     wholesaleFormText: 'Raccontaci le esigenze della tua cucina. Senza impegno.',
     quoteStatus: 'Preparazione della richiesta…',
     quoteMissingEmail: 'Il modulo è pronto, ma in locale non è configurata un’email. Aggiungi VITE_CONTACT_EMAIL in .env.local.',
