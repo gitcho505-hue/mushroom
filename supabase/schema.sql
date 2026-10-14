@@ -29,7 +29,7 @@ alter table public.truffle_products add column if not exists slug_by_locale json
 
 update public.truffle_products
 set slug_by_locale = jsonb_build_object(
-  'bg', coalesce(nullif(slug_by_locale->>'bg', ''), case id when 'black-truffle' then 'black-truffle' when 'white-truffle' then 'white-truffle' when 'summer-truffle' then 'summer-truffle' when 'burgundy-truffle' then 'burgundy-truffle' else id end),
+  'bg', case when nullif(slug_by_locale->>'bg', '') is null or slug_by_locale->>'bg' = id then case id when 'black-truffle' then 'cheren-tryufel' when 'white-truffle' then 'byal-tryufel' when 'summer-truffle' then 'leten-tryufel' when 'burgundy-truffle' then 'burgundski-tryufel' else id end else slug_by_locale->>'bg' end,
   'en', coalesce(nullif(slug_by_locale->>'en', ''), id),
   'it', coalesce(nullif(slug_by_locale->>'it', ''), case id when 'black-truffle' then 'tartufo-nero' when 'white-truffle' then 'tartufo-bianco' when 'summer-truffle' then 'tartufo-estivo' when 'burgundy-truffle' then 'tartufo-di-borgogna' else id end),
   'fr', coalesce(nullif(slug_by_locale->>'fr', ''), case id when 'black-truffle' then 'truffe-noire' when 'white-truffle' then 'truffe-blanche' when 'summer-truffle' then 'truffe-d-ete' when 'burgundy-truffle' then 'truffe-de-bourgogne' else id end),

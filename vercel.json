@@ -4,16 +4,91 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist/client",
   "rewrites": [
-    { "source": "/admin", "destination": "/admin/" },
-    { "source": "/bg/produkti/:slug", "destination": "/index.html" },
-    { "source": "/en/products/:slug", "destination": "/index.html" },
-    { "source": "/it/prodotti/:slug", "destination": "/index.html" },
-    { "source": "/fr/produits/:slug", "destination": "/index.html" },
-    { "source": "/de/produkte/:slug", "destination": "/index.html" },
-    { "source": "/bg/produkti/item/:id", "destination": "/index.html" },
-    { "source": "/en/products/item/:id", "destination": "/index.html" },
-    { "source": "/it/prodotti/item/:id", "destination": "/index.html" },
-    { "source": "/fr/produits/item/:id", "destination": "/index.html" },
-    { "source": "/de/produkte/item/:id", "destination": "/index.html" }
+    {
+      "source": "/admin",
+      "destination": "/admin/"
+    },
+    {
+      "source": "/bg/produkti/:slug",
+      "destination": "/spa.html"
+    },
+    {
+      "source": "/en/products/:slug",
+      "destination": "/spa.html"
+    },
+    {
+      "source": "/it/prodotti/:slug",
+      "destination": "/spa.html"
+    },
+    {
+      "source": "/fr/produits/:slug",
+      "destination": "/spa.html"
+    },
+    {
+      "source": "/de/produkte/:slug",
+      "destination": "/spa.html"
+    },
+    {
+      "source": "/bg/produkti/item/:id",
+      "destination": "/spa.html"
+    },
+    {
+      "source": "/en/products/item/:id",
+      "destination": "/spa.html"
+    },
+    {
+      "source": "/it/prodotti/item/:id",
+      "destination": "/spa.html"
+    },
+    {
+      "source": "/fr/produits/item/:id",
+      "destination": "/spa.html"
+    },
+    {
+      "source": "/de/produkte/item/:id",
+      "destination": "/spa.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/bg/produkti/black-truffle",
+      "destination": "/bg/produkti/cheren-tryufel",
+      "permanent": true
+    },
+    {
+      "source": "/bg/tryufeli/black-truffle",
+      "destination": "/bg/tryufeli/cheren-tryufel",
+      "permanent": true
+    },
+    {
+      "source": "/bg/produkti/white-truffle",
+      "destination": "/bg/produkti/byal-tryufel",
+      "permanent": true
+    },
+    {
+      "source": "/bg/tryufeli/white-truffle",
+      "destination": "/bg/tryufeli/byal-tryufel",
+      "permanent": true
+    },
+    {
+      "source": "/bg/produkti/summer-truffle",
+      "destination": "/bg/produkti/leten-tryufel",
+      "permanent": true
+    },
+    {
+      "source": "/bg/tryufeli/summer-truffle",
+      "destination": "/bg/tryufeli/leten-tryufel",
+      "permanent": true
+    },
+    {
+      "source": "/bg/produkti/burgundy-truffle",
+      "destination": "/bg/produkti/burgundski-tryufel",
+      "permanent": true
+    },
+    {
+      "source": "/bg/tryufeli/burgundy-truffle",
+      "destination": "/bg/tryufeli/burgundski-tryufel",
+      "permanent": true
+    }
   ]
 }

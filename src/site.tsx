@@ -3,13 +3,14 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, Check, ChevronDown, Menu, MoveUpRight, Sparkles, X } from 'lucide-react';
 import { articles, catalogProductPath, copy, faqItems, imageUrl, isCatalogProductPath, keyForPath, languageMeta, locales, pathFor, titleFor, truffleFor, truffleIds as defaultTruffleIds, type Copy, type Locale, type PageKey } from './content';
 import { localeUi } from './i18n';
-import { renderHead } from './seo';
+import { renderHead, siteUrl } from './seo';
 import { HarvestAdminPage as AdminPage } from './harvest-admin-crud';
 import { createCatalogSeeds, getSupabaseClient, loadCatalogProducts, loadHarvestRecords, safeCatalogImage, type CatalogProduct, type HarvestRecord } from './catalog';
 import { harvestGalleryCopy, harvestPhotos, heroHarvestPhotos, homeStoryPhoto } from './harvest-photos';
 import { HarvestLightbox } from './harvest-lightbox';
 import { knowledgeCopy, knowledgeArticleIds } from './knowledge';
 import { AboutPage, ContactPage, RestaurantPage } from './business-pages';
+import { ProductDetail } from './product-detail';
 import './harvest-gallery.css';
 import './harvest-inventory.css';
 
@@ -75,7 +76,16 @@ function formatProductPrice(price: number, currency: string, locale: Locale) {
 function updateManagedProductMeta(locale: Locale, product: CatalogProduct) {
   const title = `${product.title_by_locale[locale] || product.title_by_locale.en} | Truffle Balkans`;
   const description = product.description_by_locale[locale] || product.description_by_locale.en;
+  const canonical = `${siteUrl}${catalogProductPath(locale, product.id, product.slug_by_locale)}`;
+  const image = new URL(safeCatalogImage(product.image_url, product.id, 1200), `${siteUrl}/`).href;
   document.title = title;
+  document.head.querySelector('link[rel="canonical"]')?.setAttribute('href', canonical);
+  document.head.querySelector('meta[property="og:url"]')?.setAttribute('content', canonical);
+  for (const selector of ['meta[property="og:image"]', 'meta[name="twitter:image"]']) document.head.querySelector(selector)?.setAttribute('content', image);
+  document.head.querySelectorAll<HTMLLinkElement>('link[rel="alternate"][hreflang]').forEach((link) => {
+    const option = locales.find((candidate) => languageMeta[candidate].hreflang === link.hreflang) ?? 'bg';
+    link.href = `${siteUrl}${catalogProductPath(option, product.id, product.slug_by_locale)}`;
+  });
   for (const selector of ['meta[data-truffle-seo][name="description"]', 'meta[data-truffle-seo][property="og:description"]', 'meta[data-truffle-seo][name="twitter:description"]']) {
     document.head.querySelector<HTMLMetaElement>(selector)?.setAttribute('content', description);
   }
@@ -86,12 +96,16 @@ function updateManagedProductMeta(locale: Locale, product: CatalogProduct) {
   if (!schema) return;
   try {
     const graph = JSON.parse(schema.textContent || '[]') as Array<Record<string, unknown>>;
-    const productSchema = graph.find((entry) => entry['@type'] === 'Product');
-    if (!productSchema) return;
+    let productSchema = graph.find((entry) => entry['@type'] === 'Product');
+    if (!productSchema) {
+      productSchema = { '@context': 'https://schema.org', '@type': 'Product', brand: { '@type': 'Brand', name: 'Truffle Balkans' } };
+      graph.push(productSchema);
+    }
     productSchema.name = product.title_by_locale[locale] || product.title_by_locale.en;
     productSchema.description = description;
-    productSchema.image = safeCatalogImage(product.image_url, product.id, 1200);
-    if (product.price != null) productSchema.offers = { '@type': 'Offer', price: product.price, priceCurrency: product.currency, availability: product.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' };
+    productSchema.image = image;
+    productSchema.url = canonical;
+    if (product.price != null) productSchema.offers = { '@type': 'Offer', url: canonical, price: product.price, priceCurrency: product.currency, availability: product.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' };
     else delete productSchema.offers;
     schema.textContent = JSON.stringify(graph);
   } catch {
@@ -113,7 +127,8 @@ function localizedMeta(locale: Locale, key: PageKey) {
 }
 
 export function Site() {
-  const { pathname } = useLocation();
+  const { pathname, search, hash } = useLocation();
+  const navigate = useNavigate();
   const isAdminPath = pathname === '/admin' || pathname === '/admin/' || pathname.startsWith('/admin/');
   const [catalog, setCatalog] = useState<Record<string, CatalogProduct>>({});
   const [catalogLoaded, setCatalogLoaded] = useState(false);
@@ -122,6 +137,12 @@ export function Site() {
   const key = current?.key ?? 'home';
   const t = copy[locale] ?? copy.bg;
   const [harvests, setHarvests] = useState<HarvestRecord[]>([]);
+  useEffect(() => {
+    if (!current || isAdminPath) return;
+    const id = current.key.split(':')[1];
+    const canonical = current.key.startsWith('product:') ? catalogProductPath(locale, id, catalog[id]?.slug_by_locale) : pathFor(locale, current.key);
+    if (pathname.replace(/\/+$/, '') !== canonical.replace(/\/+$/, '')) navigate({ pathname: canonical, search, hash }, { replace: true });
+  }, [catalog, current?.key, hash, isAdminPath, locale, navigate, pathname, search]);
   useEffect(() => {
     if (isAdminPath) return;
     const client = getSupabaseClient();
@@ -365,7 +386,7 @@ function ProductIndex({ locale, t }: { locale: Locale; t: Copy }) {
     </section>
     <section className="section harvest-gallery" aria-labelledby="harvest-gallery-title">
       <div className="harvest-gallery-heading"><div><p className="eyebrow">{gallery.eyebrow}</p><h2 id="harvest-gallery-title">{gallery.title}</h2></div><p>{gallery.description}</p></div>
-      <div className="harvest-photo-grid">{harvestPhotos.map((src, index) => <a className="harvest-photo-tile" href={src} target="_blank" rel="noreferrer" key={src}><img src={src} alt={`${gallery.imageLabel} ${index + 1}`} loading="lazy" width="1200" height="900" /><span>{String(index + 1).padStart(2, '0')}</span></a>)}</div>
+      <HarvestLightbox locale={locale} photos={harvestPhotos} />
     </section>
     <CallToAction locale={locale} t={t} />
   </>;
@@ -381,12 +402,12 @@ function TruffleIndex({ locale, t }: { locale: Locale; t: Copy }) {
 function DetailPage({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; t: Copy }) {
   const catalog = useContext(CatalogContext);
   const catalogLoaded = useContext(CatalogLoadedContext);
-  const truffleIds = catalogProductIds(catalog, catalogLoaded);
-  const productMode = pageKey.startsWith('product:');
+  const ids = catalogProductIds(catalog, catalogLoaded);
   const id = pageKey.split(':')[1];
   const item = productFor(id, locale, catalog)!;
-  const offer = item.price_per_kg != null ? `${formatProductPrice(item.price_per_kg, item.currency ?? 'EUR', locale)} / kg` : item.price != null ? formatProductPrice(item.price, item.currency ?? 'EUR', locale) : t.inquire;
-  return <><div className="detail-hero"><div className="detail-visual"><img src={productImage(item, 1500)} alt={`${item.title} from ${item.origin ?? 'the Balkans'}`} loading="eager" /></div><div className="detail-copy"><Link className="back-link" to={pathFor(locale, productMode ? 'products' : 'truffles')}>← {t.back}</Link><p className="eyebrow"><span />{productMode ? item.available === false ? t.outOfStock : t.availability : t.origin}</p><h1>{item.title}</h1><p className="detail-lede">{item.description}</p><div className="detail-facts"><div><span>{t.season}</span><strong>{item.season}</strong></div><div><span>{t.originLabel}</span><strong>{item.origin ?? 'Balkans'}</strong></div><div><span>{t.grade}</span><strong>{item.note}</strong></div>{item.weight_grams != null && <div><span>{t.form.quantity}</span><strong>{item.weight_grams} g</strong></div>}{item.available !== undefined && <div><span>{t.availability}</span><strong>{item.available ? t.inStock : t.outOfStock}{item.stock_grams != null ? ` · ${item.stock_grams} g` : ''}</strong></div>}</div><Link className="button button-dark" to={pathFor(locale, 'wholesale')} state={{ productId: id }}>{offer}<ArrowUpRight size={16} /></Link></div></div><section className="section detail-story"><div><p className="eyebrow">{t.landscapeEyebrow}</p><h2>{item.title}, at its best</h2></div><div className="detail-prose"><p>{item.body}</p><h3>{t.season}</h3><p>{item.season}. Availability, size and grade depend on the current harvest. Contact us for the latest selection and handling guidance.</p></div></section><FaqPreview locale={locale} t={t} /><section className="section related-section"><SectionHeading eyebrow={t.nav.truffles} title={t.related} /><div className="product-grid">{truffleIds.filter((candidate) => candidate !== id).slice(0, 3).map((candidate, index) => <ProductCard key={candidate} locale={locale} t={t} id={candidate} number={`0${index + 1}`} />)}</div></section><CallToAction locale={locale} t={t} /></>;
+  const records = useContext(HarvestContext).filter((record) => record.product_id === id);
+  const photos = [...new Set([productImage(item, 1500), ...records.flatMap((record) => record.image_url ? [safeCatalogImage(record.image_url, id, 1500)] : [])])];
+  return <div className="product-detail-layout"><ProductDetail locale={locale} t={t} id={id} item={item} photos={photos} productMode={pageKey.startsWith('product:')} /><FaqPreview locale={locale} t={t} /><section className="section related-section"><SectionHeading eyebrow={t.nav.products} title={t.related} /><div className="product-grid">{ids.filter((candidate) => candidate !== id).slice(0, 3).map((candidate, index) => <ProductCard key={candidate} locale={locale} t={t} id={candidate} number={String(index + 1).padStart(2, '0')} />)}</div></section></div>;
 }
 
 function BlogPage({ locale, t }: { locale: Locale; t: Copy }) {

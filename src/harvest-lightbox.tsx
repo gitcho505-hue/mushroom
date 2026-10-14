@@ -3,8 +3,8 @@ import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react';
 import { galleryViewerCopy, harvestGalleryCopy, homeGalleryPhotos } from './harvest-photos';
 import { localeUi, type Locale } from './i18n';
 
-export function HarvestLightbox({ locale }: { locale: Locale }) {
-  const gallery = harvestGalleryCopy[locale];
+export function HarvestLightbox({ locale, photos = homeGalleryPhotos, title, imageLabel, variant = 'harvest' }: { locale: Locale; photos?: readonly string[]; title?: string; imageLabel?: string; variant?: 'harvest' | 'product' }) {
+  const gallery = { ...harvestGalleryCopy[locale], ...(title ? { title } : {}), ...(imageLabel ? { imageLabel } : {}) };
   const labels = galleryViewerCopy[locale];
   const ui = localeUi[locale];
   const dialog = useRef<HTMLDialogElement>(null);
@@ -14,10 +14,12 @@ export function HarvestLightbox({ locale }: { locale: Locale }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [loadedSource, setLoadedSource] = useState('');
   const [failedSource, setFailedSource] = useState('');
+  const [previewIndex, setPreviewIndex] = useState(0);
+  const preview = Math.min(previewIndex, photos.length - 1);
   const viewerId = useId();
   const hintId = useId();
   const isOpen = activeIndex !== null;
-  const activeSource = activeIndex === null ? '' : homeGalleryPhotos[activeIndex];
+  const activeSource = activeIndex === null ? '' : photos[activeIndex];
 
   useEffect(() => {
     if (!isOpen || !dialog.current) return;
@@ -37,26 +39,34 @@ export function HarvestLightbox({ locale }: { locale: Locale }) {
     if (activeIndex === null) return;
     for (const direction of [-1, 1]) {
       const preload = new Image();
-      preload.src = homeGalleryPhotos[(activeIndex + direction + homeGalleryPhotos.length) % homeGalleryPhotos.length];
+      preload.src = photos[(activeIndex + direction + photos.length) % photos.length];
     }
-  }, [activeIndex]);
+    setPreviewIndex(activeIndex);
+  }, [activeIndex, photos]);
 
   function move(direction: number) {
     swipeStart.current = null;
-    setActiveIndex((current) => current === null ? null : (current + direction + homeGalleryPhotos.length) % homeGalleryPhotos.length);
+    setActiveIndex((current) => current === null ? null : (current + direction + photos.length) % photos.length);
+  }
+
+  function openPhoto(index: number, button: HTMLButtonElement) {
+    opener.current = button;
+    setFailedSource('');
+    setActiveIndex(index);
   }
 
   return <>
-    <p className="harvest-gallery-hint" id={hintId}>{labels.hint}</p>
-    <div className="home-harvest-ribbon__grid">{homeGalleryPhotos.map((src, index) => <button
+    {variant === 'product' && <button type="button" className="product-gallery-main" aria-label={labels.open + ': ' + gallery.imageLabel} aria-haspopup="dialog" aria-controls={viewerId} onClick={(event) => openPhoto(preview, event.currentTarget)}><img src={photos[preview]} alt={gallery.imageLabel} loading="eager" width="828" height="1100" /><span className="harvest-photo-zoom" aria-hidden="true"><Maximize2 size={20} /></span></button>}
+    <p className="harvest-gallery-hint" id={hintId}>{photos.length > 1 ? labels.hint : labels.open}</p>
+    {(variant !== 'product' || photos.length > 1) && <div className={variant === 'product' ? 'product-gallery-thumbs' : 'home-harvest-ribbon__grid'}>{photos.map((src, index) => <button
       type="button"
-      className="home-harvest-ribbon__tile"
+      className={variant === 'product' ? 'product-gallery-thumb' : 'home-harvest-ribbon__tile'}
       key={src}
       aria-label={`${labels.open}: ${gallery.imageLabel} ${index + 1}`}
       aria-haspopup="dialog"
       aria-controls={viewerId}
-      onClick={(event) => { opener.current = event.currentTarget; setFailedSource(''); setActiveIndex(index); }}
-    ><img src={src} alt={`${gallery.imageLabel} ${index + 1}`} loading="lazy" width="828" height="1100" /><span className="harvest-photo-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span><span className="harvest-photo-zoom" aria-hidden="true"><Maximize2 size={18} /></span></button>)}</div>
+      onClick={(event) => openPhoto(index, event.currentTarget)}
+    ><img src={src} alt={`${gallery.imageLabel} ${index + 1}`} loading="lazy" width="828" height="1100" /><span className="harvest-photo-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span><span className="harvest-photo-zoom" aria-hidden="true"><Maximize2 size={18} /></span></button>)}</div>}
     <dialog
       ref={dialog}
       className="harvest-lightbox"
@@ -77,9 +87,9 @@ export function HarvestLightbox({ locale }: { locale: Locale }) {
         }
       }}
     >{activeIndex !== null && <div className="harvest-lightbox-panel">
-      <header className="harvest-lightbox-header"><span>{gallery.title}</span><span className="harvest-lightbox-count" aria-live="polite">{String(activeIndex + 1).padStart(2, '0')} / {homeGalleryPhotos.length}</span><button ref={closeButton} type="button" className="harvest-lightbox-control" aria-label={labels.close} onClick={() => setActiveIndex(null)}><X size={24} /></button></header>
-      <div className="harvest-lightbox-stage">
-        <button type="button" className="harvest-lightbox-control harvest-lightbox-prev" aria-label={ui.previousPhoto} onClick={() => move(-1)}><ChevronLeft size={28} /></button>
+      <header className="harvest-lightbox-header"><span>{gallery.title}</span><span className="harvest-lightbox-count" aria-live="polite">{String(activeIndex + 1).padStart(2, '0')} / {photos.length}</span><button ref={closeButton} type="button" className="harvest-lightbox-control" aria-label={labels.close} onClick={() => setActiveIndex(null)}><X size={24} /></button></header>
+      <div className={`harvest-lightbox-stage ${photos.length === 1 ? 'is-single' : ''}`}>
+        {photos.length > 1 && <button type="button" className="harvest-lightbox-control harvest-lightbox-prev" aria-label={ui.previousPhoto} onClick={() => move(-1)}><ChevronLeft size={28} /></button>}
         <div className="harvest-lightbox-image"
           onPointerDown={(event) => { if (event.pointerType === 'touch' && event.isPrimary) swipeStart.current = { x: event.clientX, y: event.clientY }; }}
           onPointerUp={(event) => {
@@ -92,12 +102,12 @@ export function HarvestLightbox({ locale }: { locale: Locale }) {
           }}
           onPointerCancel={() => { swipeStart.current = null; }}
         >
-          <img src={activeSource} alt={`${gallery.imageLabel} ${activeIndex + 1}`} draggable={false} onLoad={(event) => setLoadedSource(event.currentTarget.getAttribute('src') ?? '')} onError={(event) => setFailedSource(event.currentTarget.getAttribute('src') ?? '')} />
+          <img src={activeSource} alt={`${gallery.imageLabel} ${activeIndex + 1}`} draggable={false} onLoad={(event) => { setLoadedSource(event.currentTarget.getAttribute('src') ?? ''); setFailedSource(''); }} onError={(event) => setFailedSource(event.currentTarget.getAttribute('src') ?? '')} />
           {(loadedSource !== activeSource || failedSource === activeSource) && <span className="harvest-lightbox-status" role="status">{failedSource === activeSource ? labels.error : labels.loading}</span>}
         </div>
-        <button type="button" className="harvest-lightbox-control harvest-lightbox-next" aria-label={ui.nextPhoto} onClick={() => move(1)}><ChevronRight size={28} /></button>
+        {photos.length > 1 && <button type="button" className="harvest-lightbox-control harvest-lightbox-next" aria-label={ui.nextPhoto} onClick={() => move(1)}><ChevronRight size={28} /></button>}
       </div>
-      <p className="harvest-lightbox-hint">{labels.viewerHint}</p>
+      <p className="harvest-lightbox-hint">{photos.length > 1 ? labels.viewerHint : `${labels.close} ? ? / Esc`}</p>
     </div>}</dialog>
   </>;
 }

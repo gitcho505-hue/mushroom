@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import { imageUrl, locales, truffleIds, truffles, type Locale } from './content';
+import { catalogProductSlug, imageUrl, locales, truffleIds, truffles, type Locale } from './content';
 
 export type TruffleId = string;
 
@@ -72,9 +72,11 @@ async function loadAllRows<T>(fetchPage: (from: number, to: number) => Promise<P
   return { data: rows, error: null };
 }
 
-export function loadCatalogProducts(client: SupabaseClient) {
-  return loadAllRows<CatalogProduct>(async (from, to) => await client.from('truffle_products')
+export async function loadCatalogProducts(client: SupabaseClient): Promise<AllRowsResult<CatalogProduct>> {
+  const result = await loadAllRows<CatalogProduct>(async (from, to) => await client.from('truffle_products')
     .select('*', { count: 'exact' }).order('id').range(from, to));
+  if (result.error) return result;
+  return { data: result.data!.map((product) => ({ ...product, slug_by_locale: Object.fromEntries(locales.map((locale) => [locale, catalogProductSlug(locale, product.id, product.slug_by_locale)])) as Record<Locale, string> })), error: null };
 }
 
 export function loadHarvestRecords(client: SupabaseClient) {
@@ -96,6 +98,7 @@ export function getSupabaseClient() {
 
 export function safeCatalogImage(image: string, fallbackId: string, width = 1200) {
   if (image.startsWith('/snimki/')) return image;
+  if (/^\/images\/[\w-]+\.(?:jpg|jpeg|png|webp|avif)$/.test(image)) return image;
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim().replace(/\/$/, '');
   if (supabaseUrl && image.startsWith(`${supabaseUrl}/storage/v1/object/public/truffle-photos/`)) return image;
   return imageUrl(fallbackId, width);

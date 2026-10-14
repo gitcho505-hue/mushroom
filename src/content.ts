@@ -216,10 +216,10 @@ export const truffleIds: TruffleId[] = ['black-truffle', 'white-truffle', 'summe
 
 export const truffles: Record<Locale, Record<TruffleId, LocalizedPage & { season: string; image: string; note: string }>> = {
   bg: {
-    'black-truffle': { slug: 'black-truffle', title: 'Черен трюфел', description: 'Землист и дълбок, черният трюфел носи аромат на горска почва, лешник и топлина.', body: 'Черният трюфел е ценен заради своя многопластов аромат, който се разгръща особено добре при леко затопляне. Настърган върху прясна паста, яйца или сезонни кореноплодни, той добавя дълбочина, без да отнема характера на ястието.', season: 'Есен · зима', image: 'black-truffle', note: 'Дълбок аромат, фина сладост' },
-    'white-truffle': { slug: 'white-truffle', title: 'Бял трюфел', description: 'Редък и деликатен аромат, който се разкрива най-добре без термична обработка.', body: 'Белият трюфел се сервира суров, нарязан на фини люспи непосредствено преди поднасяне. Неговият свеж аромат е най-добър върху топли, семпли ястия, които оставят пространството на продукта.', season: 'Есен · ранна зима', image: 'white-truffle', note: 'Фин аромат, най-добре суров' },
-    'summer-truffle': { slug: 'summer-truffle', title: 'Летен трюфел', description: 'По-лек, с нотки на ядки и свежа горска земя; приятен избор за топлите месеци.', body: 'Летният трюфел е достъпен в по-дълъг сезон и има по-деликатен вкус от зимните си роднини. Нарязан на тънко или добавен към масло и сосове, той е чудесно начало за запознаване със света на трюфелите.', season: 'Късна пролет · лято', image: 'summer-truffle', note: 'Нежен, ядков характер' },
-    'burgundy-truffle': { slug: 'burgundy-truffle', title: 'Бургундски трюфел', description: 'Елегантен есенен трюфел с аромат на ядки и подчертано балансиран характер.', body: 'Бургундският трюфел, познат и като есенен черен трюфел, предлага добре разпознаваем аромат и гъвкавост в кухнята. Подхожда на ризото, картофи, дивеч и ароматни сирена.', season: 'Късно лято · есен', image: 'burgundy-truffle', note: 'Фин баланс и топли нотки' },
+    'black-truffle': { slug: 'cheren-tryufel', title: 'Черен трюфел', description: 'Землист и дълбок, черният трюфел носи аромат на горска почва, лешник и топлина.', body: 'Черният трюфел е ценен заради своя многопластов аромат, който се разгръща особено добре при леко затопляне. Настърган върху прясна паста, яйца или сезонни кореноплодни, той добавя дълбочина, без да отнема характера на ястието.', season: 'Есен · зима', image: 'black-truffle', note: 'Дълбок аромат, фина сладост' },
+    'white-truffle': { slug: 'byal-tryufel', title: 'Бял трюфел', description: 'Редък и деликатен аромат, който се разкрива най-добре без термична обработка.', body: 'Белият трюфел се сервира суров, нарязан на фини люспи непосредствено преди поднасяне. Неговият свеж аромат е най-добър върху топли, семпли ястия, които оставят пространството на продукта.', season: 'Есен · ранна зима', image: 'white-truffle', note: 'Фин аромат, най-добре суров' },
+    'summer-truffle': { slug: 'leten-tryufel', title: 'Летен трюфел', description: 'По-лек, с нотки на ядки и свежа горска земя; приятен избор за топлите месеци.', body: 'Летният трюфел е достъпен в по-дълъг сезон и има по-деликатен вкус от зимните си роднини. Нарязан на тънко или добавен към масло и сосове, той е чудесно начало за запознаване със света на трюфелите.', season: 'Късна пролет · лято', image: 'summer-truffle', note: 'Нежен, ядков характер' },
+    'burgundy-truffle': { slug: 'burgundski-tryufel', title: 'Бургундски трюфел', description: 'Елегантен есенен трюфел с аромат на ядки и подчертано балансиран характер.', body: 'Бургундският трюфел, познат и като есенен черен трюфел, предлага добре разпознаваем аромат и гъвкавост в кухнята. Подхожда на ризото, картофи, дивеч и ароматни сирена.', season: 'Късно лято · есен', image: 'burgundy-truffle', note: 'Фин баланс и топли нотки' },
   },
   en: {
     'black-truffle': { slug: 'black-truffle', title: 'Black truffle', description: 'Earthy and layered, black truffle carries notes of woodland soil, hazelnut and warmth.', body: 'Black truffle is prized for a layered aroma that opens beautifully with gentle warmth. Shaved over fresh pasta, eggs or seasonal roots, it lends depth without crowding the character of a dish.', season: 'Autumn · winter', image: 'black-truffle', note: 'Deep aroma, delicate sweetness' },
@@ -300,8 +300,14 @@ export function pathFor(locale: Locale, key: PageKey): string {
 
 export type CatalogRoute = { id: string; slug_by_locale?: Partial<Record<Locale, string>> };
 
+export function catalogProductSlug(locale: Locale, id: string, slugByLocale?: Partial<Record<Locale, string>>): string {
+  const requested = slugByLocale?.[locale]?.trim();
+  const defaultSlug = truffles[locale][id as TruffleId]?.slug;
+  return !requested || (defaultSlug && requested === id) ? defaultSlug || id : requested;
+}
+
 export function catalogProductPath(locale: Locale, id: string, slugByLocale?: Partial<Record<Locale, string>>): string {
-  const slug = slugByLocale?.[locale]?.trim() || truffles[locale][id as TruffleId]?.slug || id;
+  const slug = catalogProductSlug(locale, id, slugByLocale);
   return `/${locale}/${pageSlugs[locale].products}/${encodeURIComponent(slug)}`;
 }
 
@@ -319,6 +325,10 @@ export function keyForPath(pathname: string, catalogProducts: readonly CatalogRo
   const locale = cleanPath.split('/')[1] as Locale;
   if (!locales.includes(locale)) return null;
   for (const key of allPageKeys()) if (pathFor(locale, key).replace(/\/+$/, '') === cleanPath) return { locale, key };
+  for (const id of truffleIds) {
+    if (cleanPath === `/${locale}/${pageSlugs[locale].products}/${id}`) return { locale, key: `product:${id}` };
+    if (cleanPath === `/${locale}/${pageSlugs[locale].truffles}/${id}`) return { locale, key: `truffle:${id}` };
+  }
   const prefix = `/${locale}/${pageSlugs[locale].products}/`;
   if (!cleanPath.startsWith(prefix)) return null;
   const slug = decodeURIComponent(cleanPath.slice(prefix.length));
@@ -328,7 +338,7 @@ export function keyForPath(pathname: string, catalogProducts: readonly CatalogRo
     return legacyProduct ? { locale, key: `product:${legacyProduct.id}` } : null;
   }
   if (!slug || slug.includes('/')) return null;
-  const product = catalogProducts.find((item) => (item.slug_by_locale?.[locale] || item.id) === slug || item.id === slug);
+  const product = catalogProducts.find((item) => catalogProductPath(locale, item.id, item.slug_by_locale) === cleanPath || item.slug_by_locale?.[locale] === slug || item.id === slug);
   if (product) return { locale, key: `product:${product.id}` };
   return null;
 }

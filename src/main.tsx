@@ -8,9 +8,10 @@ import './forest-experience.css';
 import './site-refinements.css';
 import './business-pages.css';
 import './harvest-lightbox.css';
+import './product-detail.css';
 
 const app = <React.StrictMode><BrowserRouter><Site /></BrowserRouter></React.StrictMode>;
 const root = document.getElementById('root')!;
 
-if (import.meta.env.DEV) ReactDOM.createRoot(root).render(app);
+if (import.meta.env.DEV || !root.hasChildNodes()) ReactDOM.createRoot(root).render(app);
 else ReactDOM.hydrateRoot(root, app);

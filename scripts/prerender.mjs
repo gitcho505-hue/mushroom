@@ -39,6 +39,7 @@ const rootHtml = template
   .replace('</head>', '<meta name="robots" content="noindex,follow" /><meta http-equiv="refresh" content="0;url=/bg/" />\n  </head>')
   .replace('<!--app-html-->', server.render('/'));
 await writeFile(resolve(clientDir, 'index.html'), rootHtml);
+await writeFile(resolve(clientDir, 'spa.html'), template.replace('<!--app-html-->', ''));
 await writeFile(resolve(clientDir, 'sitemap.xml'), server.sitemapXml());
 await writeFile(resolve(clientDir, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${server.siteUrl}/sitemap.xml\n`);
 console.log(`Prerendered ${server.locales.length * server.allPageKeys().length} localized pages.`);
