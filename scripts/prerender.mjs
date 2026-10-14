@@ -5,6 +5,9 @@ import { pathToFileURL } from 'node:url';
 const root = process.cwd();
 const clientDir = resolve(root, 'dist/client');
 const template = await readFile(resolve(clientDir, 'index.html'), 'utf8');
+const publicTemplate = template
+  .replace(/<title>.*?<\/title>/, '')
+  .replace(/<meta name="description"[^>]*>/, '');
 const server = await import(pathToFileURL(resolve(root, 'dist/server/entry-server.js')).href);
 
 for (const locale of server.locales) {
@@ -12,7 +15,7 @@ for (const locale of server.locales) {
     const url = server.pathFor(locale, key);
     const parsed = server.keyForPath(url);
     if (!parsed) throw new Error(`Unable to resolve prerender route: ${url}`);
-    const html = template
+    const html = publicTemplate
       .replace('<html lang="bg">', `<html lang="${locale}">`)
       .replace('</head>', `${server.renderHead(locale, key)}\n  </head>`)
       .replace('<!--app-html-->', server.render(url));

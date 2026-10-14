@@ -1,5 +1,6 @@
 import { extraCopy, locales, pageSlugs, type Locale } from './i18n';
 import { harvestPhotos } from './harvest-photos';
+import { knowledgeCopy, questionGuides, type GuideArticle } from './knowledge';
 export { languageMeta, locales, type Locale } from './i18n';
 
 export type PageKey =
@@ -245,7 +246,7 @@ export const truffles: Record<Locale, Record<TruffleId, LocalizedPage & { season
   },
 };
 
-export const articles: Record<Locale, Record<string, LocalizedPage & { date: string; image: string; paragraphs: string[] }>> = {
+const existingArticles: Record<Locale, Record<string, GuideArticle>> = {
   bg: {
     storage: { slug: 'fresh-truffle-storage', title: 'Как да съхраняваме пресни трюфели', description: 'Краткият живот на свежия трюфел е част от чара му. Ето как да запазите аромата му у дома.', body: 'Практичен наръчник за свежестта', date: '12.09.2025', image: 'summer-truffle', paragraphs: ['Свежият трюфел не е продукт за дълго съхранение — ароматът му е най-пълноценен скоро след събирането. У дома дръжте трюфела в хладилник, в малък затворен стъклен съд.', 'Поставете го върху чиста абсорбираща хартия и я сменяйте всеки ден, за да ограничите излишната влага. Не го мийте предварително; почистете го внимателно непосредствено преди употреба.', 'Най-добрият съвет е и най-прост: планирайте ястието си скоро. Тънко настърган върху топла паста или яйца, пресният трюфел не се нуждае от сложна подготовка.'] },
     'black-and-white': { slug: 'black-vs-white-truffle', title: 'Черен и бял трюфел: каква е разликата?', description: 'Два ценени трюфела, различен аромат и различен начин на сервиране.', body: 'Два характера, еднакво сезонни', date: '03.10.2025', image: 'photo-1551183053-bf91a1d81141', paragraphs: ['Черният и белият трюфел се различават не само по цвят. Ароматът, сезонът и начинът на употреба в кухнята имат значение при избора.', 'Черният трюфел обикновено понася леко затопляне и добавя земна дълбочина към паста и сосове. Белият е по-деликатен и най-често се сервира суров, на фини люспи върху топло ястие.', 'Няма универсално по-добър избор — важни са сезонът, свежестта и ястието, което приготвяте.'] },
@@ -272,6 +273,12 @@ export const articles: Record<Locale, Record<string, LocalizedPage & { date: str
     'balkan-truffles': { slug: 'trueffel-vom-balkan', title: 'Trüffel vom Balkan', description: 'Vielfältige Böden, alte Wälder und sorgfältige Arbeit im Einklang mit der Natur.', body: 'Aroma, geprägt von seiner Herkunft', date: '21. Okt. 2025', image: 'photo-1448375240586-882707db888b', paragraphs: ['Die Balkanhalbinsel vereint kalkhaltige Böden, unterschiedliche Waldlandschaften und ein Klima, das sich von Tal zu Tal verändert.', 'Trüffel wachsen in natürlicher Partnerschaft mit bestimmten Baumarten. Ihre Suche verlangt Ortskenntnis, den richtigen Zeitpunkt und einen ausgebildeten Hund.', 'Die Geschichte jeder Trüffel beginnt im Boden. Eine nachvollziehbare Herkunft und sorgfältige Auswahl helfen Küchen, passend zur Saison einzukaufen.'] },
   },
 };
+
+export const articles = Object.fromEntries(locales.map((locale) => [locale, { ...questionGuides[locale], ...existingArticles[locale] }])) as Record<Locale, Record<string, GuideArticle>>;
+
+export function faqItems(locale: Locale): readonly (readonly [string, string])[] {
+  return [...copy[locale].faq, ...Object.values(questionGuides[locale]).map((article) => [article.title, article.body] as const)];
+}
 
 const staticKeys: PageKey[] = ['home', 'products', 'wholesale', 'about', 'truffles', 'blog', 'contact', 'faq', 'privacy', 'terms', 'cookies'];
 
@@ -358,7 +365,8 @@ export function titleFor(key: PageKey, locale: Locale): string {
 export function seoFor(locale: Locale, key: PageKey) {
   const product = truffleFor(key, locale);
   const article = articleFor(key, locale);
-  const title = key === 'home' ? `${copy[locale].heroTitle} | Truffle Balkans` : `${titleFor(key, locale)} | Truffle Balkans`;
+  const homeTitles: Record<Locale, string> = { bg: 'Пресни трюфели от Балканите', en: 'Fresh truffles from the Balkans', it: 'Tartufi freschi dai Balcani', fr: 'Truffes fraîches des Balkans', de: 'Frische Trüffel vom Balkan' };
+  const title = key === 'home' ? `${homeTitles[locale]} | Truffle Balkans` : `${titleFor(key, locale)} | Truffle Balkans`;
   const description = product?.description ?? article?.description ?? (
     key === 'home' ? copy[locale].heroText :
     key === 'products' ? copy[locale].productsIntro :
@@ -366,7 +374,7 @@ export function seoFor(locale: Locale, key: PageKey) {
     key === 'about' ? copy[locale].aboutText :
     key === 'contact' ? copy[locale].contactText :
     key === 'truffles' ? copy[locale].speciesText :
-    key === 'blog' ? copy[locale].blogTitle :
+    key === 'blog' ? knowledgeCopy[locale].intro :
     copy[locale].faqTitle
   );
   return { title, description };

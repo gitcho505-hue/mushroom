@@ -14,7 +14,7 @@ export const harvestPhotos = [
 export const heroHarvestPhotos = [
   { src: '/snimki/IMG_7306.jpeg', position: 'center 58%' },
   { src: '/snimki/IMG_7302.jpeg', position: 'center 52%' },
-  { src: '/snimki/IMG_7287.jpeg', position: 'center 62%' },
+  { src: '/snimki/IMG_7308.jpeg', position: 'center 55%' },
   { src: '/snimki/IMG_7301.jpeg', position: 'center 52%' },
 ] as const;
 
@@ -24,6 +24,17 @@ export const featuredHarvestPhotos = [
   '/snimki/IMG_7318.jpeg',
   '/snimki/IMG_7285.jpeg',
 ];
+
+export const homeStoryPhoto = '/snimki/IMG_7314.jpeg';
+
+export const homeGalleryPhotos = [
+  '/snimki/IMG_7276.jpeg',
+  '/snimki/IMG_7280.jpeg',
+  '/snimki/IMG_7290.jpeg',
+  '/snimki/IMG_7294.jpeg',
+  '/snimki/IMG_7296.jpeg',
+  '/snimki/IMG_7311.jpeg',
+] as const;
 
 export const harvestGalleryCopy: Record<Locale, { eyebrow: string; title: string; description: string; imageLabel: string }> = {
   bg: { eyebrow: 'НАШАТА РЕКОЛТА', title: 'От гората до подбора', description: 'Истински моменти от терена, събирането и сортирането на сезонните гъби.', imageLabel: 'Снимка от реколтата' },

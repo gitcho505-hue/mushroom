@@ -1,12 +1,13 @@
 import { createContext, useContext, useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, Compass, Leaf, Menu, MoveUpRight, ShieldCheck, Sparkles, X } from 'lucide-react';
-import { articles, catalogProductPath, copy, imageUrl, isCatalogProductPath, keyForPath, languageMeta, locales, pathFor, titleFor, truffleFor, truffleIds as defaultTruffleIds, type Copy, type Locale, type PageKey } from './content';
+import { articles, catalogProductPath, copy, faqItems, imageUrl, isCatalogProductPath, keyForPath, languageMeta, locales, pathFor, titleFor, truffleFor, truffleIds as defaultTruffleIds, type Copy, type Locale, type PageKey } from './content';
 import { localeUi } from './i18n';
 import { renderHead } from './seo';
 import { HarvestAdminPage as AdminPage } from './harvest-admin-crud';
 import { createCatalogSeeds, getSupabaseClient, loadCatalogProducts, loadHarvestRecords, safeCatalogImage, type CatalogProduct, type HarvestRecord } from './catalog';
-import { featuredHarvestPhotos, harvestGalleryCopy, harvestPhotos, heroHarvestPhotos } from './harvest-photos';
+import { harvestGalleryCopy, harvestPhotos, heroHarvestPhotos, homeGalleryPhotos, homeStoryPhoto } from './harvest-photos';
+import { knowledgeCopy, knowledgeArticleIds } from './knowledge';
 import './harvest-gallery.css';
 import './harvest-inventory.css';
 
@@ -259,7 +260,7 @@ function Home({ locale, t }: { locale: Locale; t: Copy }) {
     return () => window.clearInterval(timer);
   }, [activeSlide, heroSlides.length]);
   return <>
-    <section className="hero" style={{ '--hero-image': `url("${heroSlides[activeSlide].image}")` } as React.CSSProperties}>
+    <section className="hero">
       {heroSlides.map((slide, index) => <img key={slide.slug} className={`hero-photo ${activeSlide === index ? 'is-active' : ''}`} src={slide.image} style={{ objectPosition: slide.position }} alt="" aria-hidden="true" loading={index === 0 ? 'eager' : 'lazy'} />)}
       <div className="hero-shade" />
       <div className="hero-copy"><p className="eyebrow"><span />{t.heroEyebrow}</p><h1>{t.heroTitle}</h1><p className="hero-description">{t.heroText}</p><Link className="button button-gold" to={pathFor(locale, 'products')}>{t.discover}<ArrowRight size={17} /></Link></div>
@@ -272,32 +273,30 @@ function Home({ locale, t }: { locale: Locale; t: Copy }) {
       <span className="hero-slide-count" aria-live="polite">{String(activeSlide + 1).padStart(2, '0')} / {String(heroSlides.length).padStart(2, '0')}</span>
     </div>
     <section id="seasonal" className="section featured-section"><SectionHeading eyebrow={t.origin} title={t.featured} intro={t.featuredIntro} /><div className="product-grid">{productIds.map((id, index) => <ProductCard key={id} locale={locale} t={t} id={id} number={`0${index + 1}`} />)}</div><div className="section-link"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div></section>
-    <section className="species-band"><div className="species-copy"><p className="eyebrow">{t.reasonsEyebrow}</p><h2>{t.species}</h2><p>{t.speciesText}</p><Link className="text-link text-link-light" to={pathFor(locale, 'truffles')}>{t.learn}<ArrowRight size={16} /></Link></div><div className="species-image" role="img" aria-label={t.origin} style={{ backgroundImage: `url(${featuredHarvestPhotos[2]})` }} /><div className="species-index">01 <span>/</span> 04</div></section>
+    <section className="species-band"><div className="species-copy"><p className="eyebrow">{t.reasonsEyebrow}</p><h2>{t.species}</h2><p>{t.speciesText}</p><Link className="text-link text-link-light" to={pathFor(locale, 'truffles')}>{t.learn}<ArrowRight size={16} /></Link></div><div className="species-image" role="img" aria-label={t.origin} style={{ backgroundImage: 'url(/snimki/IMG_7286.jpeg)' }} /><div className="species-index">01 <span>/</span> 04</div></section>
     <HomeHarvestRibbon locale={locale} t={t} />
     <HomeStory t={t} />
+    <KnowledgePreview locale={locale} t={t} />
     <FaqPreview locale={locale} t={t} /><CallToAction locale={locale} t={t} />
   </>;
 }
 
-const homeRibbonPhotoIndices = [1, 9, 16, 23, 30, 37, 43, 46];
-
 function HomeHarvestRibbon({ locale, t }: { locale: Locale; t: Copy }) {
   const gallery = harvestGalleryCopy[locale];
-  const picks = homeRibbonPhotoIndices.map((index) => harvestPhotos[index]).filter(Boolean);
   return <section className="home-harvest-ribbon" aria-labelledby="home-harvest-title">
     <div className="home-harvest-ribbon__intro">
       <p className="eyebrow">{gallery.eyebrow}</p>
       <h2 id="home-harvest-title">{gallery.title}</h2>
       <p>{gallery.description}</p>
     </div>
-    <div className="home-harvest-ribbon__grid">{picks.map((src, index) => <figure className="home-harvest-ribbon__tile" key={src}><img src={src} alt={`${gallery.imageLabel} ${index + 1}`} loading="lazy" width="900" height="700" /><figcaption>{String(index + 1).padStart(2, '0')}</figcaption></figure>)}</div>
+    <div className="home-harvest-ribbon__grid">{homeGalleryPhotos.map((src, index) => <figure className="home-harvest-ribbon__tile" key={src}><img src={src} alt={`${gallery.imageLabel} ${index + 1}`} loading="lazy" width="900" height="700" /><figcaption>{String(index + 1).padStart(2, '0')}</figcaption></figure>)}</div>
     <div className="home-harvest-ribbon__footer"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div>
   </section>;
 }
 
 function HomeStory({ t }: { t: Copy }) {
   return <section className="field-story">
-    <div className="field-story-image"><img src={featuredHarvestPhotos[0]} alt={t.processEyebrow} loading="lazy" width="1200" height="1400" /><span>{t.landscapeEyebrow}</span></div>
+    <div className="field-story-image"><img src={homeStoryPhoto} alt={t.landscapeTitle} loading="lazy" width="828" height="1102" /><span>{t.landscapeEyebrow}</span></div>
     <div className="field-story-panel">
       <p className="eyebrow">{t.reasonsEyebrow}</p>
       <h2>{t.reasonsTitle}</h2>
@@ -305,6 +304,18 @@ function HomeStory({ t }: { t: Copy }) {
       <div className="field-story-principles">{t.reasons.map(([title, text], index) => <article key={title}><span>{String(index + 1).padStart(2, '0')}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div>
       <div className="field-story-note"><Check size={17} /><div><strong>{t.quality}</strong><span>{t.qualityText}</span></div></div>
     </div>
+  </section>;
+}
+
+function KnowledgePreview({ locale, t }: { locale: Locale; t: Copy }) {
+  const labels = knowledgeCopy[locale];
+  return <section className="section knowledge-section" aria-labelledby="knowledge-title">
+    <div className="knowledge-heading"><div><p className="eyebrow">{labels.eyebrow}</p><h2 id="knowledge-title">{labels.title}</h2><p>{labels.intro}</p></div><Link className="text-link" to={pathFor(locale, 'blog')}>{labels.all}<ArrowRight size={16} /></Link></div>
+    <div className="knowledge-grid">{knowledgeArticleIds.map((id, index) => {
+      const article = articles[locale][id];
+      return <article className="knowledge-card" key={id}><span className="knowledge-number">{String(index + 1).padStart(2, '0')}</span><h3><Link to={pathFor(locale, `article:${id}`)}>{article.title}</Link></h3><p>{article.description}</p><Link className="text-link" to={pathFor(locale, `article:${id}`)} aria-label={`${labels.read}: ${article.title}`}>{labels.read}<ArrowUpRight size={17} /></Link></article>;
+    })}</div>
+    <div className="knowledge-footer"><Link className="text-link" to={pathFor(locale, 'faq')}>{t.faqTitle}<ArrowRight size={16} /></Link></div>
   </section>;
 }
 
@@ -427,7 +438,8 @@ function BlogPage({ locale, t }: { locale: Locale; t: Copy }) {
 
 function ArticlePage({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; t: Copy }) {
   const article = articles[locale][pageKey.split(':')[1]];
-  return <><article className="article-page"><Link className="back-link" to={pathFor(locale, 'blog')}>← {t.nav.blog}</Link><header className="article-heading"><p className="eyebrow">{article.date} · Truffle Balkans</p><h1>{article.title}</h1><p>{article.description}</p></header><img className="article-cover" src={imageUrl(article.image, 1800)} alt={article.title} loading="eager" width="1800" height="1000" /><div className="article-body"><p className="article-deck">{article.body}</p>{article.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div></article><section className="section related-section"><SectionHeading eyebrow={t.nav.blog} title={t.related} /><BlogCards locale={locale} t={t} skip={pageKey.split(':')[1]} /></section></>;
+  const labels = knowledgeCopy[locale];
+  return <><article className="article-page"><Link className="back-link" to={pathFor(locale, 'blog')}>← {t.nav.blog}</Link><header className="article-heading"><p className="eyebrow">{article.date} · <Link to={pathFor(locale, 'about')}>Truffle Balkans</Link></p><h1>{article.title}</h1><p>{article.description}</p></header><img className="article-cover" src={imageUrl(article.image, 1800)} alt={article.title} loading="eager" width="1800" height="1000" /><div className="article-body"><p className="article-deck">{article.body}</p>{article.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}{article.sections?.map((section) => <section key={section.title}><h2>{section.title}</h2>{section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</section>)}<div className="article-actions"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link><Link className="text-link" to={pathFor(locale, 'wholesale')}>{t.cta}<ArrowUpRight size={16} /></Link></div>{Boolean(article.sources?.length) && <aside className="article-sources"><h2>{labels.sources}</h2><ul>{article.sources!.map((source) => <li key={source.url}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}<ArrowUpRight size={14} /></a></li>)}</ul></aside>}</div></article><section className="section related-section"><SectionHeading eyebrow={t.nav.blog} title={t.related} /><BlogCards locale={locale} t={t} skip={pageKey.split(':')[1]} /></section></>;
 }
 
 function BlogCards({ locale, t, skip }: { locale: Locale; t: Copy; skip?: string }) {
@@ -459,11 +471,11 @@ function FaqPreview({ locale, t }: { locale: Locale; t: Copy }) {
   }[locale];
   const totalWeight = records.reduce((sum, record) => sum + record.weight_grams, 0);
   const totalQuantity = records.reduce((sum, record) => sum + record.quantity, 0);
-  return <>{records.length > 0 && product && <section className="section harvest-stock" aria-labelledby="harvest-stock-title"><div className="harvest-stock-heading"><div><p className="eyebrow">{t.availability}</p><h2 id="harvest-stock-title">{labels.title}</h2></div><strong>{totalWeight} g {labels.total} · {totalQuantity} {labels.pieces}</strong></div><div className="harvest-stock-grid">{records.map((record) => <article className="harvest-stock-item" key={record.id}>{record.image_url ? <img src={record.image_url} alt={`${product.title} · ${record.weight_grams} g`} loading="lazy" /> : <img src={productImage(product, 700)} alt={product.title} loading="lazy" />}<div className="harvest-stock-copy"><time dateTime={record.found_on}>{new Date(`${record.found_on}T12:00:00`).toLocaleDateString(locale)}</time><div><span>{labels.weight}</span><strong>{record.weight_grams} g</strong></div><div><span>{labels.quantity}</span><strong>{record.quantity} {labels.pieces}</strong></div>{record.notes && <p>{record.notes}</p>}</div></article>)}</div></section>}<section className="section faq-section"><div className="faq-heading"><p className="eyebrow">{t.faqTitle}</p><h2>{t.faqTitle}</h2><Link className="text-link" to={pathFor(locale, 'faq')}>{t.learn}<ArrowRight size={15} /></Link></div><div className="faq-list">{t.faq.map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section></>;
+  return <>{records.length > 0 && product && <section className="section harvest-stock" aria-labelledby="harvest-stock-title"><div className="harvest-stock-heading"><div><p className="eyebrow">{t.availability}</p><h2 id="harvest-stock-title">{labels.title}</h2></div><strong>{totalWeight} g {labels.total} · {totalQuantity} {labels.pieces}</strong></div><div className="harvest-stock-grid">{records.map((record) => <article className="harvest-stock-item" key={record.id}>{record.image_url ? <img src={record.image_url} alt={`${product.title} · ${record.weight_grams} g`} loading="lazy" /> : <img src={productImage(product, 700)} alt={product.title} loading="lazy" />}<div className="harvest-stock-copy"><time dateTime={record.found_on}>{new Date(`${record.found_on}T12:00:00`).toLocaleDateString(locale)}</time><div><span>{labels.weight}</span><strong>{record.weight_grams} g</strong></div><div><span>{labels.quantity}</span><strong>{record.quantity} {labels.pieces}</strong></div>{record.notes && <p>{record.notes}</p>}</div></article>)}</div></section>}<section className="section faq-section"><div className="faq-heading"><p className="eyebrow">{t.faqTitle}</p><h2>{t.faqTitle}</h2><Link className="text-link" to={pathFor(locale, 'faq')}>{t.learn}<ArrowRight size={15} /></Link></div><div className="faq-list">{faqItems(locale).map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section></>;
 }
 
 function FaqPage({ locale, t }: { locale: Locale; t: Copy }) {
-  return <><PageIntro eyebrow={t.faqTitle} title={t.faqPageTitle} text={t.faqTitle} /><section className="section faq-page-section"><div className="faq-list">{t.faq.map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section><CallToAction locale={locale} t={t} /></>;
+  return <><PageIntro eyebrow={t.faqTitle} title={t.faqPageTitle} text={t.faqTitle} /><section className="section faq-page-section"><div className="faq-list">{faqItems(locale).map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section><CallToAction locale={locale} t={t} /></>;
 }
 
 function LegalPage({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; t: Copy }) {

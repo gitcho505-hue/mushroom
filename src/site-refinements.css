@@ -1,0 +1,414 @@
+/* Keep public-site text readable after the original theme's small type rules. */
+body {
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+#main p {
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+#main .eyebrow,
+.site-footer .eyebrow {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+#main .blog-card > p:not(.blog-date) {
+  font-size: 16px !important;
+  line-height: 1.8;
+}
+
+#main .hero-description,
+#main .section-intro,
+#main .page-intro > p:last-child,
+#main .detail-lede,
+#main .field-story-intro {
+  font-size: 17px;
+}
+
+.site-header .main-nav > a {
+  font-size: 14px;
+}
+
+.site-header .main-nav {
+  gap: clamp(12px, 1.3vw, 22px);
+  padding-inline: 18px;
+}
+
+#main .button,
+#main .text-link,
+#main .back-link,
+.mobile-nav-tools .button {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#main .product-meta,
+#main .catalog-offer-meta span,
+#main .catalog-offer-meta strong,
+#main .catalog-toolbar,
+#main .detail-facts span,
+#main .contact-fact span,
+#main .contact-index,
+#main .blog-date,
+#main .product-number,
+#main .hero-slide-count,
+#main .hero-caption,
+#main .scroll-cue,
+#main .home-harvest-ribbon__tile figcaption,
+#main .harvest-photo-tile > span,
+#main .harvest-stock-copy time,
+#main .harvest-stock-copy span {
+  font-size: 13px !important;
+  line-height: 1.6;
+}
+
+#main .product-meta,
+#main .catalog-offer-meta {
+  gap: 6px 12px;
+}
+
+#main .catalog-offer-meta strong {
+  margin-left: 0;
+}
+
+#main .catalog-toolbar {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#main .detail-facts strong,
+#main .contact-fact strong,
+#main .field-story-note strong,
+#main .field-story-note span,
+#main .field-story-principles article > span,
+#main .wholesale-points article > span,
+#main .harvest-stock-heading > strong,
+.site-footer .footer-column h2,
+.site-footer .footer-column > a,
+.site-footer .footer-column > p,
+.site-footer .footer-brand > p,
+.site-footer .footer-languages a,
+.site-footer .footer-bottom {
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+#main .field-story-principles h3 {
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+#main .contact-form label,
+#main .wholesale-form label {
+  font-size: 15px;
+}
+
+#main .contact-form input,
+#main .contact-form textarea,
+#main .wholesale-form input,
+#main .wholesale-form textarea,
+#main .wholesale-form select {
+  font-size: 16px;
+}
+
+#main .faq-item summary {
+  font-size: 17px;
+  line-height: 1.6;
+  gap: 18px;
+}
+
+#main .faq-item summary > span {
+  flex-shrink: 0;
+}
+
+/* Render each hero frame once, with an uninterrupted photograph. */
+.hero {
+  background-image: none;
+}
+
+.hero-photo {
+  inset: 0;
+  width: 100%;
+}
+
+.hero-slide-progress button {
+  height: 44px;
+}
+
+.hero-slide-progress button::before {
+  inset: 20px 0;
+}
+
+.hero-shade {
+  background: linear-gradient(90deg, #050e0af5 0%, #050e0ae8 24%, #050e0aba 44%, #050e0a38 72%, #050e0a12 100%), linear-gradient(0deg, #050e0a75, transparent 35%);
+}
+
+/* Fit the woodland photo to its own column, instead of cropping a full-width image. */
+.field-story::after {
+  display: none;
+}
+
+.field-story-image {
+  position: relative;
+  inset: auto;
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.field-story-image::after {
+  display: block;
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: linear-gradient(0deg, #091a13b3, transparent 45%);
+  pointer-events: none;
+}
+
+.field-story-image img {
+  object-position: center;
+  filter: none;
+}
+
+.field-story-image > span {
+  left: 28px;
+  right: 28px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.field-story-panel {
+  grid-row: 1;
+}
+
+.home-harvest-ribbon__grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  border: 0;
+  background: transparent;
+}
+
+.home-harvest-ribbon__tile {
+  aspect-ratio: 4 / 3;
+}
+
+.knowledge-section {
+  background: #e4e9dc;
+  border-bottom: var(--brutal-rule);
+}
+
+.knowledge-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 36px;
+}
+
+.knowledge-heading > div {
+  max-width: 720px;
+}
+
+.knowledge-heading .eyebrow {
+  margin: 0 0 12px;
+  color: #536241;
+}
+
+.knowledge-heading h2 {
+  margin: 0 0 20px;
+  font-family: var(--display);
+  font-size: clamp(34px, 4vw, 50px);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.knowledge-heading p {
+  margin: 0;
+  color: #414b3e;
+}
+
+.knowledge-heading > .text-link {
+  flex-shrink: 0;
+}
+
+.knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.knowledge-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 28px;
+  background: #f7f8f1;
+  border: 1px solid #bac5ad;
+}
+
+.knowledge-number {
+  font-size: 13px;
+  font-weight: 700;
+  color: #5a6748;
+}
+
+.knowledge-card h3 {
+  margin: 20px 0 14px;
+  font-family: var(--display);
+  font-size: 27px;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.knowledge-card p {
+  margin: 0 0 24px;
+  color: #414b3e;
+}
+
+.knowledge-card .text-link {
+  margin-top: auto;
+  padding-block: 8px;
+}
+
+.knowledge-card a:focus-visible {
+  outline: 3px solid #7d6437;
+  outline-offset: 4px;
+}
+
+.knowledge-footer {
+  margin-top: 28px;
+}
+
+.article-body {
+  max-width: 760px;
+}
+
+#main .article-body p {
+  font-family: 'Manrope', sans-serif;
+  font-size: 18px;
+  line-height: 1.85;
+  color: #354030;
+}
+
+#main .article-body .article-deck {
+  font-family: var(--display);
+  font-size: 26px;
+  line-height: 1.5;
+}
+
+.article-body h2 {
+  margin: 36px 0 16px;
+  font-family: var(--display);
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.article-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 28px;
+  padding-block: 28px;
+  border-top: 1px solid var(--line);
+}
+
+.article-sources {
+  padding: 20px 24px;
+  background: #e4e9dc;
+}
+
+.article-sources h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+}
+
+.article-sources ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.article-sources a {
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article-sources svg {
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+@media (max-width: 1080px) {
+  .site-header .main-nav {
+    gap: 0;
+    padding-inline: var(--page-pad);
+  }
+
+  .site-header .main-nav > a {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 900px) {
+  .field-story-panel {
+    grid-row: 2;
+  }
+
+  .knowledge-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .knowledge-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 760px) {
+  #main .hero-description,
+  #main .section-intro,
+  #main .page-intro > p:last-child,
+  #main .detail-lede,
+  #main .field-story-intro {
+    font-size: 16px;
+  }
+
+  .hero-shade {
+    background: linear-gradient(0deg, #050e0af5 0%, #050e0ade 35%, #050e0a80 66%, #050e0a28 100%);
+  }
+
+  .home-harvest-ribbon__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #main .article-body p {
+    font-size: 17px;
+  }
+
+  .footer-bottom {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 560px) {
+  .knowledge-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .knowledge-card {
+    padding: 24px;
+  }
+
+  .field-story-panel,
+  .field-story-image > span {
+    padding-inline: var(--page-pad);
+  }
+
+  .field-story-image > span {
+    left: 0;
+    right: 0;
+  }
+}
