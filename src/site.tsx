@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type FormEvent } from 'react';
+import { createContext, useContext, useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, Compass, Leaf, Menu, MoveUpRight, ShieldCheck, Sparkles, X } from 'lucide-react';
 import { articles, catalogProductPath, copy, imageUrl, isCatalogProductPath, keyForPath, languageMeta, locales, pathFor, titleFor, truffleFor, truffleIds as defaultTruffleIds, type Copy, type Locale, type PageKey } from './content';
@@ -136,7 +136,7 @@ export function Site() {
       setCatalogLoaded(true);
     });
     void loadHarvestRecords(client)
-      .then(({ data }) => { if (active) setHarvests(data.filter((record) => record.is_available)); });
+      .then(({ data }) => { if (active) setHarvests((data ?? []).filter((record) => record.is_available)); });
     return () => { active = false; };
   }, [isAdminPath]);
   useEffect(() => {
@@ -175,11 +175,22 @@ function NotFound({ locale }: { locale: Locale }) {
 
 function Layout({ locale, pageKey, t, children }: { locale: Locale; pageKey: PageKey; t: Copy; children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuToggle = useRef<HTMLButtonElement>(null);
   const location = useLocation();
   useEffect(() => {
     setMenuOpen(false);
     window.scrollTo(0, 0);
   }, [location.pathname]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setMenuOpen(false);
+      menuToggle.current?.focus();
+    };
+    document.addEventListener('keydown', closeOnEscape);
+    return () => document.removeEventListener('keydown', closeOnEscape);
+  }, [menuOpen]);
 
   return <>
     <a className="skip-link" href="#main">{localeUi[locale].skip}</a>
@@ -188,9 +199,9 @@ function Layout({ locale, pageKey, t, children }: { locale: Locale; pageKey: Pag
         <img src="/images/brand-logo.png" width="55" height="55" alt="" />
         <span><strong>TRUFFLE</strong><small>B A L K A N S</small></span>
       </Link>
-      <button className="icon-button mobile-menu-toggle" aria-label={menuOpen ? localeUi[locale].menuClose : localeUi[locale].menuOpen} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
-      <nav className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label={localeUi[locale].navigation}>
-        {(['home', 'products', 'wholesale', 'truffles', 'about', 'blog', 'contact'] as const).map((item) => <Link key={item} to={pathFor(locale, item)} aria-current={pageKey === item ? 'page' : undefined}>{t.nav[item]}</Link>)}
+      <button ref={menuToggle} type="button" className="icon-button mobile-menu-toggle" aria-label={menuOpen ? localeUi[locale].menuClose : localeUi[locale].menuOpen} aria-controls="main-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
+      <nav id="main-navigation" className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label={localeUi[locale].navigation}>
+        {(['home', 'products', 'wholesale', 'truffles', 'about', 'blog', 'contact'] as const).map((item) => <Link key={item} to={pathFor(locale, item)} onClick={() => setMenuOpen(false)} aria-current={pageKey === item ? 'page' : undefined}>{t.nav[item]}</Link>)}
         <div className="mobile-nav-tools"><LanguagePicker locale={locale} pageKey={pageKey} compact /><Link className="button button-gold" to={pathFor(locale, 'wholesale')}>{t.cta} <ArrowUpRight size={15} /></Link></div>
       </nav>
       <div className="header-tools"><LanguagePicker locale={locale} pageKey={pageKey} /><Link className="button button-gold header-cta" to={pathFor(locale, 'wholesale')}>{t.cta} <ArrowUpRight size={15} /></Link></div>
@@ -206,7 +217,7 @@ function LanguagePicker({ locale, pageKey, compact = false }: { locale: Locale; 
   const productId = pageKey.startsWith('product:') || pageKey.startsWith('truffle:') ? pageKey.split(':')[1] : null;
   return <div className={`language-picker ${compact ? 'language-picker-compact' : ''}`}>
     <button className="language-trigger" aria-expanded={open} aria-label={`${languageMeta[locale].label}: ${localeUi[locale].chooseLanguage}`} onClick={() => setOpen(!open)}><span className="language-code">{locale.toUpperCase()}</span><ChevronDown size={13} /></button>
-    {open && <div className="language-menu">{locales.map((option) => <Link key={option} to={productId ? catalogProductPath(option, productId, catalog[productId]?.slug_by_locale) : pathFor(option, pageKey)} lang={option} hrefLang={languageMeta[option].hreflang} aria-current={option === locale ? 'page' : undefined}>{languageMeta[option].label}</Link>)}</div>}
+    {open && <div className="language-menu">{locales.map((option) => <Link key={option} to={productId ? catalogProductPath(option, productId, catalog[productId]?.slug_by_locale) : pathFor(option, pageKey)} onClick={() => setOpen(false)} lang={option} hrefLang={languageMeta[option].hreflang} aria-current={option === locale ? 'page' : undefined}>{languageMeta[option].label}</Link>)}</div>}
   </div>;
 }
 
