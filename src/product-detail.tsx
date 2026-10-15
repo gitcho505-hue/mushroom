@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import type { ReactNode } from 'react';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { pathFor, type Copy, type Locale } from './content';
 import { HarvestLightbox } from './harvest-lightbox';
@@ -16,7 +17,7 @@ const labelsByLocale = {
   de: { breadcrumbs: 'Produktnavigation', price: 'Preis', onRequest: 'Preis auf Anfrage', pack: 'Pro Packung', stock: 'Verfügbare Menge', details: 'Über diese Trüffel', season: 'Saison und Auswahl', seasonText: 'Verfügbarkeit, Größe und Preis richten sich nach der aktuellen Partie. Nennen Sie Gericht und Termin, damit wir eine passende Auswahl besprechen können.', preparation: 'Aufbewahrung und Verwendung', preparationText: 'Für die Zubereitung lesen Sie unsere Ratgeber zur Aufbewahrung und Verwendung frischer Trüffel.', storage: 'Frische Trüffel aufbewahren', cooking: 'Trüffel in der Küche verwenden', inquiry: 'Nennen Sie Menge und Termin. Wir bestätigen Verfügbarkeit und Angebot für Ihre Anfrage.', origin: 'Balkan' },
 } satisfies Record<Locale, Record<string, string>>;
 
-export function ProductDetail({ locale, t, id, item, photos, productMode }: { locale: Locale; t: Copy; id: string; item: ProductDetailData; photos: readonly string[]; productMode: boolean }) {
+export function ProductDetail({ locale, t, id, item, photos, productMode, harvestStock }: { locale: Locale; t: Copy; id: string; item: ProductDetailData; photos: readonly string[]; productMode: boolean; harvestStock?: ReactNode }) {
   const labels = labelsByLocale[locale];
   const price = (amount: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: item.currency ?? 'EUR' }).format(amount);
   const origin = !item.origin || item.origin === 'Balkans' ? labels.origin : item.origin;
@@ -30,6 +31,7 @@ export function ProductDetail({ locale, t, id, item, photos, productMode }: { lo
         <Link className="button product-enquiry-button" to={pathFor(locale, 'wholesale')} state={{ productId: id }}>{t.inquire}<ArrowUpRight size={19} /></Link><p className="product-enquiry-note">{labels.inquiry}</p>
       </section>
     </div>
+    {harvestStock}
     <section className="product-information"><div><p className="eyebrow">{t.nav.truffles}</p><h2>{labels.details}</h2><p>{item.body}</p></div><div><h2>{labels.season}</h2><p><strong>{item.season}</strong></p><p>{labels.seasonText}</p><h2>{labels.preparation}</h2><p>{labels.preparationText}</p><div className="product-guide-links"><Link className="text-link" to={pathFor(locale, 'article:storage')}>{labels.storage}<ArrowRight size={16} /></Link><Link className="text-link" to={pathFor(locale, 'article:cooking')}>{labels.cooking}<ArrowRight size={16} /></Link></div></div></section>
   </article>;
 }

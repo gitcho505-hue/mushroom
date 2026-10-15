@@ -317,7 +317,7 @@ function Home({ locale, t }: { locale: Locale; t: Copy }) {
   const productIds = catalogProductIds(catalog, catalogLoaded);
   return <>
     <HomeIntro locale={locale} />
-    <section id="seasonal" className="section featured-section"><SectionHeading eyebrow={t.origin} title={t.featured} intro={t.featuredIntro} /><HarvestStock locale={locale} t={t} embedded /><div className="product-grid">{productIds.map((id, index) => <ProductCard key={id} locale={locale} t={t} id={id} number={`0${index + 1}`} />)}</div><div className="section-link"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div></section>
+    <section id="seasonal" className="section featured-section"><SectionHeading eyebrow={t.origin} title={t.featured} intro={t.featuredIntro} /><div className="product-grid">{productIds.map((id, index) => <ProductCard key={id} locale={locale} t={t} id={id} number={`0${index + 1}`} />)}</div><div className="section-link"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div></section>
     <HomeHarvestRibbon locale={locale} />
     <section className="species-band"><div className="species-copy"><p className="eyebrow">{t.nav.truffles}</p><h2>{t.species}</h2><p>{t.speciesText}</p><Link className="text-link text-link-light" to={pathFor(locale, 'truffles')}>{t.learn}<ArrowRight size={16} /></Link></div><figure className="species-image"><img src="/snimki/IMG_7286.jpeg" alt={t.species} loading="lazy" width="828" height="1097" /></figure></section>
     <HomeStory t={t} />
@@ -433,7 +433,7 @@ function DetailPage({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; 
   const item = productFor(id, locale, catalog)!;
   const records = useContext(HarvestContext).filter((record) => record.product_id === id);
   const photos = [...new Set([productImage(item, 1500), ...records.flatMap((record) => record.image_url ? [safeCatalogImage(record.image_url, id, 1500)] : [])])];
-  return <div className="product-detail-layout"><ProductDetail locale={locale} t={t} id={id} item={item} photos={photos} productMode={pageKey.startsWith('product:')} /><FaqPreview locale={locale} t={t} /><section className="section related-section"><SectionHeading eyebrow={t.nav.products} title={t.related} /><div className="product-grid">{ids.filter((candidate) => candidate !== id).slice(0, 3).map((candidate, index) => <ProductCard key={candidate} locale={locale} t={t} id={candidate} number={String(index + 1).padStart(2, '0')} />)}</div></section></div>;
+  return <div className="product-detail-layout"><ProductDetail locale={locale} t={t} id={id} item={item} photos={photos} productMode={pageKey.startsWith('product:')} harvestStock={pageKey.startsWith('product:') ? <HarvestStock locale={locale} t={t} productId={id} /> : undefined} /><FaqPreview locale={locale} t={t} /><section className="section related-section"><SectionHeading eyebrow={t.nav.products} title={t.related} /><div className="product-grid">{ids.filter((candidate) => candidate !== id).slice(0, 3).map((candidate, index) => <ProductCard key={candidate} locale={locale} t={t} id={candidate} number={String(index + 1).padStart(2, '0')} />)}</div></section></div>;
 }
 
 function BlogPage({ locale, t }: { locale: Locale; t: Copy }) {
@@ -449,26 +449,22 @@ function BlogCards({ locale, t, skip }: { locale: Locale; t: Copy; skip?: string
   return <div className="blog-grid">{Object.entries(articles[locale]).filter(([id]) => id !== skip).slice(0, 2).map(([id, article]) => <article className="blog-card" key={id}><Link to={pathFor(locale, `article:${id}`)} className="blog-image"><img src={imageUrl(article.image, 800)} alt={article.title} loading="lazy" width="800" height="600" /></Link><p className="blog-date">{article.date} · Truffle Balkans</p><h2><Link to={pathFor(locale, `article:${id}`)}>{article.title}</Link></h2><p>{article.description}</p><Link className="text-link" to={pathFor(locale, `article:${id}`)}>{t.learn}<ArrowRight size={15} /></Link></article>)}</div>;
 }
 
-function HarvestStock({ locale, t, productId, embedded = false, onlyProduct = false }: { locale: Locale; t: Copy; productId?: string; embedded?: boolean; onlyProduct?: boolean }) {
+function HarvestStock({ locale, t, productId }: { locale: Locale; t: Copy; productId: string }) {
   const catalog = useContext(CatalogContext);
-  const records = useContext(HarvestContext).filter((record) => (!onlyProduct || !!productId) && (!productId || record.product_id === productId) && isPublicProduct(catalog[record.product_id]));
+  const records = useContext(HarvestContext).filter((record) => record.product_id === productId && isPublicProduct(catalog[record.product_id]));
   const labels = harvestStockCopy[locale];
   if (!records.length) return null;
-  const content = <><div className="harvest-stock-heading"><div><p className="eyebrow">{t.availability}</p><h2 id={embedded ? 'home-harvest-stock-title' : 'harvest-stock-title'}>{labels.title}</h2></div><strong>{records.reduce((sum, record) => sum + record.weight_grams, 0)} g {labels.total} · {records.reduce((sum, record) => sum + record.quantity, 0)} {labels.pieces}</strong></div><div className="harvest-stock-grid">{records.map((record) => {
+  const content = <><div className="harvest-stock-heading"><div><p className="eyebrow">{t.availability}</p><h2 id="harvest-stock-title">{labels.title}</h2></div><strong>{records.reduce((sum, record) => sum + record.weight_grams, 0)} g {labels.total} · {records.reduce((sum, record) => sum + record.quantity, 0)} {labels.pieces}</strong></div><div className="harvest-stock-grid">{records.map((record) => {
     const product = productFor(record.product_id, locale, catalog)!;
     const href = catalogProductPath(locale, record.product_id, catalog[record.product_id].slug_by_locale);
     const details = harvestDetails(record, locale);
     return <article className="harvest-stock-item" key={record.id} data-harvest-id={record.id}><Link className="harvest-stock-image" to={href}><img src={record.image_url ? safeCatalogImage(record.image_url, record.product_id, 700) : productImage(product, 700)} alt={`${product.title} · ${record.weight_grams} g${details ? ' · ' + details : ''}`} loading="lazy" width="700" height="800" /></Link><div className="harvest-stock-copy"><Link className="harvest-stock-product" to={href}>{product.title}</Link><time dateTime={record.found_on}>{new Date(`${record.found_on}T12:00:00`).toLocaleDateString(locale)}</time><div><span>{labels.weight}</span><strong>{record.weight_grams} g</strong></div><div><span>{labels.quantity}</span><strong>{record.quantity} {labels.pieces}</strong></div>{details && <p className="harvest-stock-details">{details}</p>}<Link className="text-link" to={pathFor(locale, 'wholesale')} state={{ productId: record.product_id }}>{t.inquire}<ArrowRight size={15} /></Link></div></article>;
   })}</div></>;
-  return embedded ? <div className="home-harvest-stock" aria-labelledby="home-harvest-stock-title">{content}</div> : <section className="section harvest-stock" aria-labelledby="harvest-stock-title">{content}</section>;
+  return <section className="section harvest-stock" aria-labelledby="harvest-stock-title">{content}</section>;
 }
 
 function FaqPreview({ locale, t }: { locale: Locale; t: Copy }) {
-  const { pathname } = useLocation();
-  const catalog = useContext(CatalogContext);
-  const page = keyForPath(pathname, Object.values(catalog))?.key;
-  const productId = page?.startsWith('product:') || page?.startsWith('truffle:') ? page.split(':')[1] : null;
-  return <><HarvestStock locale={locale} t={t} productId={productId ?? undefined} onlyProduct /><section className="section faq-section"><div className="faq-heading"><p className="eyebrow">{t.faqTitle}</p><h2>{t.faqTitle}</h2><Link className="text-link" to={pathFor(locale, 'faq')}>{t.learn}<ArrowRight size={15} /></Link></div><div className="faq-list">{faqItems(locale).map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section></>;
+  return <><section className="section faq-section"><div className="faq-heading"><p className="eyebrow">{t.faqTitle}</p><h2>{t.faqTitle}</h2><Link className="text-link" to={pathFor(locale, 'faq')}>{t.learn}<ArrowRight size={15} /></Link></div><div className="faq-list">{faqItems(locale).map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section></>;
 }
 
 function FaqPage({ locale, t }: { locale: Locale; t: Copy }) {

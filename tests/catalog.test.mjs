@@ -29,21 +29,37 @@ test('preset details translate automatically for all supported languages', () =>
   assert.equal(server.harvestDetails({ ...record, grade_code: null, size_code: null, preparation_code: null, notes: 'Първо' }, 'en'), 'First grade');
 });
 
-test('SSR shows published subproducts inside the second home section and omits hidden records', async (context) => {
-  mockDatabase(context);
+test('SSR shows subproducts only on their own product page before the information section', async (context) => {
+  mockDatabase(context, products, [...records, { ...record, id: 'burgundy-find', product_id: 'burgundy-truffle' }]);
   const response = recorder();
   await pageHandler({ method: 'GET', url: '/?locale=en' }, response);
   assert.equal(response.statusCode, 200);
   assert.equal(response.headers['Cache-Control'], 'no-store');
-  const featured = response.body.split('id="seasonal"')[1].split('</section>')[0];
-  assert.ok(featured.includes('data-harvest-id="visible-find"'));
-  assert.ok(featured.includes('First grade · Large · Cleaned'));
+  assert.ok(!response.body.includes('data-harvest-id='));
   assert.ok(!response.body.includes('data-harvest-id="hidden-parent"'));
   assert.ok(!response.body.includes('data-harvest-id="draft-find"'));
   const bootstrap = JSON.parse(response.body.match(/<script id="catalog-bootstrap" type="application\/json">(.*?)<\/script>/s)[1]);
   assert.equal(bootstrap.products.length, 3);
-  assert.equal(bootstrap.harvests.length, 1);
+  assert.equal(bootstrap.harvests.length, 2);
   assert.ok(!bootstrap.products.some((product) => product.id === 'summer-truffle'));
+  for (const locale of server.locales) {
+    for (const [productId, harvestId] of [['black-truffle', 'visible-find'], ['burgundy-truffle', 'burgundy-find']]) {
+      const detail = recorder();
+      const path = server.pathFor(locale, `product:${productId}`).split('/').slice(2).join('/');
+      await pageHandler({ method: 'GET', url: `/?locale=${locale}&path=${path}` }, detail);
+      assert.equal(detail.statusCode, 200);
+      assert.equal((detail.body.match(/data-harvest-id=/g) || []).length, 1);
+      assert.ok(detail.body.includes(`data-harvest-id="${harvestId}"`));
+      const stockPosition = detail.body.indexOf('class="section harvest-stock"');
+      const informationPosition = detail.body.indexOf('class="product-information"');
+      assert.ok(stockPosition > detail.body.indexOf('class="product-detail-hero"') && stockPosition < informationPosition);
+      assert.ok(detail.body.includes(server.harvestDetails(record, locale)));
+    }
+    const guide = recorder();
+    const path = server.pathFor(locale, 'truffle:black-truffle').split('/').slice(2).join('/');
+    await pageHandler({ method: 'GET', url: `/?locale=${locale}&path=${path}` }, guide);
+    assert.ok(!guide.body.includes('data-harvest-id='));
+  }
 });
 
 test('hidden products cannot be opened directly or indexed in the live sitemap', async (context) => {
