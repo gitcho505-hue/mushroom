@@ -25,7 +25,7 @@ export type PageKey =
 
 const baseCopy = {
   bg: {
-    nav: { home: 'Начало', products: 'Продукти', truffles: 'Трюфели', wholesale: 'За ресторанти', about: 'За нас', blog: 'Журнал', contact: 'Контакт' },
+    nav: { home: 'Начало', products: 'Пресни трюфели', truffles: 'Трюфели', wholesale: 'За ресторанти', about: 'За нас', blog: 'Журнал', contact: 'Контакт' },
     cta: 'Запитване',
     heroEyebrow: 'ДИВИ ТРЮФЕЛИ ЗА ПРОФЕСИОНАЛНИ КУХНИ',
     heroTitle: 'Вкусът на дивата природа.',
@@ -86,7 +86,7 @@ const baseCopy = {
     navMore: 'Повече', allProducts: 'Продукти', contactNote: 'Работим по заявка и потвърждаваме всяка наличност лично.',
   },
   en: {
-    nav: { home: 'Home', products: 'Truffles for chefs', truffles: 'Truffle guide', wholesale: 'For restaurants', about: 'Our story', blog: 'Journal', contact: 'Contact' },
+    nav: { home: 'Home', products: 'Fresh truffles', truffles: 'Truffle guide', wholesale: 'For restaurants', about: 'Our story', blog: 'Journal', contact: 'Contact' },
     cta: 'Enquiry',
     heroEyebrow: 'WILD TRUFFLES FOR PROFESSIONAL KITCHENS',
     heroTitle: 'A taste of the wild.',
@@ -147,7 +147,7 @@ const baseCopy = {
     navMore: 'More', allProducts: 'Products', contactNote: 'We work to order and personally confirm every availability.',
   },
   it: {
-    nav: { home: 'Home', products: 'Tartufi per chef', truffles: 'Guida ai tartufi', wholesale: 'Per ristoranti', about: 'Chi siamo', blog: 'Diario', contact: 'Contatti' },
+    nav: { home: 'Home', products: 'Tartufi freschi', truffles: 'Guida ai tartufi', wholesale: 'Per ristoranti', about: 'Chi siamo', blog: 'Diario', contact: 'Contatti' },
     cta: 'Richiesta',
     heroEyebrow: 'TARTUFI SELVATICI PER CUCINE PROFESSIONALI',
     heroTitle: 'Il sapore della natura.',

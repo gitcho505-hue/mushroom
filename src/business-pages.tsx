@@ -87,7 +87,7 @@ export function RestaurantPage({ locale, t, products, initialProduct }: PageProp
   const labels = businessCopy[locale].wholesale;
   return <div className="business-page business-wholesale">
     <section className="business-intro-grid"><header className="business-heading"><p className="eyebrow">{t.nav.wholesale}</p><h1>{labels.title}</h1><p>{labels.intro}</p><a className="button business-button" href="#restaurant-enquiry">{labels.formTitle}<ArrowRight size={18} /></a></header><figure className="business-photo restaurant-photo"><img src="/snimki/IMG_7296.jpeg" alt={labels.caption} width="828" height="1244" loading="eager" /><figcaption>{labels.caption}</figcaption></figure></section>
-    <ProcessSteps title={labels.process} steps={labels.steps} />
     <section className="business-order-layout" id="restaurant-enquiry"><aside><p className="eyebrow">{t.availability}</p><h2>{labels.orderLegend}</h2><p>{t.contactNote}</p><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={18} /></Link><ContactMethods locale={locale} /></aside><EnquiryForm locale={locale} t={t} wholesale products={products} initialProduct={initialProduct} /></section>
+    <ProcessSteps title={labels.process} steps={labels.steps} />
   </div>;
 }
