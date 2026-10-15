@@ -3,11 +3,13 @@ import { harvestPhotos } from './harvest-photos';
 import { knowledgeCopy, questionGuides, type GuideArticle } from './knowledge';
 import { businessCopy } from './business-copy';
 import { homeIntroCopy } from './home-intro-copy';
+import { galleryCopy } from './gallery-copy';
 export { languageMeta, locales, type Locale } from './i18n';
 
 export type PageKey =
   | 'home'
   | 'products'
+  | 'gallery'
   | 'wholesale'
   | 'about'
   | 'truffles'
@@ -288,7 +290,7 @@ export function faqItems(locale: Locale): readonly (readonly [string, string])[]
   return [...copy[locale].faq, ...Object.values(questionGuides[locale]).map((article) => [article.title, article.body] as const)];
 }
 
-const staticKeys: PageKey[] = ['home', 'products', 'wholesale', 'about', 'truffles', 'blog', 'contact', 'faq', 'privacy', 'terms', 'cookies'];
+const staticKeys: PageKey[] = ['home', 'products', 'gallery', 'wholesale', 'about', 'truffles', 'blog', 'contact', 'faq', 'privacy', 'terms', 'cookies'];
 
 export function allPageKeys(): PageKey[] {
   return [...staticKeys, ...truffleIds.flatMap((id) => [`product:${id}` as PageKey, `truffle:${id}` as PageKey]), ...Object.keys(articles.en).map((id) => `article:${id}` as PageKey)];
@@ -360,6 +362,7 @@ export function articleFor(key: PageKey, locale: Locale) {
 }
 
 export function titleFor(key: PageKey, locale: Locale): string {
+  if (key === 'gallery') return galleryCopy[locale].nav;
   const t = copy[locale];
   const product = truffleFor(key, locale);
   const article = articleFor(key, locale);
@@ -386,6 +389,7 @@ export function seoFor(locale: Locale, key: PageKey) {
   const homeTitles: Record<Locale, string> = { bg: 'Пресни трюфели от Балканите', en: 'Fresh truffles from the Balkans', it: 'Tartufi freschi dai Balcani', fr: 'Truffes fraîches des Balkans', de: 'Frische Trüffel vom Balkan' };
   const title = key === 'home' ? `${homeTitles[locale]} | Truffle Balkans` : `${titleFor(key, locale)} | Truffle Balkans`;
   const description = product?.description ?? article?.description ?? (
+    key === 'gallery' ? galleryCopy[locale].intro :
     key === 'home' ? copy[locale].heroText :
     key === 'products' ? copy[locale].productsIntro :
     key === 'wholesale' ? businessCopy[locale].wholesale.intro :

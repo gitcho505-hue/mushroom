@@ -5,8 +5,8 @@ const siteUrl = (import.meta.env.VITE_SITE_URL || 'https://mushroom-beta-dusky.v
 const heroImage = heroHarvestPhotos[0].src;
 const absoluteImage = (path: string) => new URL(path, `${siteUrl}/`).href;
 
-export function structuredData(locale: Locale, key: PageKey) {
-  const canonical = `${siteUrl}${pathFor(locale, key)}`;
+export function structuredData(locale: Locale, key: PageKey, galleryPage = 1) {
+  const canonical = `${siteUrl}${pathFor(locale, key)}${key === 'gallery' && galleryPage > 1 ? `?page=${galleryPage}` : ''}`;
   const title = seoFor(locale, key).title;
   const product = key.startsWith('product:') ? truffleFor(key, locale) : undefined;
   const articleId = key.startsWith('article:') ? key.split(':')[1] : undefined;
@@ -23,16 +23,17 @@ export function structuredData(locale: Locale, key: PageKey) {
   return data;
 }
 
-export function renderHead(locale: Locale, key: PageKey) {
+export function renderHead(locale: Locale, key: PageKey, galleryPage = 1) {
   const { title, description } = seoFor(locale, key);
-  const canonical = `${siteUrl}${pathFor(locale, key)}`;
+  const query = key === 'gallery' && Number.isSafeInteger(galleryPage) && galleryPage > 1 ? `?page=${galleryPage}` : '';
+  const canonical = `${siteUrl}${pathFor(locale, key)}${query}`;
   const product = key.startsWith('product:') ? truffleFor(key, locale) : undefined;
   const article = key.startsWith('article:') ? articles[locale][key.split(':')[1]] : undefined;
   const image = absoluteImage(product ? imageUrl(product.image) : article ? imageUrl(article.image) : heroImage);
   const preloadImage = product ? imageUrl(product.image, 1500) : article ? imageUrl(article.image, 1800) : key === 'home' ? heroImage : undefined;
-  const alternates = locales.map((other) => `<link rel="alternate" hreflang="${languageMeta[other].hreflang}" href="${siteUrl}${pathFor(other, key)}" />`).join('\n    ');
-  const xDefault = `<link rel="alternate" hreflang="x-default" href="${siteUrl}${pathFor('bg', key)}" />`;
-  const jsonLd = JSON.stringify(structuredData(locale, key)).replace(/</g, '\\u003c');
+  const alternates = locales.map((other) => `<link rel="alternate" hreflang="${languageMeta[other].hreflang}" href="${siteUrl}${pathFor(other, key)}${query}" />`).join('\n    ');
+  const xDefault = `<link rel="alternate" hreflang="x-default" href="${siteUrl}${pathFor('bg', key)}${query}" />`;
+  const jsonLd = JSON.stringify(structuredData(locale, key, query ? galleryPage : 1)).replace(/</g, '\\u003c');
   return `
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(description)}" />

@@ -8,6 +8,7 @@ const template = await readFile(resolve(clientDir, 'index.html'), 'utf8');
 const publicTemplate = template
   .replace(/<title>.*?<\/title>/, '')
   .replace(/<meta name="description"[^>]*>/, '');
+await writeFile(resolve(clientDir, 'gallery-shell.html'), publicTemplate);
 const server = await import(pathToFileURL(resolve(root, 'dist/server/entry-server.js')).href);
 
 for (const locale of server.locales) {
@@ -18,7 +19,8 @@ for (const locale of server.locales) {
     const html = publicTemplate
       .replace('<html lang="bg">', `<html lang="${locale}">`)
       .replace('</head>', `${server.renderHead(locale, key)}\n  </head>`)
-      .replace('<!--app-html-->', server.render(url));
+      .replace('<!--app-html-->', server.render(url)).replace('</body>', `<script id="gallery-bootstrap" type="application/json">${JSON.stringify(server.gallerySeeds).replace(/</g, '\\u003c')}</script></body>`);
+    if (process.env.VERCEL && (key === 'home' || key === 'gallery')) continue;
     const outputPath = resolve(clientDir, `.${url}`, 'index.html');
     await mkdir(dirname(outputPath), { recursive: true });
     await writeFile(outputPath, html);
@@ -41,5 +43,5 @@ const rootHtml = template
 await writeFile(resolve(clientDir, 'index.html'), rootHtml);
 await writeFile(resolve(clientDir, 'spa.html'), template.replace('<!--app-html-->', ''));
 await writeFile(resolve(clientDir, 'sitemap.xml'), server.sitemapXml());
-await writeFile(resolve(clientDir, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${server.siteUrl}/sitemap.xml\n`);
+await writeFile(resolve(clientDir, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${server.siteUrl}/sitemap.xml\nSitemap: ${server.siteUrl}/image-sitemap.xml\n`);
 console.log(`Prerendered ${server.locales.length * server.allPageKeys().length} localized pages.`);

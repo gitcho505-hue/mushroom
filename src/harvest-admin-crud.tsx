@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
+import { lazy, Suspense, useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import { ArrowLeft, ArrowUpRight, Check, ImagePlus, LogOut, Pencil, Plus, Save, ShieldCheck, Trash2, X } from 'lucide-react';
 import type { Session } from '@supabase/supabase-js';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,8 @@ import { createEmptyCatalogProduct, getSupabaseClient, loadCatalogProducts, load
 import './admin.css';
 import './admin-crud.css';
 import { NewsletterAdmin } from './newsletter-admin';
+
+const GalleryAdmin = lazy(() => import('./gallery-admin').then((module) => ({ default: module.GalleryAdmin })));
 
 type AdminAccess = 'loading' | 'allowed' | 'denied';
 type LocalizedField = 'title_by_locale' | 'description_by_locale' | 'body_by_locale' | 'season_by_locale' | 'note_by_locale';
@@ -44,6 +46,7 @@ export function HarvestAdminPage() {
   const [editLocale, setEditLocale] = useState<Locale>('bg');
   const [loadingCatalog, setLoadingCatalog] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [workspace, setWorkspace] = useState<'catalog' | 'gallery'>('catalog');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -410,9 +413,9 @@ export function HarvestAdminPage() {
     <main className="admin-shell">
       <aside className="admin-sidebar">
         <Link className="admin-mark" to="/bg/"><img src="/snimki/logo1.png" alt="Balkan Truffles" /><span><small>ADMIN WORKSPACE</small></span></Link>
-        <div className="admin-sidebar-heading"><div className="admin-sidebar-label">{catalog.length} ПРОДУКТА · НАЛИЧНОСТ</div><button className="admin-add-product" type="button" title="Добави главен продукт" aria-label="Добави главен продукт" onClick={() => void addProduct()} disabled={saving}><Plus size={17} /></button></div>
+        <nav className="admin-section-nav" aria-label="CMS"><button type="button" aria-pressed={workspace === 'catalog'} onClick={() => setWorkspace('catalog')}>Продукти</button><button type="button" aria-pressed={workspace === 'gallery'} onClick={() => setWorkspace('gallery')}>Галерия</button></nav><div className="admin-sidebar-heading"><div className="admin-sidebar-label">{catalog.length} ПРОДУКТА · НАЛИЧНОСТ</div><button className="admin-add-product" type="button" title="Добави главен продукт" aria-label="Добави главен продукт" onClick={() => void addProduct()} disabled={saving}><Plus size={17} /></button></div>
         <div className="admin-product-list">
-          {catalog.map((item) => <button type="button" key={item.id} className={`admin-product-nav ${item.id === selectedId ? 'is-active' : ''}`} onClick={() => { setSelectedId(item.id); setMessage(''); setError(''); setHarvestFormOpen(false); resetHarvestForm(); }}>
+          {catalog.map((item) => <button type="button" key={item.id} className={`admin-product-nav ${item.id === selectedId ? 'is-active' : ''}`} onClick={() => { setWorkspace('catalog'); setSelectedId(item.id); setMessage(''); setError(''); setHarvestFormOpen(false); resetHarvestForm(); }}>
             <span className="admin-product-thumb"><img src={safeCatalogImage(item.image_url, item.id, 320)} alt="" /></span>
             <span><strong>{item.title_by_locale.bg || item.title_by_locale.en || item.id}</strong><small>{item.available ? `${harvests.filter((row) => row.product_id === item.id && row.is_available).reduce((sum, row) => sum + row.weight_grams, 0) || item.stock_grams || 0} g налични` : 'Скрит продукт'}</small></span>
             <span className={`availability-dot ${item.available ? 'is-available' : ''}`} />
@@ -421,8 +424,8 @@ export function HarvestAdminPage() {
         <div className="admin-sidebar-bottom"><Link to="/bg/" className="admin-back"><ArrowLeft size={15} />Към сайта</Link><button className="admin-signout" onClick={signOut}><LogOut size={15} />Изход</button></div>
       </aside>
       <section className="admin-workspace">
-        <header className="admin-topbar"><div><p className="admin-eyebrow">УПРАВЛЕНИЕ НА РЕКОЛТАТА</p><h1>Гъби и цени</h1></div><span className="admin-user">{signedInUsername ?? adminUsernameForEmail(session.user.email) ?? 'ADMIN'}</span></header>
-        {loadingCatalog ? <div className="admin-state"><span className="admin-spinner" /><p>Зареждаме продуктите…</p></div> : selected ? (
+        <header className="admin-topbar"><div><p className="admin-eyebrow">{workspace === 'gallery' ? 'УПРАВЛЕНИЕ НА СНИМКИТЕ' : 'УПРАВЛЕНИЕ НА РЕКОЛТАТА'}</p><h1>{workspace === 'gallery' ? 'Галерия' : 'Гъби и цени'}</h1></div><span className="admin-user">{signedInUsername ?? adminUsernameForEmail(session.user.email) ?? 'ADMIN'}</span></header>
+        {workspace === 'gallery' ? <Suspense fallback={<p role="status">Зареждане на галерията…</p>}><GalleryAdmin client={supabase} /></Suspense> : <>{loadingCatalog ? <div className="admin-state"><span className="admin-spinner" /><p>Зареждаме продуктите…</p></div> : selected ? (
           <form className="admin-editor" onSubmit={saveProduct}>
             <div className="admin-editor-heading">
               <div><span className="admin-status-line"><i className={selected.available ? 'is-available' : ''} />{selected.available ? 'Публикуван продукт' : 'Скрит от сайта'}</span><h2>{selected.title_by_locale[editLocale] || selected.title_by_locale.bg || 'Нов продукт'}</h2><p>Редактирай описанието, снимката, количеството и цената на килограм.</p></div>
@@ -484,7 +487,7 @@ export function HarvestAdminPage() {
             <p className="admin-save-note">Последна редакция: {selected.updated_at ? new Date(selected.updated_at).toLocaleString('bg-BG') : 'нов продукт'}</p>
           </form>
         ) : <div className="admin-state"><p>Няма главни продукти. Използвай `+`, за да добавиш първия.</p></div>}
-        <NewsletterAdmin client={supabase} />
+        <NewsletterAdmin client={supabase} /></>}
       </section>
     </main>
   );

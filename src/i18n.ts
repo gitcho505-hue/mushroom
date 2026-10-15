@@ -10,11 +10,11 @@ export const languageMeta: Record<Locale, { label: string; flag: string; hreflan
 };
 
 export const pageSlugs: Record<Locale, Record<string, string>> = {
-  bg: { products: 'produkti', wholesale: 'restoranti', about: 'za-nas', truffles: 'tryufeli', blog: 'blog', contact: 'kontakti', faq: 'vuprosi', privacy: 'poveritelnost', terms: 'usloviya', cookies: 'biskvitki' },
-  en: { products: 'products', wholesale: 'restaurants', about: 'about', truffles: 'truffles', blog: 'journal', contact: 'contact', faq: 'faq', privacy: 'privacy', terms: 'terms', cookies: 'cookies' },
-  it: { products: 'prodotti', wholesale: 'ristoranti', about: 'chi-siamo', truffles: 'tartufi', blog: 'diario', contact: 'contatti', faq: 'domande-frequenti', privacy: 'privacy', terms: 'termini', cookies: 'cookie' },
-  fr: { products: 'produits', wholesale: 'restaurants', about: 'a-propos', truffles: 'truffes', blog: 'journal', contact: 'contact', faq: 'questions', privacy: 'confidentialite', terms: 'conditions', cookies: 'cookies' },
-  de: { products: 'produkte', wholesale: 'gastronomie', about: 'ueber-uns', truffles: 'trueffel', blog: 'magazin', contact: 'kontakt', faq: 'fragen', privacy: 'datenschutz', terms: 'agb', cookies: 'cookies' },
+  bg: { gallery: 'galeriya', products: 'produkti', wholesale: 'restoranti', about: 'za-nas', truffles: 'tryufeli', blog: 'blog', contact: 'kontakti', faq: 'vuprosi', privacy: 'poveritelnost', terms: 'usloviya', cookies: 'biskvitki' },
+  en: { gallery: 'gallery', products: 'products', wholesale: 'restaurants', about: 'about', truffles: 'truffles', blog: 'journal', contact: 'contact', faq: 'faq', privacy: 'privacy', terms: 'terms', cookies: 'cookies' },
+  it: { gallery: 'galleria', products: 'prodotti', wholesale: 'ristoranti', about: 'chi-siamo', truffles: 'tartufi', blog: 'diario', contact: 'contatti', faq: 'domande-frequenti', privacy: 'privacy', terms: 'termini', cookies: 'cookie' },
+  fr: { gallery: 'galerie', products: 'produits', wholesale: 'restaurants', about: 'a-propos', truffles: 'truffes', blog: 'journal', contact: 'contact', faq: 'questions', privacy: 'confidentialite', terms: 'conditions', cookies: 'cookies' },
+  de: { gallery: 'galerie', products: 'produkte', wholesale: 'gastronomie', about: 'ueber-uns', truffles: 'trueffel', blog: 'magazin', contact: 'kontakt', faq: 'fragen', privacy: 'datenschutz', terms: 'agb', cookies: 'cookies' },
 };
 
 export const localeUi = {

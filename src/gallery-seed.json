@@ -1,0 +1,1346 @@
+[
+  {
+    "id": "cc2c91b9-923c-471d-b73d-789acba6c26f",
+    "slug": "balkan-truffle-harvest-01",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-harvest-01.webp",
+    "image_path": "balkan-truffle-harvest-01.webp",
+    "width": 828,
+    "height": 1097,
+    "bytes": 162662,
+    "alt_by_locale": {
+      "bg": "Сортирани трюфели от сезонната реколта",
+      "en": "Sorted truffles from the seasonal harvest",
+      "it": "Tartufi selezionati del raccolto stagionale",
+      "fr": "Truffes triées de la récolte saisonnière",
+      "de": "Sortierte Trüffel aus der saisonalen Ernte"
+    },
+    "title_by_locale": {
+      "bg": "Сортирани трюфели от сезонната реколта",
+      "en": "Sorted truffles from the seasonal harvest",
+      "it": "Tartufi selezionati del raccolto stagionale",
+      "fr": "Truffes triées de la récolte saisonnière",
+      "de": "Sortierte Trüffel aus der saisonalen Ernte"
+    },
+    "published": true,
+    "sort_order": 1024,
+    "home_position": 1,
+    "created_at": "2026-10-14T20:00:00.000Z",
+    "updated_at": "2026-10-14T20:00:00.000Z"
+  },
+  {
+    "id": "6ffd3ac2-88e3-4591-88b5-b6ea42bdbecc",
+    "slug": "balkan-truffle-people-02",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-people-02.webp",
+    "image_path": "balkan-truffle-people-02.webp",
+    "width": 770,
+    "height": 1004,
+    "bytes": 164156,
+    "alt_by_locale": {
+      "bg": "На терен с търсачите на трюфели и техните кучета",
+      "en": "In the field with truffle hunters and their dogs",
+      "it": "Sul campo con i cercatori di tartufi e i loro cani",
+      "fr": "Sur le terrain avec les chercheurs de truffes et leurs chiens",
+      "de": "Mit Trüffelsuchern und ihren Hunden im Gelände"
+    },
+    "title_by_locale": {
+      "bg": "На терен с търсачите на трюфели и техните кучета",
+      "en": "In the field with truffle hunters and their dogs",
+      "it": "Sul campo con i cercatori di tartufi e i loro cani",
+      "fr": "Sur le terrain avec les chercheurs de truffes et leurs chiens",
+      "de": "Mit Trüffelsuchern und ihren Hunden im Gelände"
+    },
+    "published": true,
+    "sort_order": 2048,
+    "home_position": 2,
+    "created_at": "2026-10-14T20:00:01.000Z",
+    "updated_at": "2026-10-14T20:00:01.000Z"
+  },
+  {
+    "id": "264632dd-c67e-42ae-a76a-4ac89e5738d2",
+    "slug": "balkan-truffle-dogs-03",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-dogs-03.webp",
+    "image_path": "balkan-truffle-dogs-03.webp",
+    "width": 828,
+    "height": 1262,
+    "bytes": 253640,
+    "alt_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "title_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "published": true,
+    "sort_order": 3072,
+    "home_position": 3,
+    "created_at": "2026-10-14T20:00:02.000Z",
+    "updated_at": "2026-10-14T20:00:02.000Z"
+  },
+  {
+    "id": "23f7c37a-0bd1-4132-84f2-3c8347ff4f5c",
+    "slug": "balkan-truffle-dogs-04",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-dogs-04.webp",
+    "image_path": "balkan-truffle-dogs-04.webp",
+    "width": 828,
+    "height": 1108,
+    "bytes": 267978,
+    "alt_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "title_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "published": true,
+    "sort_order": 4096,
+    "home_position": 4,
+    "created_at": "2026-10-14T20:00:03.000Z",
+    "updated_at": "2026-10-14T20:00:03.000Z"
+  },
+  {
+    "id": "6d2cbce5-4562-49e6-aec8-6e7b742a548d",
+    "slug": "balkan-truffle-weighing-05",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-weighing-05.webp",
+    "image_path": "balkan-truffle-weighing-05.webp",
+    "width": 828,
+    "height": 1052,
+    "bytes": 133962,
+    "alt_by_locale": {
+      "bg": "Претегляне на пресни трюфели от реколтата",
+      "en": "Weighing fresh truffles from the harvest",
+      "it": "Pesatura dei tartufi freschi del raccolto",
+      "fr": "Pesée des truffes fraîches de la récolte",
+      "de": "Wiegen frischer Trüffel aus der Ernte"
+    },
+    "title_by_locale": {
+      "bg": "Претегляне на пресни трюфели от реколтата",
+      "en": "Weighing fresh truffles from the harvest",
+      "it": "Pesatura dei tartufi freschi del raccolto",
+      "fr": "Pesée des truffes fraîches de la récolte",
+      "de": "Wiegen frischer Trüffel aus der Ernte"
+    },
+    "published": true,
+    "sort_order": 5120,
+    "home_position": 5,
+    "created_at": "2026-10-14T20:00:04.000Z",
+    "updated_at": "2026-10-14T20:00:04.000Z"
+  },
+  {
+    "id": "9b17fbe4-3232-46ff-8556-64810c6454c1",
+    "slug": "balkan-truffle-dogs-06",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-dogs-06.webp",
+    "image_path": "balkan-truffle-dogs-06.webp",
+    "width": 828,
+    "height": 1100,
+    "bytes": 285002,
+    "alt_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "title_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "published": true,
+    "sort_order": 6144,
+    "home_position": 6,
+    "created_at": "2026-10-14T20:00:05.000Z",
+    "updated_at": "2026-10-14T20:00:05.000Z"
+  },
+  {
+    "id": "36cd8837-d96d-4f7e-9ec3-d5fa6988d3dc",
+    "slug": "balkan-truffle-weighing-07",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-weighing-07.webp",
+    "image_path": "balkan-truffle-weighing-07.webp",
+    "width": 828,
+    "height": 913,
+    "bytes": 80682,
+    "alt_by_locale": {
+      "bg": "Претегляне на пресни трюфели от реколтата",
+      "en": "Weighing fresh truffles from the harvest",
+      "it": "Pesatura dei tartufi freschi del raccolto",
+      "fr": "Pesée des truffes fraîches de la récolte",
+      "de": "Wiegen frischer Trüffel aus der Ernte"
+    },
+    "title_by_locale": {
+      "bg": "Претегляне на пресни трюфели от реколтата",
+      "en": "Weighing fresh truffles from the harvest",
+      "it": "Pesatura dei tartufi freschi del raccolto",
+      "fr": "Pesée des truffes fraîches de la récolte",
+      "de": "Wiegen frischer Trüffel aus der Ernte"
+    },
+    "published": true,
+    "sort_order": 7168,
+    "home_position": 7,
+    "created_at": "2026-10-14T20:00:06.000Z",
+    "updated_at": "2026-10-14T20:00:06.000Z"
+  },
+  {
+    "id": "f396f903-41cd-4320-9529-7aa15fd26e14",
+    "slug": "balkan-truffle-landscape-08",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-landscape-08.webp",
+    "image_path": "balkan-truffle-landscape-08.webp",
+    "width": 828,
+    "height": 1093,
+    "bytes": 259428,
+    "alt_by_locale": {
+      "bg": "Природата и горите на Балканите",
+      "en": "Balkan landscapes and woodland",
+      "it": "Paesaggi e boschi dei Balcani",
+      "fr": "Paysages et forêts des Balkans",
+      "de": "Landschaften und Wälder des Balkans"
+    },
+    "title_by_locale": {
+      "bg": "Природата и горите на Балканите",
+      "en": "Balkan landscapes and woodland",
+      "it": "Paesaggi e boschi dei Balcani",
+      "fr": "Paysages et forêts des Balkans",
+      "de": "Landschaften und Wälder des Balkans"
+    },
+    "published": true,
+    "sort_order": 8192,
+    "home_position": 8,
+    "created_at": "2026-10-14T20:00:07.000Z",
+    "updated_at": "2026-10-14T20:00:07.000Z"
+  },
+  {
+    "id": "770dad88-6d3d-4548-87da-66f6476d81d3",
+    "slug": "balkan-truffle-dogs-09",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-dogs-09.webp",
+    "image_path": "balkan-truffle-dogs-09.webp",
+    "width": 828,
+    "height": 1197,
+    "bytes": 191408,
+    "alt_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "title_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "published": true,
+    "sort_order": 9216,
+    "home_position": 9,
+    "created_at": "2026-10-14T20:00:08.000Z",
+    "updated_at": "2026-10-14T20:00:08.000Z"
+  },
+  {
+    "id": "50acb673-a102-42a2-a164-db70ac07b6da",
+    "slug": "balkan-truffle-dogs-10",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-dogs-10.webp",
+    "image_path": "balkan-truffle-dogs-10.webp",
+    "width": 828,
+    "height": 1097,
+    "bytes": 430090,
+    "alt_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "title_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "published": true,
+    "sort_order": 10240,
+    "home_position": 10,
+    "created_at": "2026-10-14T20:00:09.000Z",
+    "updated_at": "2026-10-14T20:00:09.000Z"
+  },
+  {
+    "id": "cbba5e99-8f5e-4f30-ac7c-8aaf35c717f2",
+    "slug": "balkan-truffle-black-11",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-black-11.webp",
+    "image_path": "balkan-truffle-black-11.webp",
+    "width": 828,
+    "height": 1536,
+    "bytes": 82942,
+    "alt_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "title_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "published": true,
+    "sort_order": 11264,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:10.000Z",
+    "updated_at": "2026-10-14T20:00:10.000Z"
+  },
+  {
+    "id": "20c940a7-69fd-43ab-8699-d795b6f679a5",
+    "slug": "balkan-truffle-dogs-12",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-dogs-12.webp",
+    "image_path": "balkan-truffle-dogs-12.webp",
+    "width": 828,
+    "height": 1100,
+    "bytes": 156812,
+    "alt_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "title_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "published": true,
+    "sort_order": 12288,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:11.000Z",
+    "updated_at": "2026-10-14T20:00:11.000Z"
+  },
+  {
+    "id": "c0b728da-b3ec-457e-ab46-edb437cf5088",
+    "slug": "balkan-truffle-dogs-13",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-dogs-13.webp",
+    "image_path": "balkan-truffle-dogs-13.webp",
+    "width": 828,
+    "height": 1097,
+    "bytes": 235170,
+    "alt_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "title_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "published": true,
+    "sort_order": 13312,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:12.000Z",
+    "updated_at": "2026-10-14T20:00:12.000Z"
+  },
+  {
+    "id": "81e9457f-36fc-4318-8c6a-7feee959dc10",
+    "slug": "balkan-truffle-mushrooms-14",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-mushrooms-14.webp",
+    "image_path": "balkan-truffle-mushrooms-14.webp",
+    "width": 828,
+    "height": 1088,
+    "bytes": 195534,
+    "alt_by_locale": {
+      "bg": "Диви гъби от нашите снимки от гората",
+      "en": "Wild mushrooms from our woodland photographs",
+      "it": "Funghi selvatici nelle nostre foto del bosco",
+      "fr": "Champignons sauvages dans nos photos de forêt",
+      "de": "Wildpilze auf unseren Waldfotografien"
+    },
+    "title_by_locale": {
+      "bg": "Диви гъби от нашите снимки от гората",
+      "en": "Wild mushrooms from our woodland photographs",
+      "it": "Funghi selvatici nelle nostre foto del bosco",
+      "fr": "Champignons sauvages dans nos photos de forêt",
+      "de": "Wildpilze auf unseren Waldfotografien"
+    },
+    "published": true,
+    "sort_order": 14336,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:13.000Z",
+    "updated_at": "2026-10-14T20:00:13.000Z"
+  },
+  {
+    "id": "42c86b47-9b41-4e71-b065-0e823be848d2",
+    "slug": "balkan-truffle-black-15",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-black-15.webp",
+    "image_path": "balkan-truffle-black-15.webp",
+    "width": 828,
+    "height": 1180,
+    "bytes": 154910,
+    "alt_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "title_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "published": true,
+    "sort_order": 15360,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:14.000Z",
+    "updated_at": "2026-10-14T20:00:14.000Z"
+  },
+  {
+    "id": "14e361c5-118a-45c4-9cdc-3db29b699a32",
+    "slug": "balkan-truffle-river-16",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-river-16.webp",
+    "image_path": "balkan-truffle-river-16.webp",
+    "width": 828,
+    "height": 1105,
+    "bytes": 316220,
+    "alt_by_locale": {
+      "bg": "Горски поток по време на излет за трюфели",
+      "en": "A woodland stream on a truffle foraging trip",
+      "it": "Un ruscello nel bosco durante la ricerca dei tartufi",
+      "fr": "Un ruisseau en forêt lors d’une sortie aux truffes",
+      "de": "Ein Waldbach bei einem Ausflug zur Trüffelsuche"
+    },
+    "title_by_locale": {
+      "bg": "Горски поток по време на излет за трюфели",
+      "en": "A woodland stream on a truffle foraging trip",
+      "it": "Un ruscello nel bosco durante la ricerca dei tartufi",
+      "fr": "Un ruisseau en forêt lors d’une sortie aux truffes",
+      "de": "Ein Waldbach bei einem Ausflug zur Trüffelsuche"
+    },
+    "published": true,
+    "sort_order": 16384,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:15.000Z",
+    "updated_at": "2026-10-14T20:00:15.000Z"
+  },
+  {
+    "id": "68ac98a6-4512-4c99-8dd6-283f851fd701",
+    "slug": "balkan-truffle-black-17",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-black-17.webp",
+    "image_path": "balkan-truffle-black-17.webp",
+    "width": 828,
+    "height": 1406,
+    "bytes": 115126,
+    "alt_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "title_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "published": true,
+    "sort_order": 17408,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:16.000Z",
+    "updated_at": "2026-10-14T20:00:16.000Z"
+  },
+  {
+    "id": "5f273e33-19f4-45cc-996d-4d4123bcd362",
+    "slug": "balkan-truffle-landscape-18",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-landscape-18.webp",
+    "image_path": "balkan-truffle-landscape-18.webp",
+    "width": 828,
+    "height": 1087,
+    "bytes": 116688,
+    "alt_by_locale": {
+      "bg": "Природата и горите на Балканите",
+      "en": "Balkan landscapes and woodland",
+      "it": "Paesaggi e boschi dei Balcani",
+      "fr": "Paysages et forêts des Balkans",
+      "de": "Landschaften und Wälder des Balkans"
+    },
+    "title_by_locale": {
+      "bg": "Природата и горите на Балканите",
+      "en": "Balkan landscapes and woodland",
+      "it": "Paesaggi e boschi dei Balcani",
+      "fr": "Paysages et forêts des Balkans",
+      "de": "Landschaften und Wälder des Balkans"
+    },
+    "published": true,
+    "sort_order": 18432,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:17.000Z",
+    "updated_at": "2026-10-14T20:00:17.000Z"
+  },
+  {
+    "id": "3342de65-6ad4-4fdc-a1ac-6845ac637913",
+    "slug": "balkan-truffle-cut-19",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-cut-19.webp",
+    "image_path": "balkan-truffle-cut-19.webp",
+    "width": 828,
+    "height": 1497,
+    "bytes": 259850,
+    "alt_by_locale": {
+      "bg": "Разрязан трюфел с видима вътрешна структура",
+      "en": "A cut truffle showing its inner marbling",
+      "it": "Un tartufo tagliato con la venatura interna visibile",
+      "fr": "Une truffe coupée montrant ses marbrures",
+      "de": "Eine aufgeschnittene Trüffel mit sichtbarer Marmorierung"
+    },
+    "title_by_locale": {
+      "bg": "Разрязан трюфел с видима вътрешна структура",
+      "en": "A cut truffle showing its inner marbling",
+      "it": "Un tartufo tagliato con la venatura interna visibile",
+      "fr": "Une truffe coupée montrant ses marbrures",
+      "de": "Eine aufgeschnittene Trüffel mit sichtbarer Marmorierung"
+    },
+    "published": true,
+    "sort_order": 19456,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:18.000Z",
+    "updated_at": "2026-10-14T20:00:18.000Z"
+  },
+  {
+    "id": "b6d47cc9-772a-43fe-b5e6-3839c5cb3616",
+    "slug": "balkan-truffle-mushrooms-20",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-mushrooms-20.webp",
+    "image_path": "balkan-truffle-mushrooms-20.webp",
+    "width": 828,
+    "height": 1102,
+    "bytes": 133136,
+    "alt_by_locale": {
+      "bg": "Диви гъби от нашите снимки от гората",
+      "en": "Wild mushrooms from our woodland photographs",
+      "it": "Funghi selvatici nelle nostre foto del bosco",
+      "fr": "Champignons sauvages dans nos photos de forêt",
+      "de": "Wildpilze auf unseren Waldfotografien"
+    },
+    "title_by_locale": {
+      "bg": "Диви гъби от нашите снимки от гората",
+      "en": "Wild mushrooms from our woodland photographs",
+      "it": "Funghi selvatici nelle nostre foto del bosco",
+      "fr": "Champignons sauvages dans nos photos de forêt",
+      "de": "Wildpilze auf unseren Waldfotografien"
+    },
+    "published": true,
+    "sort_order": 20480,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:19.000Z",
+    "updated_at": "2026-10-14T20:00:19.000Z"
+  },
+  {
+    "id": "1d43e816-8d0f-40e9-bdea-63e39038a922",
+    "slug": "balkan-truffle-harvest-21",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-harvest-21.webp",
+    "image_path": "balkan-truffle-harvest-21.webp",
+    "width": 828,
+    "height": 1101,
+    "bytes": 219404,
+    "alt_by_locale": {
+      "bg": "Сортирани трюфели от сезонната реколта",
+      "en": "Sorted truffles from the seasonal harvest",
+      "it": "Tartufi selezionati del raccolto stagionale",
+      "fr": "Truffes triées de la récolte saisonnière",
+      "de": "Sortierte Trüffel aus der saisonalen Ernte"
+    },
+    "title_by_locale": {
+      "bg": "Сортирани трюфели от сезонната реколта",
+      "en": "Sorted truffles from the seasonal harvest",
+      "it": "Tartufi selezionati del raccolto stagionale",
+      "fr": "Truffes triées de la récolte saisonnière",
+      "de": "Sortierte Trüffel aus der saisonalen Ernte"
+    },
+    "published": true,
+    "sort_order": 21504,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:20.000Z",
+    "updated_at": "2026-10-14T20:00:20.000Z"
+  },
+  {
+    "id": "6ac0cdf4-9bf8-4615-ac6d-ba3fc62d0b76",
+    "slug": "balkan-truffle-harvest-22",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-harvest-22.webp",
+    "image_path": "balkan-truffle-harvest-22.webp",
+    "width": 1100,
+    "height": 828,
+    "bytes": 188704,
+    "alt_by_locale": {
+      "bg": "Сортирани трюфели от сезонната реколта",
+      "en": "Sorted truffles from the seasonal harvest",
+      "it": "Tartufi selezionati del raccolto stagionale",
+      "fr": "Truffes triées de la récolte saisonnière",
+      "de": "Sortierte Trüffel aus der saisonalen Ernte"
+    },
+    "title_by_locale": {
+      "bg": "Сортирани трюфели от сезонната реколта",
+      "en": "Sorted truffles from the seasonal harvest",
+      "it": "Tartufi selezionati del raccolto stagionale",
+      "fr": "Truffes triées de la récolte saisonnière",
+      "de": "Sortierte Trüffel aus der saisonalen Ernte"
+    },
+    "published": true,
+    "sort_order": 22528,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:21.000Z",
+    "updated_at": "2026-10-14T20:00:21.000Z"
+  },
+  {
+    "id": "a6185df9-952f-452b-bba1-d7b5aa81d590",
+    "slug": "balkan-truffle-weighing-23",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-weighing-23.webp",
+    "image_path": "balkan-truffle-weighing-23.webp",
+    "width": 828,
+    "height": 1112,
+    "bytes": 98402,
+    "alt_by_locale": {
+      "bg": "Претегляне на пресни трюфели от реколтата",
+      "en": "Weighing fresh truffles from the harvest",
+      "it": "Pesatura dei tartufi freschi del raccolto",
+      "fr": "Pesée des truffes fraîches de la récolte",
+      "de": "Wiegen frischer Trüffel aus der Ernte"
+    },
+    "title_by_locale": {
+      "bg": "Претегляне на пресни трюфели от реколтата",
+      "en": "Weighing fresh truffles from the harvest",
+      "it": "Pesatura dei tartufi freschi del raccolto",
+      "fr": "Pesée des truffes fraîches de la récolte",
+      "de": "Wiegen frischer Trüffel aus der Ernte"
+    },
+    "published": true,
+    "sort_order": 23552,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:22.000Z",
+    "updated_at": "2026-10-14T20:00:22.000Z"
+  },
+  {
+    "id": "f900b722-1658-4eb5-a4a9-c9e9958d399a",
+    "slug": "balkan-truffle-weighing-24",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-weighing-24.webp",
+    "image_path": "balkan-truffle-weighing-24.webp",
+    "width": 786,
+    "height": 1132,
+    "bytes": 74490,
+    "alt_by_locale": {
+      "bg": "Претегляне на пресни трюфели от реколтата",
+      "en": "Weighing fresh truffles from the harvest",
+      "it": "Pesatura dei tartufi freschi del raccolto",
+      "fr": "Pesée des truffes fraîches de la récolte",
+      "de": "Wiegen frischer Trüffel aus der Ernte"
+    },
+    "title_by_locale": {
+      "bg": "Претегляне на пресни трюфели от реколтата",
+      "en": "Weighing fresh truffles from the harvest",
+      "it": "Pesatura dei tartufi freschi del raccolto",
+      "fr": "Pesée des truffes fraîches de la récolte",
+      "de": "Wiegen frischer Trüffel aus der Ernte"
+    },
+    "published": true,
+    "sort_order": 24576,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:23.000Z",
+    "updated_at": "2026-10-14T20:00:23.000Z"
+  },
+  {
+    "id": "e29ab37a-1dea-4139-a997-5765d29fd278",
+    "slug": "balkan-truffle-weighing-25",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-weighing-25.webp",
+    "image_path": "balkan-truffle-weighing-25.webp",
+    "width": 828,
+    "height": 991,
+    "bytes": 48684,
+    "alt_by_locale": {
+      "bg": "Претегляне на пресни трюфели от реколтата",
+      "en": "Weighing fresh truffles from the harvest",
+      "it": "Pesatura dei tartufi freschi del raccolto",
+      "fr": "Pesée des truffes fraîches de la récolte",
+      "de": "Wiegen frischer Trüffel aus der Ernte"
+    },
+    "title_by_locale": {
+      "bg": "Претегляне на пресни трюфели от реколтата",
+      "en": "Weighing fresh truffles from the harvest",
+      "it": "Pesatura dei tartufi freschi del raccolto",
+      "fr": "Pesée des truffes fraîches de la récolte",
+      "de": "Wiegen frischer Trüffel aus der Ernte"
+    },
+    "published": true,
+    "sort_order": 25600,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:24.000Z",
+    "updated_at": "2026-10-14T20:00:24.000Z"
+  },
+  {
+    "id": "f4bd8859-ff41-4efe-952e-00bd1061e44f",
+    "slug": "balkan-truffle-landscape-26",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-landscape-26.webp",
+    "image_path": "balkan-truffle-landscape-26.webp",
+    "width": 1464,
+    "height": 828,
+    "bytes": 307520,
+    "alt_by_locale": {
+      "bg": "Природата и горите на Балканите",
+      "en": "Balkan landscapes and woodland",
+      "it": "Paesaggi e boschi dei Balcani",
+      "fr": "Paysages et forêts des Balkans",
+      "de": "Landschaften und Wälder des Balkans"
+    },
+    "title_by_locale": {
+      "bg": "Природата и горите на Балканите",
+      "en": "Balkan landscapes and woodland",
+      "it": "Paesaggi e boschi dei Balcani",
+      "fr": "Paysages et forêts des Balkans",
+      "de": "Landschaften und Wälder des Balkans"
+    },
+    "published": true,
+    "sort_order": 26624,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:25.000Z",
+    "updated_at": "2026-10-14T20:00:25.000Z"
+  },
+  {
+    "id": "995c3296-e4fb-4dd4-b2f0-be8e5ad0c774",
+    "slug": "balkan-truffle-black-27",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-black-27.webp",
+    "image_path": "balkan-truffle-black-27.webp",
+    "width": 828,
+    "height": 1097,
+    "bytes": 121392,
+    "alt_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "title_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "published": true,
+    "sort_order": 27648,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:26.000Z",
+    "updated_at": "2026-10-14T20:00:26.000Z"
+  },
+  {
+    "id": "e39b0d98-07bc-448c-bd68-d79e5c1fb1f6",
+    "slug": "balkan-truffle-black-28",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-black-28.webp",
+    "image_path": "balkan-truffle-black-28.webp",
+    "width": 828,
+    "height": 1098,
+    "bytes": 142696,
+    "alt_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "title_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "published": true,
+    "sort_order": 28672,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:27.000Z",
+    "updated_at": "2026-10-14T20:00:27.000Z"
+  },
+  {
+    "id": "364eaa21-1fd2-4f25-998d-8780a35670ab",
+    "slug": "balkan-truffle-black-29",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-black-29.webp",
+    "image_path": "balkan-truffle-black-29.webp",
+    "width": 828,
+    "height": 1559,
+    "bytes": 96256,
+    "alt_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "title_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "published": true,
+    "sort_order": 29696,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:28.000Z",
+    "updated_at": "2026-10-14T20:00:28.000Z"
+  },
+  {
+    "id": "f67eae02-4e9c-40c6-af33-cdccd5c7336a",
+    "slug": "balkan-truffle-people-30",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-people-30.webp",
+    "image_path": "balkan-truffle-people-30.webp",
+    "width": 728,
+    "height": 1267,
+    "bytes": 285038,
+    "alt_by_locale": {
+      "bg": "На терен с търсачите на трюфели и техните кучета",
+      "en": "In the field with truffle hunters and their dogs",
+      "it": "Sul campo con i cercatori di tartufi e i loro cani",
+      "fr": "Sur le terrain avec les chercheurs de truffes et leurs chiens",
+      "de": "Mit Trüffelsuchern und ihren Hunden im Gelände"
+    },
+    "title_by_locale": {
+      "bg": "На терен с търсачите на трюфели и техните кучета",
+      "en": "In the field with truffle hunters and their dogs",
+      "it": "Sul campo con i cercatori di tartufi e i loro cani",
+      "fr": "Sur le terrain avec les chercheurs de truffes et leurs chiens",
+      "de": "Mit Trüffelsuchern und ihren Hunden im Gelände"
+    },
+    "published": true,
+    "sort_order": 30720,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:29.000Z",
+    "updated_at": "2026-10-14T20:00:29.000Z"
+  },
+  {
+    "id": "a9dbbceb-41ea-483b-b61c-03ea67fd6021",
+    "slug": "balkan-truffle-people-31",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-people-31.webp",
+    "image_path": "balkan-truffle-people-31.webp",
+    "width": 828,
+    "height": 1177,
+    "bytes": 185602,
+    "alt_by_locale": {
+      "bg": "На терен с търсачите на трюфели и техните кучета",
+      "en": "In the field with truffle hunters and their dogs",
+      "it": "Sul campo con i cercatori di tartufi e i loro cani",
+      "fr": "Sur le terrain avec les chercheurs de truffes et leurs chiens",
+      "de": "Mit Trüffelsuchern und ihren Hunden im Gelände"
+    },
+    "title_by_locale": {
+      "bg": "На терен с търсачите на трюфели и техните кучета",
+      "en": "In the field with truffle hunters and their dogs",
+      "it": "Sul campo con i cercatori di tartufi e i loro cani",
+      "fr": "Sur le terrain avec les chercheurs de truffes et leurs chiens",
+      "de": "Mit Trüffelsuchern und ihren Hunden im Gelände"
+    },
+    "published": true,
+    "sort_order": 31744,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:30.000Z",
+    "updated_at": "2026-10-14T20:00:30.000Z"
+  },
+  {
+    "id": "732ad1e5-2ae9-4894-9719-563cd1686dfe",
+    "slug": "balkan-truffle-dogs-32",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-dogs-32.webp",
+    "image_path": "balkan-truffle-dogs-32.webp",
+    "width": 828,
+    "height": 1307,
+    "bytes": 189116,
+    "alt_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "title_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "published": true,
+    "sort_order": 32768,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:31.000Z",
+    "updated_at": "2026-10-14T20:00:31.000Z"
+  },
+  {
+    "id": "32d47d1c-877f-41b9-9432-934c0dfba697",
+    "slug": "balkan-truffle-black-33",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-black-33.webp",
+    "image_path": "balkan-truffle-black-33.webp",
+    "width": 828,
+    "height": 1238,
+    "bytes": 115208,
+    "alt_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "title_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "published": true,
+    "sort_order": 33792,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:32.000Z",
+    "updated_at": "2026-10-14T20:00:32.000Z"
+  },
+  {
+    "id": "658d87e5-c4f0-4666-a65b-ce79546981ef",
+    "slug": "balkan-truffle-black-34",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-black-34.webp",
+    "image_path": "balkan-truffle-black-34.webp",
+    "width": 749,
+    "height": 951,
+    "bytes": 132750,
+    "alt_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "title_by_locale": {
+      "bg": "Черен трюфел, показан в ръка след събирането",
+      "en": "A black truffle held in a hand after harvesting",
+      "it": "Un tartufo nero tenuto in mano dopo la raccolta",
+      "fr": "Une truffe noire en main après la récolte",
+      "de": "Eine schwarze Trüffel nach der Ernte in der Hand"
+    },
+    "published": true,
+    "sort_order": 34816,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:33.000Z",
+    "updated_at": "2026-10-14T20:00:33.000Z"
+  },
+  {
+    "id": "66e53563-518f-4bc3-ad03-aaf10dd50f13",
+    "slug": "balkan-truffle-harvest-35",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-harvest-35.webp",
+    "image_path": "balkan-truffle-harvest-35.webp",
+    "width": 828,
+    "height": 1081,
+    "bytes": 200090,
+    "alt_by_locale": {
+      "bg": "Сортирани трюфели от сезонната реколта",
+      "en": "Sorted truffles from the seasonal harvest",
+      "it": "Tartufi selezionati del raccolto stagionale",
+      "fr": "Truffes triées de la récolte saisonnière",
+      "de": "Sortierte Trüffel aus der saisonalen Ernte"
+    },
+    "title_by_locale": {
+      "bg": "Сортирани трюфели от сезонната реколта",
+      "en": "Sorted truffles from the seasonal harvest",
+      "it": "Tartufi selezionati del raccolto stagionale",
+      "fr": "Truffes triées de la récolte saisonnière",
+      "de": "Sortierte Trüffel aus der saisonalen Ernte"
+    },
+    "published": true,
+    "sort_order": 35840,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:34.000Z",
+    "updated_at": "2026-10-14T20:00:34.000Z"
+  },
+  {
+    "id": "f6c5b4a4-e93f-4d0d-bd2b-a53095e942bc",
+    "slug": "balkan-truffle-dogs-36",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-dogs-36.webp",
+    "image_path": "balkan-truffle-dogs-36.webp",
+    "width": 828,
+    "height": 1100,
+    "bytes": 236054,
+    "alt_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "title_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "published": true,
+    "sort_order": 36864,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:35.000Z",
+    "updated_at": "2026-10-14T20:00:35.000Z"
+  },
+  {
+    "id": "75348fed-d5b9-4c28-9a0e-a1c989df479b",
+    "slug": "balkan-truffle-dogs-37",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-dogs-37.webp",
+    "image_path": "balkan-truffle-dogs-37.webp",
+    "width": 828,
+    "height": 1107,
+    "bytes": 213012,
+    "alt_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "title_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "published": true,
+    "sort_order": 37888,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:36.000Z",
+    "updated_at": "2026-10-14T20:00:36.000Z"
+  },
+  {
+    "id": "f9ecd948-114f-4178-80e4-1b8ea437cfac",
+    "slug": "balkan-truffle-river-38",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-river-38.webp",
+    "image_path": "balkan-truffle-river-38.webp",
+    "width": 828,
+    "height": 1098,
+    "bytes": 239786,
+    "alt_by_locale": {
+      "bg": "Горски поток по време на излет за трюфели",
+      "en": "A woodland stream on a truffle foraging trip",
+      "it": "Un ruscello nel bosco durante la ricerca dei tartufi",
+      "fr": "Un ruisseau en forêt lors d’une sortie aux truffes",
+      "de": "Ein Waldbach bei einem Ausflug zur Trüffelsuche"
+    },
+    "title_by_locale": {
+      "bg": "Горски поток по време на излет за трюфели",
+      "en": "A woodland stream on a truffle foraging trip",
+      "it": "Un ruscello nel bosco durante la ricerca dei tartufi",
+      "fr": "Un ruisseau en forêt lors d’une sortie aux truffes",
+      "de": "Ein Waldbach bei einem Ausflug zur Trüffelsuche"
+    },
+    "published": true,
+    "sort_order": 38912,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:37.000Z",
+    "updated_at": "2026-10-14T20:00:37.000Z"
+  },
+  {
+    "id": "6f229e00-7b6d-4406-8338-a128adf825f4",
+    "slug": "balkan-truffle-mushrooms-39",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-mushrooms-39.webp",
+    "image_path": "balkan-truffle-mushrooms-39.webp",
+    "width": 828,
+    "height": 609,
+    "bytes": 64456,
+    "alt_by_locale": {
+      "bg": "Диви гъби от нашите снимки от гората",
+      "en": "Wild mushrooms from our woodland photographs",
+      "it": "Funghi selvatici nelle nostre foto del bosco",
+      "fr": "Champignons sauvages dans nos photos de forêt",
+      "de": "Wildpilze auf unseren Waldfotografien"
+    },
+    "title_by_locale": {
+      "bg": "Диви гъби от нашите снимки от гората",
+      "en": "Wild mushrooms from our woodland photographs",
+      "it": "Funghi selvatici nelle nostre foto del bosco",
+      "fr": "Champignons sauvages dans nos photos de forêt",
+      "de": "Wildpilze auf unseren Waldfotografien"
+    },
+    "published": true,
+    "sort_order": 39936,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:38.000Z",
+    "updated_at": "2026-10-14T20:00:38.000Z"
+  },
+  {
+    "id": "2732a3c0-e283-4a64-aa96-f9ef54b1605e",
+    "slug": "balkan-truffle-mushrooms-40",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-mushrooms-40.webp",
+    "image_path": "balkan-truffle-mushrooms-40.webp",
+    "width": 828,
+    "height": 1086,
+    "bytes": 80002,
+    "alt_by_locale": {
+      "bg": "Диви гъби от нашите снимки от гората",
+      "en": "Wild mushrooms from our woodland photographs",
+      "it": "Funghi selvatici nelle nostre foto del bosco",
+      "fr": "Champignons sauvages dans nos photos de forêt",
+      "de": "Wildpilze auf unseren Waldfotografien"
+    },
+    "title_by_locale": {
+      "bg": "Диви гъби от нашите снимки от гората",
+      "en": "Wild mushrooms from our woodland photographs",
+      "it": "Funghi selvatici nelle nostre foto del bosco",
+      "fr": "Champignons sauvages dans nos photos de forêt",
+      "de": "Wildpilze auf unseren Waldfotografien"
+    },
+    "published": true,
+    "sort_order": 40960,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:39.000Z",
+    "updated_at": "2026-10-14T20:00:39.000Z"
+  },
+  {
+    "id": "8d3a4c38-aa83-4b1f-9899-4a583892a98c",
+    "slug": "balkan-truffle-dogs-41",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-dogs-41.webp",
+    "image_path": "balkan-truffle-dogs-41.webp",
+    "width": 828,
+    "height": 1105,
+    "bytes": 349284,
+    "alt_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "title_by_locale": {
+      "bg": "Кучетата ни по време на търсене на трюфели в гората",
+      "en": "Our dogs searching for truffles in the woodland",
+      "it": "I nostri cani alla ricerca di tartufi nel bosco",
+      "fr": "Nos chiens à la recherche de truffes en forêt",
+      "de": "Unsere Hunde bei der Trüffelsuche im Wald"
+    },
+    "published": true,
+    "sort_order": 41984,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:40.000Z",
+    "updated_at": "2026-10-14T20:00:40.000Z"
+  },
+  {
+    "id": "f5452a05-b8e9-4c78-a8f5-602ea3a8283a",
+    "slug": "balkan-truffle-weighing-42",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-weighing-42.webp",
+    "image_path": "balkan-truffle-weighing-42.webp",
+    "width": 769,
+    "height": 1028,
+    "bytes": 140882,
+    "alt_by_locale": {
+      "bg": "Претегляне на пресни трюфели от реколтата",
+      "en": "Weighing fresh truffles from the harvest",
+      "it": "Pesatura dei tartufi freschi del raccolto",
+      "fr": "Pesée des truffes fraîches de la récolte",
+      "de": "Wiegen frischer Trüffel aus der Ernte"
+    },
+    "title_by_locale": {
+      "bg": "Претегляне на пресни трюфели от реколтата",
+      "en": "Weighing fresh truffles from the harvest",
+      "it": "Pesatura dei tartufi freschi del raccolto",
+      "fr": "Pesée des truffes fraîches de la récolte",
+      "de": "Wiegen frischer Trüffel aus der Ernte"
+    },
+    "published": true,
+    "sort_order": 43008,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:41.000Z",
+    "updated_at": "2026-10-14T20:00:41.000Z"
+  },
+  {
+    "id": "7d75a177-696e-4be4-8df1-c06ce001f801",
+    "slug": "balkan-truffle-people-43",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-people-43.webp",
+    "image_path": "balkan-truffle-people-43.webp",
+    "width": 828,
+    "height": 1792,
+    "bytes": 401520,
+    "alt_by_locale": {
+      "bg": "На терен с търсачите на трюфели и техните кучета",
+      "en": "In the field with truffle hunters and their dogs",
+      "it": "Sul campo con i cercatori di tartufi e i loro cani",
+      "fr": "Sur le terrain avec les chercheurs de truffes et leurs chiens",
+      "de": "Mit Trüffelsuchern und ihren Hunden im Gelände"
+    },
+    "title_by_locale": {
+      "bg": "На терен с търсачите на трюфели и техните кучета",
+      "en": "In the field with truffle hunters and their dogs",
+      "it": "Sul campo con i cercatori di tartufi e i loro cani",
+      "fr": "Sur le terrain avec les chercheurs de truffes et leurs chiens",
+      "de": "Mit Trüffelsuchern und ihren Hunden im Gelände"
+    },
+    "published": true,
+    "sort_order": 44032,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:42.000Z",
+    "updated_at": "2026-10-14T20:00:42.000Z"
+  },
+  {
+    "id": "2822fdfb-f2b7-48d8-bdc4-263017b0b3e7",
+    "slug": "balkan-truffle-landscape-44",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-landscape-44.webp",
+    "image_path": "balkan-truffle-landscape-44.webp",
+    "width": 828,
+    "height": 1102,
+    "bytes": 360496,
+    "alt_by_locale": {
+      "bg": "Природата и горите на Балканите",
+      "en": "Balkan landscapes and woodland",
+      "it": "Paesaggi e boschi dei Balcani",
+      "fr": "Paysages et forêts des Balkans",
+      "de": "Landschaften und Wälder des Balkans"
+    },
+    "title_by_locale": {
+      "bg": "Природата и горите на Балканите",
+      "en": "Balkan landscapes and woodland",
+      "it": "Paesaggi e boschi dei Balcani",
+      "fr": "Paysages et forêts des Balkans",
+      "de": "Landschaften und Wälder des Balkans"
+    },
+    "published": true,
+    "sort_order": 45056,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:43.000Z",
+    "updated_at": "2026-10-14T20:00:43.000Z"
+  },
+  {
+    "id": "e05888c9-328d-4207-8a20-70d38deb05fe",
+    "slug": "balkan-truffle-harvest-45",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-harvest-45.webp",
+    "image_path": "balkan-truffle-harvest-45.webp",
+    "width": 828,
+    "height": 1792,
+    "bytes": 337014,
+    "alt_by_locale": {
+      "bg": "Сортирани трюфели от сезонната реколта",
+      "en": "Sorted truffles from the seasonal harvest",
+      "it": "Tartufi selezionati del raccolto stagionale",
+      "fr": "Truffes triées de la récolte saisonnière",
+      "de": "Sortierte Trüffel aus der saisonalen Ernte"
+    },
+    "title_by_locale": {
+      "bg": "Сортирани трюфели от сезонната реколта",
+      "en": "Sorted truffles from the seasonal harvest",
+      "it": "Tartufi selezionati del raccolto stagionale",
+      "fr": "Truffes triées de la récolte saisonnière",
+      "de": "Sortierte Trüffel aus der saisonalen Ernte"
+    },
+    "published": true,
+    "sort_order": 46080,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:44.000Z",
+    "updated_at": "2026-10-14T20:00:44.000Z"
+  },
+  {
+    "id": "898d46b9-85d8-4e4b-afa3-d670039ce528",
+    "slug": "balkan-truffle-cut-46",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-cut-46.webp",
+    "image_path": "balkan-truffle-cut-46.webp",
+    "width": 828,
+    "height": 1555,
+    "bytes": 199736,
+    "alt_by_locale": {
+      "bg": "Разрязан трюфел с видима вътрешна структура",
+      "en": "A cut truffle showing its inner marbling",
+      "it": "Un tartufo tagliato con la venatura interna visibile",
+      "fr": "Une truffe coupée montrant ses marbrures",
+      "de": "Eine aufgeschnittene Trüffel mit sichtbarer Marmorierung"
+    },
+    "title_by_locale": {
+      "bg": "Разрязан трюфел с видима вътрешна структура",
+      "en": "A cut truffle showing its inner marbling",
+      "it": "Un tartufo tagliato con la venatura interna visibile",
+      "fr": "Une truffe coupée montrant ses marbrures",
+      "de": "Eine aufgeschnittene Trüffel mit sichtbarer Marmorierung"
+    },
+    "published": true,
+    "sort_order": 47104,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:45.000Z",
+    "updated_at": "2026-10-14T20:00:45.000Z"
+  },
+  {
+    "id": "2e1925a6-2b0e-456e-9f4d-20faaf828d79",
+    "slug": "balkan-truffle-mushrooms-47",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-mushrooms-47.webp",
+    "image_path": "balkan-truffle-mushrooms-47.webp",
+    "width": 828,
+    "height": 1097,
+    "bytes": 126936,
+    "alt_by_locale": {
+      "bg": "Диви гъби от нашите снимки от гората",
+      "en": "Wild mushrooms from our woodland photographs",
+      "it": "Funghi selvatici nelle nostre foto del bosco",
+      "fr": "Champignons sauvages dans nos photos de forêt",
+      "de": "Wildpilze auf unseren Waldfotografien"
+    },
+    "title_by_locale": {
+      "bg": "Диви гъби от нашите снимки от гората",
+      "en": "Wild mushrooms from our woodland photographs",
+      "it": "Funghi selvatici nelle nostre foto del bosco",
+      "fr": "Champignons sauvages dans nos photos de forêt",
+      "de": "Wildpilze auf unseren Waldfotografien"
+    },
+    "published": true,
+    "sort_order": 48128,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:46.000Z",
+    "updated_at": "2026-10-14T20:00:46.000Z"
+  },
+  {
+    "id": "3ddb8ba4-5b82-47de-96b3-4423e5e6835e",
+    "slug": "balkan-truffle-mushrooms-48",
+    "image_url": "https://xvpgrgkaiklqyzvjpygc.supabase.co/storage/v1/object/public/gallery-photos/balkan-truffle-mushrooms-48.webp",
+    "image_path": "balkan-truffle-mushrooms-48.webp",
+    "width": 828,
+    "height": 1095,
+    "bytes": 145704,
+    "alt_by_locale": {
+      "bg": "Диви гъби от нашите снимки от гората",
+      "en": "Wild mushrooms from our woodland photographs",
+      "it": "Funghi selvatici nelle nostre foto del bosco",
+      "fr": "Champignons sauvages dans nos photos de forêt",
+      "de": "Wildpilze auf unseren Waldfotografien"
+    },
+    "title_by_locale": {
+      "bg": "Диви гъби от нашите снимки от гората",
+      "en": "Wild mushrooms from our woodland photographs",
+      "it": "Funghi selvatici nelle nostre foto del bosco",
+      "fr": "Champignons sauvages dans nos photos de forêt",
+      "de": "Wildpilze auf unseren Waldfotografien"
+    },
+    "published": true,
+    "sort_order": 49152,
+    "home_position": null,
+    "created_at": "2026-10-14T20:00:47.000Z",
+    "updated_at": "2026-10-14T20:00:47.000Z"
+  }
+]

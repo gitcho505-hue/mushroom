@@ -5,6 +5,90 @@
   "outputDirectory": "dist/client",
   "rewrites": [
     {
+      "source": "/image-sitemap.xml",
+      "destination": "/api/image-sitemap"
+    },
+    {
+      "source": "/bg",
+      "destination": "/api/gallery-page?locale=bg&kind=home"
+    },
+    {
+      "source": "/bg/",
+      "destination": "/api/gallery-page?locale=bg&kind=home"
+    },
+    {
+      "source": "/bg/galeriya",
+      "destination": "/api/gallery-page?locale=bg&kind=gallery"
+    },
+    {
+      "source": "/bg/galeriya/",
+      "destination": "/api/gallery-page?locale=bg&kind=gallery"
+    },
+    {
+      "source": "/en",
+      "destination": "/api/gallery-page?locale=en&kind=home"
+    },
+    {
+      "source": "/en/",
+      "destination": "/api/gallery-page?locale=en&kind=home"
+    },
+    {
+      "source": "/en/gallery",
+      "destination": "/api/gallery-page?locale=en&kind=gallery"
+    },
+    {
+      "source": "/en/gallery/",
+      "destination": "/api/gallery-page?locale=en&kind=gallery"
+    },
+    {
+      "source": "/it",
+      "destination": "/api/gallery-page?locale=it&kind=home"
+    },
+    {
+      "source": "/it/",
+      "destination": "/api/gallery-page?locale=it&kind=home"
+    },
+    {
+      "source": "/it/galleria",
+      "destination": "/api/gallery-page?locale=it&kind=gallery"
+    },
+    {
+      "source": "/it/galleria/",
+      "destination": "/api/gallery-page?locale=it&kind=gallery"
+    },
+    {
+      "source": "/fr",
+      "destination": "/api/gallery-page?locale=fr&kind=home"
+    },
+    {
+      "source": "/fr/",
+      "destination": "/api/gallery-page?locale=fr&kind=home"
+    },
+    {
+      "source": "/fr/galerie",
+      "destination": "/api/gallery-page?locale=fr&kind=gallery"
+    },
+    {
+      "source": "/fr/galerie/",
+      "destination": "/api/gallery-page?locale=fr&kind=gallery"
+    },
+    {
+      "source": "/de",
+      "destination": "/api/gallery-page?locale=de&kind=home"
+    },
+    {
+      "source": "/de/",
+      "destination": "/api/gallery-page?locale=de&kind=home"
+    },
+    {
+      "source": "/de/galerie",
+      "destination": "/api/gallery-page?locale=de&kind=gallery"
+    },
+    {
+      "source": "/de/galerie/",
+      "destination": "/api/gallery-page?locale=de&kind=gallery"
+    },
+    {
       "source": "/admin",
       "destination": "/admin/"
     },
@@ -90,5 +174,15 @@
       "destination": "/bg/tryufeli/burgundski-tryufel",
       "permanent": true
     }
-  ]
+  ],
+  "functions": {
+    "api/gallery-page.js": {
+      "includeFiles": "{dist/server/**,dist/client/gallery-shell.html,.env.production}",
+      "maxDuration": 30
+    },
+    "api/image-sitemap.js": {
+      "includeFiles": ".env.production",
+      "maxDuration": 30
+    }
+  }
 }

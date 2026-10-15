@@ -6,8 +6,11 @@ import { localeUi } from './i18n';
 import { renderHead, siteUrl } from './seo';
 import { HarvestAdminPage as AdminPage } from './harvest-admin-crud';
 import { createCatalogSeeds, getSupabaseClient, loadCatalogProducts, loadHarvestRecords, safeCatalogImage, type CatalogProduct, type HarvestRecord } from './catalog';
-import { harvestGalleryCopy, harvestPhotos, homeStoryPhoto } from './harvest-photos';
-import { HarvestLightbox } from './harvest-lightbox';
+import { harvestGalleryCopy, homeStoryPhoto } from './harvest-photos';
+import { GalleryProvider } from './gallery-data';
+import { GalleryPage, GalleryPreview } from './gallery-page';
+import { galleryCopy } from './gallery-copy';
+import type { GalleryPhoto } from './gallery-model';
 import { knowledgeCopy, knowledgeArticleIds } from './knowledge';
 import { AboutPage, ContactPage, RestaurantPage } from './business-pages';
 import { ProductDetail } from './product-detail';
@@ -118,8 +121,8 @@ function updateManagedProductMeta(locale: Locale, product: CatalogProduct) {
   }
 }
 
-function localizedMeta(locale: Locale, key: PageKey) {
-  const fragment = renderHead(locale, key);
+function localizedMeta(locale: Locale, key: PageKey, search: string) {
+  const fragment = renderHead(locale, key, Math.floor(Number(new URLSearchParams(search).get('page'))) || 1);
   document.documentElement.lang = locale;
   const parsed = new DOMParser().parseFromString(`<head>${fragment}</head>`, 'text/html').head;
   const owned = document.head.querySelectorAll('title, meta[name="description"], [data-truffle-seo]');
@@ -131,7 +134,7 @@ function localizedMeta(locale: Locale, key: PageKey) {
   });
 }
 
-export function Site() {
+export function Site({ initialGallery }: { initialGallery?: GalleryPhoto[] } = {}) {
   const { pathname, search, hash } = useLocation();
   const navigate = useNavigate();
   const isAdminPath = pathname === '/admin' || pathname === '/admin/' || pathname.startsWith('/admin/');
@@ -169,12 +172,12 @@ export function Site() {
   }, [isAdminPath]);
   useEffect(() => {
     if (isAdminPath) return;
-    localizedMeta(locale, key);
+    localizedMeta(locale, key, search);
     if (key.startsWith('product:')) {
       const managed = catalog[key.split(':')[1]];
       if (managed) updateManagedProductMeta(locale, managed);
     }
-  }, [catalog, isAdminPath, locale, key]);
+  }, [catalog, isAdminPath, locale, key, search]);
 
   const publicCatalog = Object.fromEntries(Object.entries(catalog).map(([id, product]) => {
     const harvestStock = harvests.filter((record) => record.product_id === id).reduce((total, record) => total + record.weight_grams, 0);
@@ -186,7 +189,7 @@ export function Site() {
   if (!current && pathname !== '/') return <NotFound locale={locale} />;
   if (pathname === '/') return <RedirectHome />;
   if (catalogLoaded && (key.startsWith('product:') || key.startsWith('truffle:')) && !catalog[key.split(':')[1]]) return <NotFound locale={locale} />;
-  return <CatalogContext.Provider value={publicCatalog}><CatalogLoadedContext.Provider value={catalogLoaded}><HarvestContext.Provider value={harvests}><Layout locale={locale} pageKey={key} t={t}><Page locale={locale} pageKey={key} t={t} /></Layout></HarvestContext.Provider></CatalogLoadedContext.Provider></CatalogContext.Provider>;
+  return <GalleryProvider initialRows={initialGallery}><CatalogContext.Provider value={publicCatalog}><CatalogLoadedContext.Provider value={catalogLoaded}><HarvestContext.Provider value={harvests}><Layout locale={locale} pageKey={key} t={t}><Page locale={locale} pageKey={key} t={t} /></Layout></HarvestContext.Provider></CatalogLoadedContext.Provider></CatalogContext.Provider></GalleryProvider>;
 }
 
 function RedirectHome() {
@@ -253,7 +256,7 @@ function Footer({ locale, t }: { locale: Locale; t: Copy }) {
   return <footer className="site-footer">
     <div className="footer-main">
       <div className="footer-brand"><Link className="brand brand-light" to={pathFor(locale, 'home')}><img src="/snimki/logo2.png" width="828" height="828" alt="Balkan Truffles" /></Link><p>{t.footerText}</p><a className="social-link" href="https://www.instagram.com/" aria-label="Instagram"><MoveUpRight size={16} /> Instagram</a></div>
-      <div className="footer-column"><h2>{t.navMore}</h2>{(['products', 'wholesale', 'truffles', 'about', 'blog'] as const).map((item) => <Link key={item} to={pathFor(locale, item)}>{t.nav[item]}</Link>)}</div>
+      <div className="footer-column"><h2>{t.navMore}</h2><Link to={pathFor(locale, 'gallery')}>{galleryCopy[locale].nav}</Link>{(['products', 'wholesale', 'truffles', 'about', 'blog'] as const).map((item) => <Link key={item} to={pathFor(locale, item)}>{t.nav[item]}</Link>)}</div>
       <div className="footer-column"><h2>{t.nav.contact}</h2><Link to={pathFor(locale, 'contact')}>{t.nav.contact}</Link><Link to={pathFor(locale, 'faq')}>{t.faqTitle}</Link><p>{t.contactNote}</p></div>
       <div className="footer-column"><h2>{localeUi[locale].legal}</h2><Link to={pathFor(locale, 'privacy')}>{localeUi[locale].privacy}</Link><Link to={pathFor(locale, 'terms')}>{localeUi[locale].terms}</Link><Link to={pathFor(locale, 'cookies')}>{localeUi[locale].cookies}</Link><div className="footer-languages">{locales.map((lang) => <Link key={lang} to={pathFor(lang, 'home')}>{lang.toUpperCase()}</Link>)}</div></div>
     </div>
@@ -264,6 +267,7 @@ function Footer({ locale, t }: { locale: Locale; t: Copy }) {
 function Page({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; t: Copy }) {
   if (pageKey === 'home') return <Home locale={locale} t={t} />;
   if (pageKey === 'products') return <ProductIndex locale={locale} t={t} />;
+  if (pageKey === 'gallery') return <GalleryPage locale={locale} />;
   if (pageKey === 'wholesale') return <WholesalePage locale={locale} t={t} />;
   if (pageKey === 'truffles') return <TruffleIndex locale={locale} t={t} />;
   if (pageKey === 'about') return <AboutPage locale={locale} t={t} />;
@@ -282,7 +286,7 @@ function Home({ locale, t }: { locale: Locale; t: Copy }) {
   return <>
     <HomeIntro locale={locale} />
     <section id="seasonal" className="section featured-section"><SectionHeading eyebrow={t.origin} title={t.featured} intro={t.featuredIntro} /><div className="product-grid">{productIds.map((id, index) => <ProductCard key={id} locale={locale} t={t} id={id} number={`0${index + 1}`} />)}</div><div className="section-link"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div></section>
-    <HomeHarvestRibbon locale={locale} t={t} />
+    <HomeHarvestRibbon locale={locale} />
     <section className="species-band"><div className="species-copy"><p className="eyebrow">{t.nav.truffles}</p><h2>{t.species}</h2><p>{t.speciesText}</p><Link className="text-link text-link-light" to={pathFor(locale, 'truffles')}>{t.learn}<ArrowRight size={16} /></Link></div><figure className="species-image"><img src="/snimki/IMG_7286.jpeg" alt={t.species} loading="lazy" width="828" height="1097" /></figure></section>
     <HomeStory t={t} />
     <KnowledgePreview locale={locale} t={t} />
@@ -290,7 +294,7 @@ function Home({ locale, t }: { locale: Locale; t: Copy }) {
   </>;
 }
 
-function HomeHarvestRibbon({ locale, t }: { locale: Locale; t: Copy }) {
+function HomeHarvestRibbon({ locale }: { locale: Locale }) {
   const gallery = harvestGalleryCopy[locale];
   return <section className="home-harvest-ribbon" aria-labelledby="home-harvest-title">
     <div className="home-harvest-ribbon__intro">
@@ -298,8 +302,8 @@ function HomeHarvestRibbon({ locale, t }: { locale: Locale; t: Copy }) {
       <h2 id="home-harvest-title">{gallery.title}</h2>
       <p>{gallery.description}</p>
     </div>
-    <HarvestLightbox locale={locale} />
-    <div className="home-harvest-ribbon__footer"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div>
+    <GalleryPreview locale={locale} />
+    <div className="home-harvest-ribbon__footer"><Link className="button button-gold" to={pathFor(locale, 'gallery')}>{galleryCopy[locale].all}<ArrowRight size={16} /></Link></div>
   </section>;
 }
 
@@ -377,7 +381,7 @@ function ProductIndex({ locale, t }: { locale: Locale; t: Copy }) {
     </section>
     <section className="section harvest-gallery" aria-labelledby="harvest-gallery-title">
       <div className="harvest-gallery-heading"><div><p className="eyebrow">{gallery.eyebrow}</p><h2 id="harvest-gallery-title">{gallery.title}</h2></div><p>{gallery.description}</p></div>
-      <HarvestLightbox locale={locale} photos={harvestPhotos} />
+      <GalleryPreview locale={locale} /><div className="section-link"><Link className="text-link" to={pathFor(locale, 'gallery')}>{galleryCopy[locale].all}<ArrowRight size={16} /></Link></div>
     </section>
   </>;
 }
