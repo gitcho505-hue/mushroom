@@ -22,6 +22,7 @@ import { FooterCampaign } from './footer-campaign';
 import { newsletterCopy } from './newsletter-copy';
 import { whatsappLink } from './whatsapp';
 import { SeasonalProductCard, selectionCopy } from './seasonal-selection';
+import { RelatedSection } from './related-section';
 import './harvest-gallery.css';
 import './harvest-inventory.css';
 
@@ -444,7 +445,11 @@ function DetailPage({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; 
   const item = productFor(id, locale, catalog)!;
   const records = useContext(HarvestContext).filter((record) => record.product_id === id);
   const photos = [...new Set([productImage(item, 1500), ...records.flatMap((record) => record.image_url ? [safeCatalogImage(record.image_url, id, 1500)] : [])])];
-  return <div className="product-detail-layout"><ProductDetail locale={locale} t={t} id={id} item={item} photos={photos} productMode={pageKey.startsWith('product:')} harvestStock={pageKey.startsWith('product:') ? <HarvestStock locale={locale} t={t} productId={id} /> : undefined} /><FaqPreview locale={locale} t={t} /><section className="section related-section"><SectionHeading eyebrow={t.nav.products} title={t.related} /><div className="product-grid">{ids.filter((candidate) => candidate !== id).slice(0, 3).map((candidate, index) => <ProductCard key={candidate} locale={locale} t={t} id={candidate} number={String(index + 1).padStart(2, '0')} />)}</div></section></div>;
+  const related = ids.filter((candidate) => candidate !== id).slice(0, 3).map((candidate) => {
+    const product = productFor(candidate, locale, catalog)!;
+    return { href: catalogProductPath(locale, candidate, catalog[candidate]?.slug_by_locale), title: product.title, caption: product.season, image: productImage(product, 360) };
+  });
+  return <div className="product-detail-layout"><ProductDetail locale={locale} t={t} id={id} item={item} photos={photos} productMode={pageKey.startsWith('product:')} harvestStock={pageKey.startsWith('product:') ? <HarvestStock locale={locale} t={t} productId={id} /> : undefined} /><FaqPreview locale={locale} t={t} /><RelatedSection title={t.related} items={related} /></div>;
 }
 
 function BlogPage({ locale, t }: { locale: Locale; t: Copy }) {
@@ -453,11 +458,8 @@ function BlogPage({ locale, t }: { locale: Locale; t: Copy }) {
 
 function ArticlePage({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; t: Copy }) {
   const article = articles[locale][pageKey.split(':')[1]];
-  return <><article className="article-page"><Link className="back-link" to={pathFor(locale, 'blog')}>← {t.nav.blog}</Link><header className="article-heading"><p className="eyebrow">{article.date} · <Link to={pathFor(locale, 'about')}>Truffle Balkans</Link></p><h1>{article.title}</h1><p>{article.description}</p></header><img className="article-cover" src={imageUrl(article.image, 1800)} alt={article.title} loading="eager" width="1800" height="1000" /><div className="article-body"><p className="article-deck">{article.body}</p>{article.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}{article.sections?.map((section) => <section key={section.title}><h2>{section.title}</h2>{section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</section>)}<div className="article-actions"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link><Link className="text-link" to={pathFor(locale, 'wholesale')}>{t.cta}<ArrowUpRight size={16} /></Link></div></div></article><section className="section related-section"><SectionHeading eyebrow={t.nav.blog} title={t.related} /><BlogCards locale={locale} t={t} skip={pageKey.split(':')[1]} /></section></>;
-}
-
-function BlogCards({ locale, t, skip }: { locale: Locale; t: Copy; skip?: string }) {
-  return <div className="blog-grid">{Object.entries(articles[locale]).filter(([id]) => id !== skip).slice(0, 2).map(([id, article]) => <article className="blog-card" key={id}><Link to={pathFor(locale, `article:${id}`)} className="blog-image"><img src={imageUrl(article.image, 800)} alt={article.title} loading="lazy" width="800" height="600" /></Link><p className="blog-date">{article.date} · Truffle Balkans</p><h2><Link to={pathFor(locale, `article:${id}`)}>{article.title}</Link></h2><p>{article.description}</p><Link className="text-link" to={pathFor(locale, `article:${id}`)}>{t.learn}<ArrowRight size={15} /></Link></article>)}</div>;
+  const related = Object.entries(articles[locale]).filter(([id]) => id !== pageKey.split(':')[1]).slice(0, 2).map(([id, item]) => ({ href: pathFor(locale, `article:${id}`), title: item.title, image: imageUrl(item.image, 360) }));
+  return <><article className="article-page"><Link className="back-link" to={pathFor(locale, 'blog')}>← {t.nav.blog}</Link><header className="article-heading"><p className="eyebrow">{article.date} · <Link to={pathFor(locale, 'about')}>Truffle Balkans</Link></p><h1>{article.title}</h1><p>{article.description}</p></header><img className="article-cover" src={imageUrl(article.image, 1800)} alt={article.title} loading="eager" width="1800" height="1000" /><div className="article-body"><p className="article-deck">{article.body}</p>{article.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}{article.sections?.map((section) => <section key={section.title}><h2>{section.title}</h2>{section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</section>)}<div className="article-actions"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link><Link className="text-link" to={pathFor(locale, 'wholesale')}>{t.cta}<ArrowUpRight size={16} /></Link></div></div></article><RelatedSection title={t.related} items={related} /></>;
 }
 
 function HarvestStock({ locale, t, productId }: { locale: Locale; t: Copy; productId: string }) {
