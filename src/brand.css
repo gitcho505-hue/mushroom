@@ -1,13 +1,13 @@
-/* The supplied full wordmark uses dark lettering and needs a light surface. */
+/* Keep the supplied logos transparent against the forest background. */
 .site-header .brand,
 .site-footer .brand {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: none;
-  padding: 4px 8px;
-  border: 1px solid #c5a86666;
-  background: #f5f2e7;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 
 .site-header .brand img,
@@ -20,10 +20,8 @@
   filter: none;
 }
 
-.site-footer .brand {
-  padding: 0;
-  border: 0;
-  background: transparent;
+.site-header .brand img {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 .site-footer .brand img {
@@ -47,7 +45,6 @@
 }
 
 @media (max-width: 1080px) {
-  .site-header .brand { padding: 3px 7px; }
   .site-header .brand img { width: 138px; }
 }
 
