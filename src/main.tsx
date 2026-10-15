@@ -16,6 +16,7 @@ import './gallery.css';
 import './seasonal-selection.css';
 import './related-section.css';
 import './catalog-cards.css';
+import './main-navigation.css';
 
 const app = <React.StrictMode><BrowserRouter><Site /></BrowserRouter></React.StrictMode>;
 const root = document.getElementById('root')!;

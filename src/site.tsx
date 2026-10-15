@@ -17,13 +17,13 @@ import { knowledgeCopy, knowledgeArticleIds } from './knowledge';
 import { AboutPage, ContactPage, RestaurantPage } from './business-pages';
 import { ProductDetail } from './product-detail';
 import { HomeIntro } from './home-intro';
-import { homeIntroCopy } from './home-intro-copy';
 import { FooterCampaign } from './footer-campaign';
 import { newsletterCopy } from './newsletter-copy';
 import { whatsappLink } from './whatsapp';
 import { SeasonalProductCard, selectionCopy } from './seasonal-selection';
 import { RelatedSection } from './related-section';
 import { HarvestLightbox } from './harvest-lightbox';
+import { MainNavigation } from './main-navigation';
 import './harvest-gallery.css';
 import './harvest-inventory.css';
 
@@ -261,11 +261,10 @@ function Layout({ locale, pageKey, t, children }: { locale: Locale; pageKey: Pag
         <img src="/snimki/logo1.png" width="790" height="316" alt="Balkan Truffles" />
       </Link>
       <button ref={menuToggle} type="button" className="icon-button mobile-menu-toggle" aria-label={menuOpen ? localeUi[locale].menuClose : localeUi[locale].menuOpen} aria-controls="main-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
-      <nav id="main-navigation" className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label={localeUi[locale].navigation}>
-        {(pageKey === 'home' ? (['home', 'products', 'wholesale', 'about', 'contact'] as const) : (['home', 'products', 'wholesale', 'truffles', 'about', 'blog', 'contact'] as const)).map((item) => <Link key={item} to={pathFor(locale, item)} onClick={() => setMenuOpen(false)} aria-current={pageKey === item ? 'page' : undefined}>{t.nav[item]}</Link>)}
-        <div className="mobile-nav-tools"><LanguagePicker locale={locale} pageKey={pageKey} compact /><Link className="button button-gold" to={pathFor(locale, 'wholesale')}>{pageKey === 'home' ? homeIntroCopy[locale].enquiry : t.cta} <ArrowUpRight size={15} /></Link></div>
-      </nav>
-      <div className="header-tools"><LanguagePicker locale={locale} pageKey={pageKey} /><Link className="button button-gold header-cta" to={pathFor(locale, 'wholesale')}>{pageKey === 'home' ? homeIntroCopy[locale].enquiry : t.cta} <ArrowUpRight size={15} /></Link></div>
+      <MainNavigation locale={locale} t={t} pageKey={pageKey} mobileOpen={menuOpen} onNavigate={() => setMenuOpen(false)}>
+        <div className="mobile-nav-tools"><LanguagePicker locale={locale} pageKey={pageKey} compact /><Link className="button button-gold" to={pathFor(locale, 'wholesale')} onClick={() => setMenuOpen(false)}>{t.cta} <ArrowUpRight size={15} /></Link></div>
+      </MainNavigation>
+      <div className="header-tools"><LanguagePicker locale={locale} pageKey={pageKey} /><Link className="button button-gold header-cta" to={pathFor(locale, 'wholesale')}>{t.cta} <ArrowUpRight size={15} /></Link></div>
     </header>
     <main id="main">{children}</main>
     <FooterCampaign key={locale} locale={locale} />

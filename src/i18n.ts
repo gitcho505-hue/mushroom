@@ -27,7 +27,7 @@ export const localeUi = {
 
 export const extraCopy = {
   fr: {
-    nav: { home: 'Accueil', products: 'Truffes fraîches', truffles: 'Guide des truffes', wholesale: 'Restaurants', about: 'Notre histoire', blog: 'Journal', contact: 'Contact' },
+    nav: { home: 'Accueil', products: 'Truffes fraîches', wholesale: 'Commandes', knowledge: 'Tout sur la truffe', information: 'Informations', truffles: 'Guide des truffes', about: 'Notre histoire', blog: 'Journal', contact: 'Contact' },
     cta: 'Demande', heroEyebrow: 'TRUFFES SAUVAGES POUR CUISINES PROFESSIONNELLES', heroTitle: 'Le goût de la nature.',
     heroText: 'Des truffes balkaniques de saison pour des menus qui ont du caractère. Nous vous aidons à choisir la variété et le calibre, puis confirmons la disponibilité et le prix.',
     discover: 'Découvrir la sélection', origin: 'Au cœur des Balkans', featured: 'La sélection du moment',
@@ -57,7 +57,7 @@ export const extraCopy = {
     back: 'Retour à la sélection', related: 'À découvrir également', freshness: 'La fraîcheur suit les saisons', navMore: 'Explorer', allProducts: 'Produits', contactNote: 'Chaque disponibilité est confirmée personnellement selon la récolte.',
   },
   de: {
-    nav: { home: 'Startseite', products: 'Frische Trüffel', truffles: 'Trüffelwissen', wholesale: 'Für Restaurants', about: 'Über uns', blog: 'Journal', contact: 'Kontakt' },
+    nav: { home: 'Startseite', products: 'Frische Trüffel', wholesale: 'Bestellungen', knowledge: 'Alles über Trüffel', information: 'Informationen', truffles: 'Trüffelwissen', about: 'Über uns', blog: 'Journal', contact: 'Kontakt' },
     cta: 'Anfrage', heroEyebrow: 'WILDE TRÜFFEL FÜR DIE PROFIKÜCHE', heroTitle: 'Der Geschmack der Natur.',
     heroText: 'Saisonale Balkantrüffel für Menüs mit Charakter. Wir stimmen Sorte und Größe auf Ihre Küche ab und bestätigen Verfügbarkeit und Preis persönlich.',
     discover: 'Auswahl entdecken', origin: 'Aus dem Herzen des Balkans', featured: 'Die Auswahl der Saison',

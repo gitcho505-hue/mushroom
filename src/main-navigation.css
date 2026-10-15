@@ -1,0 +1,60 @@
+.site-header .main-nav { gap: clamp(14px, 1.4vw, 24px); padding-inline: 22px; }
+.site-header .main-nav > a { white-space: nowrap; }
+.nav-group { position: relative; flex-shrink: 0; }
+
+.nav-group__trigger {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #f2f2e7;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.nav-group__trigger svg { flex-shrink: 0; transition: transform .2s ease; }
+.nav-group__trigger[aria-expanded='true'] svg { transform: rotate(180deg); }
+.nav-group__trigger:hover,
+.nav-group__trigger[aria-expanded='true'],
+.nav-group__trigger[data-current],
+.site-header .main-nav > a[data-current] { color: #dfbe83; }
+
+.nav-group__links {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: -16px;
+  z-index: 35;
+  min-width: 215px;
+  padding: 8px;
+  color: #f5f2e7;
+  background: #10271d;
+  border: 1px solid #b7955680;
+  border-top: 2px solid #d7a75c;
+  box-shadow: 0 14px 30px #0003;
+}
+
+.nav-group__links[hidden] { display: none; }
+.nav-group__links a { display: block; min-height: 44px; padding: 10px 12px; font-size: 14px; line-height: 1.6; }
+.nav-group__links a:hover,
+.nav-group__links a[aria-current='page'] { color: #f2d091; background: #203b2a; }
+.nav-group :is(button, a):focus-visible { outline: 2px solid #dfbe83; outline-offset: 3px; }
+
+@media (max-width: 1200px) {
+  .site-header .main-nav { gap: 0; padding-inline: var(--page-pad); }
+  .site-header .main-nav > a { font-size: 17px; }
+  .site-header-home .main-nav > a[aria-current='page']::after { display: none; }
+  .nav-group { border-bottom: 1px solid var(--forest-line); }
+  .nav-group__trigger { width: 100%; min-height: 48px; justify-content: space-between; padding: 10px 0; font-size: 17px; text-align: left; white-space: normal; }
+  .nav-group__links { position: static; min-width: 0; padding: 4px 0 10px 16px; border: 0; border-left: 1px solid #d7a75c66; background: transparent; box-shadow: none; margin: 0 0 12px 4px; }
+  .nav-group__links a { font-size: 16px; padding: 10px 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-group__trigger svg { transition: none; }
+}
