@@ -19,6 +19,8 @@ export type CatalogProduct = {
   price_per_kg: number | null;
   currency: string;
   available: boolean;
+  is_hidden?: boolean;
+  status?: string;
   stock_grams: number | null;
   updated_at?: string;
 };
@@ -49,6 +51,11 @@ export type HarvestRecord = {
   image_url: string | null;
   image_path: string | null;
   is_available: boolean;
+  is_hidden?: boolean;
+  status?: string;
+  grade_code?: string | null;
+  size_code?: string | null;
+  preparation_code?: string | null;
   created_at?: string;
 };
 
@@ -72,16 +79,31 @@ async function loadAllRows<T>(fetchPage: (from: number, to: number) => Promise<P
   return { data: rows, error: null };
 }
 
-export async function loadCatalogProducts(client: SupabaseClient): Promise<AllRowsResult<CatalogProduct>> {
-  const result = await loadAllRows<CatalogProduct>(async (from, to) => await client.from('truffle_products')
-    .select('*', { count: 'exact' }).order('id').range(from, to));
-  if (result.error) return result;
-  return { data: result.data!.map((product) => ({ ...product, slug_by_locale: Object.fromEntries(locales.map((locale) => [locale, catalogProductSlug(locale, product.id, product.slug_by_locale)])) as Record<Locale, string> })), error: null };
+export const isPublicProduct = (product?: CatalogProduct | null) => product?.available === true && product.is_hidden !== true && product.status !== 'hidden';
+export const isPublicHarvest = (record: HarvestRecord) => record.is_available === true && record.is_hidden !== true && record.status !== 'hidden';
+export type PublicCatalog = { products: CatalogProduct[]; harvests: HarvestRecord[] };
+export function filterPublicCatalog(products: CatalogProduct[], harvests: HarvestRecord[]): PublicCatalog {
+  const visible = products.filter(isPublicProduct);
+  const ids = new Set(visible.map((product) => product.id));
+  return { products: visible, harvests: harvests.filter((record) => isPublicHarvest(record) && ids.has(record.product_id)) };
 }
 
-export function loadHarvestRecords(client: SupabaseClient) {
-  return loadAllRows<HarvestRecord>(async (from, to) => await client.from('truffle_harvests')
-    .select('*', { count: 'exact' }).order('found_on', { ascending: false }).order('created_at', { ascending: false }).order('id').range(from, to));
+export async function loadCatalogProducts(client: SupabaseClient, publicOnly = false): Promise<AllRowsResult<CatalogProduct>> {
+  const result = await loadAllRows<CatalogProduct>(async (from, to) => {
+    let query = client.from('truffle_products').select('*', { count: 'exact' });
+    if (publicOnly) query = query.eq('available', true);
+    return await query.order('id').range(from, to);
+  });
+  if (result.error) return result;
+  return { data: result.data!.filter((product) => !publicOnly || isPublicProduct(product)).map((product) => ({ ...product, slug_by_locale: Object.fromEntries(locales.map((locale) => [locale, catalogProductSlug(locale, product.id, product.slug_by_locale)])) as Record<Locale, string> })), error: null };
+}
+
+export function loadHarvestRecords(client: SupabaseClient, publicOnly = false) {
+  return loadAllRows<HarvestRecord>(async (from, to) => {
+    let query = client.from('truffle_harvests').select('*', { count: 'exact' });
+    if (publicOnly) query = query.eq('is_available', true);
+    return await query.order('found_on', { ascending: false }).order('created_at', { ascending: false }).order('id').range(from, to);
+  });
 }
 
 let client: SupabaseClient | null = null;

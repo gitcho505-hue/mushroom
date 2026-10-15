@@ -49,6 +49,9 @@ create table if not exists public.truffle_harvests (
   weight_grams integer not null check (weight_grams > 0),
   quantity integer not null default 1 check (quantity > 0),
   notes text not null default '',
+  grade_code text check (grade_code in ('extra', 'first', 'pieces')),
+  size_code text check (size_code in ('small', 'medium', 'large', 'mixed')),
+  preparation_code text check (preparation_code in ('unwashed', 'cleaned')),
   image_url text,
   image_path text,
   is_available boolean not null default true,
@@ -92,7 +95,7 @@ create policy "Admins can read their own membership"
 drop policy if exists "Anyone can read available truffles" on public.truffle_products;
 create policy "Anyone can read available truffles"
   on public.truffle_products for select to anon, authenticated
-  using (true);
+  using (available);
 
 drop policy if exists "Admins can manage truffle products" on public.truffle_products;
 create policy "Admins can manage truffle products"
@@ -103,7 +106,7 @@ create policy "Admins can manage truffle products"
 drop policy if exists "Anyone can read available harvests" on public.truffle_harvests;
 create policy "Anyone can read available harvests"
   on public.truffle_harvests for select to anon, authenticated
-  using (is_available);
+  using (is_available and exists (select 1 from public.truffle_products p where p.id = product_id and p.available));
 
 drop policy if exists "Admins can manage truffle harvests" on public.truffle_harvests;
 create policy "Admins can manage truffle harvests"

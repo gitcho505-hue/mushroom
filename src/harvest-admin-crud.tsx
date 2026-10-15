@@ -7,6 +7,8 @@ import { pageSlugs } from './i18n';
 import { createEmptyCatalogProduct, getSupabaseClient, loadCatalogProducts, loadHarvestRecords, safeCatalogImage, slugifyProduct, type CatalogProduct, type HarvestRecord } from './catalog';
 import './admin.css';
 import './admin-crud.css';
+import { emptyHarvestOptions, harvestDetails, harvestOptionFields, harvestOptionLabels, harvestOptions, legacyGrade } from './harvest-options';
+import { notifyCatalogChanged } from './catalog-sync';
 import { NewsletterAdmin } from './newsletter-admin';
 
 const GalleryAdmin = lazy(() => import('./gallery-admin').then((module) => ({ default: module.GalleryAdmin })));
@@ -38,6 +40,8 @@ export function HarvestAdminPage() {
   const [harvestWeight, setHarvestWeight] = useState('');
   const [harvestQuantity, setHarvestQuantity] = useState('1');
   const [harvestNotes, setHarvestNotes] = useState('');
+  const [harvestChoices, setHarvestChoices] = useState(emptyHarvestOptions);
+  const [harvestPublished, setHarvestPublished] = useState(true);
   const [harvestPhoto, setHarvestPhoto] = useState<File | null>(null);
   const [editingHarvestId, setEditingHarvestId] = useState<string | null>(null);
   const [harvestFormOpen, setHarvestFormOpen] = useState(false);
@@ -153,6 +157,8 @@ export function HarvestAdminPage() {
     setHarvestWeight('');
     setHarvestQuantity('1');
     setHarvestNotes('');
+    setHarvestChoices(emptyHarvestOptions());
+    setHarvestPublished(true);
     setHarvestPhoto(null);
   }
 
@@ -162,6 +168,8 @@ export function HarvestAdminPage() {
     setHarvestWeight(String(record.weight_grams));
     setHarvestQuantity(String(record.quantity));
     setHarvestNotes(record.notes);
+    setHarvestChoices({ grade_code: record.grade_code || legacyGrade(record.notes), size_code: record.size_code || '', preparation_code: record.preparation_code || '' });
+    setHarvestPublished(record.is_available);
     setHarvestPhoto(null);
     setHarvestFormOpen(true);
   }
@@ -177,6 +185,7 @@ export function HarvestAdminPage() {
       const product = data as CatalogProduct;
       setCatalog((rows) => [...rows, product].sort((first, second) => first.id.localeCompare(second.id)));
       setSelectedId(product.id);
+      notifyCatalogChanged();
       setMessage('Главният продукт е добавен. Попълни информацията и запази.');
     }
     setSaving(false);
@@ -192,6 +201,7 @@ export function HarvestAdminPage() {
     if (deleteError) setError(deleteError.message);
     else {
       const imagePaths = [selected.image_path, ...childRecords.map((record) => record.image_path)].filter((path): path is string => Boolean(path));
+      notifyCatalogChanged();
       const nextProducts = catalog.filter((product) => product.id !== selected.id);
       setCatalog(nextProducts);
       setHarvests((rows) => rows.filter((record) => record.product_id !== selected.id));
@@ -256,6 +266,7 @@ export function HarvestAdminPage() {
     if (saveError) setError(saveError.message);
     else {
       setCatalog((rows) => rows.map((row) => row.id === selected.id ? data as CatalogProduct : row));
+      notifyCatalogChanged();
       setMessage('Продуктът е запазен.');
     }
     setSaving(false);
@@ -358,6 +369,8 @@ export function HarvestAdminPage() {
       weight_grams: weight,
       quantity,
       notes: harvestNotes.trim(),
+      ...Object.fromEntries(harvestOptionFields.map((field) => [field, harvestChoices[field] || null])),
+      is_available: harvestPublished,
       image_url: publicImage,
       image_path: imagePath,
     };
@@ -373,6 +386,7 @@ export function HarvestAdminPage() {
         ? rows.map((record) => record.id === saved.id ? saved : record)
         : [saved, ...rows]);
       if (currentRecord?.image_path && currentRecord.image_path !== imagePath) await bucket.remove([currentRecord.image_path]);
+      notifyCatalogChanged();
       setMessage(currentRecord ? 'Подпродуктът е обновен.' : 'Подпродуктът е добавен.');
       resetHarvestForm();
       setHarvestFormOpen(false);
@@ -386,7 +400,7 @@ export function HarvestAdminPage() {
     const { data, error: updateError } = await supabase.from('truffle_harvests')
       .update({ is_available: !record.is_available }).eq('id', record.id).select('*').single();
     if (updateError) setError(updateError.message);
-    else setHarvests((rows) => rows.map((row) => row.id === record.id ? data as HarvestRecord : row));
+    else { setHarvests((rows) => rows.map((row) => row.id === record.id ? data as HarvestRecord : row)); notifyCatalogChanged(); }
     setSaving(false);
   }
 
@@ -397,6 +411,7 @@ export function HarvestAdminPage() {
     if (deleteError) setError(deleteError.message);
     else {
       setHarvests((rows) => rows.filter((row) => row.id !== record.id));
+      notifyCatalogChanged();
       if (record.image_path) {
         const { error: storageError } = await supabase.storage.from('truffle-photos').remove([record.image_path]);
         setMessage(storageError ? 'Находката е изтрита, но снимката остана в Storage.' : 'Находката е изтрита.');
@@ -470,13 +485,16 @@ export function HarvestAdminPage() {
                 <label>Намерена на<input type="date" value={harvestDate} onChange={(event) => setHarvestDate(event.target.value)} /></label>
                 <label>Общо тегло<div className="admin-input-suffix"><input type="number" min="1" step="1" value={harvestWeight} onChange={(event) => setHarvestWeight(event.target.value)} placeholder="напр. 120" /><span>g</span></div></label>
                 <label>Брой гъби<input type="number" min="1" step="1" value={harvestQuantity} onChange={(event) => setHarvestQuantity(event.target.value)} /></label>
-                <label>Бележка<input value={harvestNotes} onChange={(event) => setHarvestNotes(event.target.value)} placeholder="Район, размер, качество…" /></label>
+                {harvestOptionFields.map((field) => <label key={field}>{harvestOptionLabels[field]}<select value={harvestChoices[field]} onChange={(event) => setHarvestChoices({ ...harvestChoices, [field]: event.target.value })} disabled={saving}><option value="">Не е посочено</option>{harvestOptions[field].map((item) => <option key={item.code} value={item.code}>{item.labels.bg}</option>)}</select></label>)}
+                <p className="admin-help admin-harvest-translation">Избраните детайли се показват автоматично на български, английски, италиански, френски и немски.</p>
+                {!selected.available && <p className="admin-error admin-harvest-translation">Главният продукт е скрит. Подпродуктите му остават скрити, докато го публикувате.</p>}
+                <label className="admin-toggle"><span>Публикуван подпродукт</span><input type="checkbox" checked={harvestPublished} onChange={(event) => setHarvestPublished(event.target.checked)} disabled={saving} /></label>
                 <label className="admin-harvest-file"><ImagePlus size={15} />{harvestPhoto ? harvestPhoto.name : 'Снимка'}<input type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(event) => setHarvestPhoto(event.target.files?.[0] ?? null)} /></label>
                 <div className="admin-harvest-form-actions"><button className="admin-secondary" type="button" onClick={() => { resetHarvestForm(); setHarvestFormOpen(false); }}>Откажи</button><button className="admin-primary" type="button" onClick={() => void saveHarvest()} disabled={saving}>{saving ? 'Запазване…' : editingHarvestId ? 'Запази подпродукт' : 'Добави подпродукт'}</button></div>
               </div>}
               {loadingHarvests ? <p className="admin-help">Зареждаме находките…</p> : <div className="admin-harvest-list">{harvests.filter((row) => row.product_id === selected.id).map((row) => <article className="admin-harvest-row" key={row.id}>
                 {row.image_url ? <img src={row.image_url} alt="" /> : <span className="admin-harvest-no-image"><ImagePlus size={18} /></span>}
-                <div><strong>{new Date(`${row.found_on}T12:00:00`).toLocaleDateString('bg-BG')} · {row.weight_grams} g · {row.quantity} бр.</strong><small>{row.notes || 'Без бележка'} · {row.is_available ? 'Показва се в сайта' : 'Скрита от сайта'}</small></div>
+                <div><strong>{new Date(`${row.found_on}T12:00:00`).toLocaleDateString('bg-BG')} · {row.weight_grams} g · {row.quantity} бр.</strong><small>{harvestDetails(row, 'bg') || row.notes || 'Без детайли'} · {row.is_available && selected.available ? 'Показва се в сайта' : 'Скрита от сайта'}</small></div>
                 <label className="admin-toggle admin-harvest-toggle"><span className="sr-only">Показване в сайта</span><input type="checkbox" checked={row.is_available} onChange={() => void toggleHarvest(row)} disabled={saving} /></label>
                 <button className="admin-icon-button admin-harvest-edit" type="button" title="Редактирай подпродукта" aria-label="Редактирай подпродукта" onClick={() => editHarvest(row)} disabled={saving}><Pencil size={16} /></button>
                 <button className="admin-icon-button admin-harvest-delete" type="button" title="Изтрий находката" aria-label="Изтрий находката" onClick={() => void deleteHarvest(row)} disabled={saving}><Trash2 size={16} /></button>

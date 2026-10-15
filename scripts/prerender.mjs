@@ -20,7 +20,7 @@ for (const locale of server.locales) {
       .replace('<html lang="bg">', `<html lang="${locale}">`)
       .replace('</head>', `${server.renderHead(locale, key)}\n  </head>`)
       .replace('<!--app-html-->', server.render(url)).replace('</body>', `<script id="gallery-bootstrap" type="application/json">${JSON.stringify(server.gallerySeeds).replace(/</g, '\\u003c')}</script></body>`);
-    if (process.env.VERCEL && (key === 'home' || key === 'gallery')) continue;
+    if (process.env.VERCEL) continue;
     const outputPath = resolve(clientDir, `.${url}`, 'index.html');
     await mkdir(dirname(outputPath), { recursive: true });
     await writeFile(outputPath, html);
@@ -42,6 +42,6 @@ const rootHtml = template
   .replace('<!--app-html-->', server.render('/'));
 await writeFile(resolve(clientDir, 'index.html'), rootHtml);
 await writeFile(resolve(clientDir, 'spa.html'), template.replace('<!--app-html-->', ''));
-await writeFile(resolve(clientDir, 'sitemap.xml'), server.sitemapXml());
+if (!process.env.VERCEL) await writeFile(resolve(clientDir, 'sitemap.xml'), server.sitemapXml());
 await writeFile(resolve(clientDir, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${server.siteUrl}/sitemap.xml\nSitemap: ${server.siteUrl}/image-sitemap.xml\n`);
 console.log(`Prerendered ${server.locales.length * server.allPageKeys().length} localized pages.`);

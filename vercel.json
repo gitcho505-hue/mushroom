@@ -5,132 +5,76 @@
   "outputDirectory": "dist/client",
   "rewrites": [
     {
+      "source": "/sitemap.xml",
+      "destination": "/api/catalog-sitemap"
+    },
+    {
       "source": "/image-sitemap.xml",
       "destination": "/api/image-sitemap"
     },
     {
       "source": "/bg",
-      "destination": "/api/gallery-page?locale=bg&kind=home"
+      "destination": "/api/site-page?locale=bg"
     },
     {
       "source": "/bg/",
-      "destination": "/api/gallery-page?locale=bg&kind=home"
+      "destination": "/api/site-page?locale=bg"
     },
     {
-      "source": "/bg/galeriya",
-      "destination": "/api/gallery-page?locale=bg&kind=gallery"
-    },
-    {
-      "source": "/bg/galeriya/",
-      "destination": "/api/gallery-page?locale=bg&kind=gallery"
+      "source": "/bg/:path*",
+      "destination": "/api/site-page?locale=bg&path=:path*"
     },
     {
       "source": "/en",
-      "destination": "/api/gallery-page?locale=en&kind=home"
+      "destination": "/api/site-page?locale=en"
     },
     {
       "source": "/en/",
-      "destination": "/api/gallery-page?locale=en&kind=home"
+      "destination": "/api/site-page?locale=en"
     },
     {
-      "source": "/en/gallery",
-      "destination": "/api/gallery-page?locale=en&kind=gallery"
-    },
-    {
-      "source": "/en/gallery/",
-      "destination": "/api/gallery-page?locale=en&kind=gallery"
+      "source": "/en/:path*",
+      "destination": "/api/site-page?locale=en&path=:path*"
     },
     {
       "source": "/it",
-      "destination": "/api/gallery-page?locale=it&kind=home"
+      "destination": "/api/site-page?locale=it"
     },
     {
       "source": "/it/",
-      "destination": "/api/gallery-page?locale=it&kind=home"
+      "destination": "/api/site-page?locale=it"
     },
     {
-      "source": "/it/galleria",
-      "destination": "/api/gallery-page?locale=it&kind=gallery"
-    },
-    {
-      "source": "/it/galleria/",
-      "destination": "/api/gallery-page?locale=it&kind=gallery"
+      "source": "/it/:path*",
+      "destination": "/api/site-page?locale=it&path=:path*"
     },
     {
       "source": "/fr",
-      "destination": "/api/gallery-page?locale=fr&kind=home"
+      "destination": "/api/site-page?locale=fr"
     },
     {
       "source": "/fr/",
-      "destination": "/api/gallery-page?locale=fr&kind=home"
+      "destination": "/api/site-page?locale=fr"
     },
     {
-      "source": "/fr/galerie",
-      "destination": "/api/gallery-page?locale=fr&kind=gallery"
-    },
-    {
-      "source": "/fr/galerie/",
-      "destination": "/api/gallery-page?locale=fr&kind=gallery"
+      "source": "/fr/:path*",
+      "destination": "/api/site-page?locale=fr&path=:path*"
     },
     {
       "source": "/de",
-      "destination": "/api/gallery-page?locale=de&kind=home"
+      "destination": "/api/site-page?locale=de"
     },
     {
       "source": "/de/",
-      "destination": "/api/gallery-page?locale=de&kind=home"
+      "destination": "/api/site-page?locale=de"
     },
     {
-      "source": "/de/galerie",
-      "destination": "/api/gallery-page?locale=de&kind=gallery"
-    },
-    {
-      "source": "/de/galerie/",
-      "destination": "/api/gallery-page?locale=de&kind=gallery"
+      "source": "/de/:path*",
+      "destination": "/api/site-page?locale=de&path=:path*"
     },
     {
       "source": "/admin",
       "destination": "/admin/"
-    },
-    {
-      "source": "/bg/produkti/:slug",
-      "destination": "/spa.html"
-    },
-    {
-      "source": "/en/products/:slug",
-      "destination": "/spa.html"
-    },
-    {
-      "source": "/it/prodotti/:slug",
-      "destination": "/spa.html"
-    },
-    {
-      "source": "/fr/produits/:slug",
-      "destination": "/spa.html"
-    },
-    {
-      "source": "/de/produkte/:slug",
-      "destination": "/spa.html"
-    },
-    {
-      "source": "/bg/produkti/item/:id",
-      "destination": "/spa.html"
-    },
-    {
-      "source": "/en/products/item/:id",
-      "destination": "/spa.html"
-    },
-    {
-      "source": "/it/prodotti/item/:id",
-      "destination": "/spa.html"
-    },
-    {
-      "source": "/fr/produits/item/:id",
-      "destination": "/spa.html"
-    },
-    {
-      "source": "/de/produkte/item/:id",
-      "destination": "/spa.html"
     }
   ],
   "redirects": [
@@ -182,6 +126,14 @@
     },
     "api/image-sitemap.js": {
       "includeFiles": ".env.production",
+      "maxDuration": 30
+    },
+    "api/site-page.js": {
+      "includeFiles": "{dist/server/**,dist/client/gallery-shell.html,.env.production}",
+      "maxDuration": 30
+    },
+    "api/catalog-sitemap.js": {
+      "includeFiles": "{dist/server/**,dist/client/gallery-shell.html,.env.production}",
       "maxDuration": 30
     }
   }

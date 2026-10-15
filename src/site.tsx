@@ -1,11 +1,13 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, Check, ChevronDown, Menu, MoveUpRight, Sparkles, X } from 'lucide-react';
-import { articles, catalogProductPath, copy, faqItems, imageUrl, isCatalogProductPath, keyForPath, languageMeta, locales, pathFor, titleFor, truffleFor, truffleIds as defaultTruffleIds, type Copy, type Locale, type PageKey } from './content';
+import { articles, catalogProductPath, copy, faqItems, imageUrl, isCatalogProductPath, keyForPath, languageMeta, locales, pathFor, titleFor, truffleFor, type Copy, type Locale, type PageKey } from './content';
 import { localeUi } from './i18n';
 import { renderHead, siteUrl } from './seo';
 import { HarvestAdminPage as AdminPage } from './harvest-admin-crud';
-import { createCatalogSeeds, getSupabaseClient, loadCatalogProducts, loadHarvestRecords, safeCatalogImage, type CatalogProduct, type HarvestRecord } from './catalog';
+import { filterPublicCatalog, isPublicProduct, getSupabaseClient, loadCatalogProducts, loadHarvestRecords, safeCatalogImage, type CatalogProduct, type HarvestRecord, type PublicCatalog } from './catalog';
+import { catalogChangeEvent } from './catalog-sync';
+import { harvestDetails, harvestStockCopy } from './harvest-options';
 import { harvestGalleryCopy, homeStoryPhoto } from './harvest-photos';
 import { GalleryProvider } from './gallery-data';
 import { GalleryPage, GalleryPreview } from './gallery-page';
@@ -39,6 +41,7 @@ type ProductView = NonNullable<ReturnType<typeof truffleFor>> & {
 function productFor(id: string, locale: Locale, catalog: Record<string, CatalogProduct>): ProductView | undefined {
   const staticProduct = truffleFor(`product:${id}`, locale);
   const managed = catalog[id];
+  if (!managed || !isPublicProduct(managed)) return undefined;
   if (!staticProduct && !managed) return undefined;
   const product = staticProduct ?? {
     slug: id,
@@ -68,9 +71,8 @@ function productFor(id: string, locale: Locale, catalog: Record<string, CatalogP
   };
 }
 
-function catalogProductIds(catalog: Record<string, CatalogProduct>, loaded: boolean) {
-  const ids = Object.keys(catalog);
-  return loaded ? ids : ids.length ? ids : defaultTruffleIds;
+function catalogProductIds(catalog: Record<string, CatalogProduct>, _loaded: boolean) {
+  return Object.values(catalog).filter(isPublicProduct).map((product) => product.id);
 }
 
 function productImage(product: { image: string }, width: number) {
@@ -134,17 +136,29 @@ function localizedMeta(locale: Locale, key: PageKey, search: string) {
   });
 }
 
-export function Site({ initialGallery }: { initialGallery?: GalleryPhoto[] } = {}) {
+function initialCatalogRows(initial?: PublicCatalog): PublicCatalog | null {
+  if (initial) return filterPublicCatalog(initial.products, initial.harvests);
+  if (typeof document === 'undefined') return null;
+  try {
+    const value = document.getElementById('catalog-bootstrap')?.textContent;
+    if (!value) return null;
+    const parsed = JSON.parse(value) as PublicCatalog;
+    return filterPublicCatalog(parsed.products, parsed.harvests);
+  } catch { return null; }
+}
+
+export function Site({ initialGallery, initialCatalog }: { initialGallery?: GalleryPhoto[]; initialCatalog?: PublicCatalog } = {}) {
   const { pathname, search, hash } = useLocation();
   const navigate = useNavigate();
   const isAdminPath = pathname === '/admin' || pathname === '/admin/' || pathname.startsWith('/admin/');
-  const [catalog, setCatalog] = useState<Record<string, CatalogProduct>>({});
-  const [catalogLoaded, setCatalogLoaded] = useState(false);
+  const [snapshot, setSnapshot] = useState<PublicCatalog | null>(() => initialCatalogRows(initialCatalog));
+  const catalog = Object.fromEntries((snapshot?.products ?? []).map((product) => [product.id, product]));
+  const catalogLoaded = snapshot !== null;
   const current = keyForPath(pathname, Object.values(catalog));
   const locale = current?.locale ?? (pathname.split('/')[1] as Locale) ?? 'bg';
   const key = current?.key ?? 'home';
   const t = copy[locale] ?? copy.bg;
-  const [harvests, setHarvests] = useState<HarvestRecord[]>([]);
+  const harvests = snapshot?.harvests ?? [];
   useEffect(() => {
     if (!current || isAdminPath) return;
     const id = current.key.split(':')[1];
@@ -154,30 +168,48 @@ export function Site({ initialGallery }: { initialGallery?: GalleryPhoto[] } = {
   useEffect(() => {
     if (isAdminPath) return;
     const client = getSupabaseClient();
-    if (!client) {
-      setCatalog(Object.fromEntries(createCatalogSeeds().map((product) => [product.id, product])));
-      setCatalogLoaded(true);
-      return;
-    }
+    if (!client) { setSnapshot({ products: [], harvests: [] }); return; }
     let active = true;
-    void loadCatalogProducts(client).then(({ data, error }) => {
-      if (!active) return;
-      const products = error ? createCatalogSeeds() : data;
-      setCatalog(Object.fromEntries(products.map((product) => [product.id, product])));
-      setCatalogLoaded(true);
-    });
-    void loadHarvestRecords(client)
-      .then(({ data }) => { if (active) setHarvests((data ?? []).filter((record) => record.is_available)); });
-    return () => { active = false; };
+    let sequence = 0;
+    const refresh = async () => {
+      const request = ++sequence;
+      try {
+        const [products, records] = await Promise.all([loadCatalogProducts(client, true), loadHarvestRecords(client, true)]);
+        if (!active || request !== sequence) return;
+        setSnapshot(products.error || records.error ? { products: [], harvests: [] } : filterPublicCatalog(products.data!, records.data!));
+      } catch { if (active && request === sequence) setSnapshot({ products: [], harvests: [] }); }
+    };
+    const onFocus = () => { if (document.visibilityState === 'visible') void refresh(); };
+    const onStorage = (event: StorageEvent) => { if (event.key === catalogChangeEvent) void refresh(); };
+    window.addEventListener(catalogChangeEvent, refresh);
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onFocus);
+    const timer = window.setInterval(onFocus, 15000);
+    const channel = client.channel('public-catalog-revision').on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'catalog_revision' }, () => void refresh()).subscribe((status) => { if (status === 'SUBSCRIBED') void refresh(); });
+    void refresh();
+    return () => {
+      active = false; window.clearInterval(timer); void client.removeChannel(channel);
+      window.removeEventListener(catalogChangeEvent, refresh); window.removeEventListener('storage', onStorage);
+      window.removeEventListener('focus', onFocus); document.removeEventListener('visibilitychange', onFocus);
+    };
   }, [isAdminPath]);
   useEffect(() => {
     if (isAdminPath) return;
+    if (/^(product|truffle):/.test(key) && !catalog[key.split(':')[1]]) {
+      if (catalogLoaded) {
+        document.head.querySelectorAll('[data-truffle-seo]').forEach((element) => element.remove());
+        document.title = '404 | Truffle Balkans';
+        const robots = document.createElement('meta'); robots.name = 'robots'; robots.content = 'noindex'; robots.dataset.truffleSeo = 'true'; document.head.append(robots);
+      }
+      return;
+    }
     localizedMeta(locale, key, search);
     if (key.startsWith('product:')) {
       const managed = catalog[key.split(':')[1]];
       if (managed) updateManagedProductMeta(locale, managed);
     }
-  }, [catalog, isAdminPath, locale, key, search]);
+  }, [catalog, catalogLoaded, isAdminPath, locale, key, search]);
 
   const publicCatalog = Object.fromEntries(Object.entries(catalog).map(([id, product]) => {
     const harvestStock = harvests.filter((record) => record.product_id === id).reduce((total, record) => total + record.weight_grams, 0);
@@ -185,7 +217,7 @@ export function Site({ initialGallery }: { initialGallery?: GalleryPhoto[] } = {
   }));
 
   if (isAdminPath) return <AdminPage />;
-  if (!current && !catalogLoaded && isCatalogProductPath(pathname)) return <main className="admin-state"><span className="admin-spinner" /><p>Зареждаме продукта…</p></main>;
+  if (!catalogLoaded && (isCatalogProductPath(pathname) || key.startsWith('truffle:'))) return <main className="admin-state"><span className="admin-spinner" /><p>{t.availability}</p></main>;
   if (!current && pathname !== '/') return <NotFound locale={locale} />;
   if (pathname === '/') return <RedirectHome />;
   if (catalogLoaded && (key.startsWith('product:') || key.startsWith('truffle:')) && !catalog[key.split(':')[1]]) return <NotFound locale={locale} />;
@@ -285,7 +317,7 @@ function Home({ locale, t }: { locale: Locale; t: Copy }) {
   const productIds = catalogProductIds(catalog, catalogLoaded);
   return <>
     <HomeIntro locale={locale} />
-    <section id="seasonal" className="section featured-section"><SectionHeading eyebrow={t.origin} title={t.featured} intro={t.featuredIntro} /><div className="product-grid">{productIds.map((id, index) => <ProductCard key={id} locale={locale} t={t} id={id} number={`0${index + 1}`} />)}</div><div className="section-link"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div></section>
+    <section id="seasonal" className="section featured-section"><SectionHeading eyebrow={t.origin} title={t.featured} intro={t.featuredIntro} /><HarvestStock locale={locale} t={t} embedded /><div className="product-grid">{productIds.map((id, index) => <ProductCard key={id} locale={locale} t={t} id={id} number={`0${index + 1}`} />)}</div><div className="section-link"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div></section>
     <HomeHarvestRibbon locale={locale} />
     <section className="species-band"><div className="species-copy"><p className="eyebrow">{t.nav.truffles}</p><h2>{t.species}</h2><p>{t.speciesText}</p><Link className="text-link text-link-light" to={pathFor(locale, 'truffles')}>{t.learn}<ArrowRight size={16} /></Link></div><figure className="species-image"><img src="/snimki/IMG_7286.jpeg" alt={t.species} loading="lazy" width="828" height="1097" /></figure></section>
     <HomeStory t={t} />
@@ -417,23 +449,26 @@ function BlogCards({ locale, t, skip }: { locale: Locale; t: Copy; skip?: string
   return <div className="blog-grid">{Object.entries(articles[locale]).filter(([id]) => id !== skip).slice(0, 2).map(([id, article]) => <article className="blog-card" key={id}><Link to={pathFor(locale, `article:${id}`)} className="blog-image"><img src={imageUrl(article.image, 800)} alt={article.title} loading="lazy" width="800" height="600" /></Link><p className="blog-date">{article.date} · Truffle Balkans</p><h2><Link to={pathFor(locale, `article:${id}`)}>{article.title}</Link></h2><p>{article.description}</p><Link className="text-link" to={pathFor(locale, `article:${id}`)}>{t.learn}<ArrowRight size={15} /></Link></article>)}</div>;
 }
 
+function HarvestStock({ locale, t, productId, embedded = false, onlyProduct = false }: { locale: Locale; t: Copy; productId?: string; embedded?: boolean; onlyProduct?: boolean }) {
+  const catalog = useContext(CatalogContext);
+  const records = useContext(HarvestContext).filter((record) => (!onlyProduct || !!productId) && (!productId || record.product_id === productId) && isPublicProduct(catalog[record.product_id]));
+  const labels = harvestStockCopy[locale];
+  if (!records.length) return null;
+  const content = <><div className="harvest-stock-heading"><div><p className="eyebrow">{t.availability}</p><h2 id={embedded ? 'home-harvest-stock-title' : 'harvest-stock-title'}>{labels.title}</h2></div><strong>{records.reduce((sum, record) => sum + record.weight_grams, 0)} g {labels.total} · {records.reduce((sum, record) => sum + record.quantity, 0)} {labels.pieces}</strong></div><div className="harvest-stock-grid">{records.map((record) => {
+    const product = productFor(record.product_id, locale, catalog)!;
+    const href = catalogProductPath(locale, record.product_id, catalog[record.product_id].slug_by_locale);
+    const details = harvestDetails(record, locale);
+    return <article className="harvest-stock-item" key={record.id} data-harvest-id={record.id}><Link className="harvest-stock-image" to={href}><img src={record.image_url ? safeCatalogImage(record.image_url, record.product_id, 700) : productImage(product, 700)} alt={`${product.title} · ${record.weight_grams} g${details ? ' · ' + details : ''}`} loading="lazy" width="700" height="800" /></Link><div className="harvest-stock-copy"><Link className="harvest-stock-product" to={href}>{product.title}</Link><time dateTime={record.found_on}>{new Date(`${record.found_on}T12:00:00`).toLocaleDateString(locale)}</time><div><span>{labels.weight}</span><strong>{record.weight_grams} g</strong></div><div><span>{labels.quantity}</span><strong>{record.quantity} {labels.pieces}</strong></div>{details && <p className="harvest-stock-details">{details}</p>}<Link className="text-link" to={pathFor(locale, 'wholesale')} state={{ productId: record.product_id }}>{t.inquire}<ArrowRight size={15} /></Link></div></article>;
+  })}</div></>;
+  return embedded ? <div className="home-harvest-stock" aria-labelledby="home-harvest-stock-title">{content}</div> : <section className="section harvest-stock" aria-labelledby="harvest-stock-title">{content}</section>;
+}
+
 function FaqPreview({ locale, t }: { locale: Locale; t: Copy }) {
   const { pathname } = useLocation();
   const catalog = useContext(CatalogContext);
   const page = keyForPath(pathname, Object.values(catalog))?.key;
   const productId = page?.startsWith('product:') || page?.startsWith('truffle:') ? page.split(':')[1] : null;
-  const records = useContext(HarvestContext).filter((record) => record.product_id === productId);
-  const product = productId ? productFor(productId, locale, catalog) : undefined;
-  const labels = {
-    bg: { title: 'Намерени трюфели', total: 'общо', pieces: 'бр.', weight: 'Тегло', quantity: 'Брой' },
-    en: { title: 'Recent finds', total: 'total', pieces: 'pcs', weight: 'Weight', quantity: 'Count' },
-    it: { title: 'Raccolta recente', total: 'totali', pieces: 'pz', weight: 'Peso', quantity: 'Quantità' },
-    fr: { title: 'Dernières récoltes', total: 'au total', pieces: 'pcs', weight: 'Poids', quantity: 'Quantité' },
-    de: { title: 'Aktuelle Funde', total: 'insgesamt', pieces: 'Stk.', weight: 'Gewicht', quantity: 'Anzahl' },
-  }[locale];
-  const totalWeight = records.reduce((sum, record) => sum + record.weight_grams, 0);
-  const totalQuantity = records.reduce((sum, record) => sum + record.quantity, 0);
-  return <>{records.length > 0 && product && <section className="section harvest-stock" aria-labelledby="harvest-stock-title"><div className="harvest-stock-heading"><div><p className="eyebrow">{t.availability}</p><h2 id="harvest-stock-title">{labels.title}</h2></div><strong>{totalWeight} g {labels.total} · {totalQuantity} {labels.pieces}</strong></div><div className="harvest-stock-grid">{records.map((record) => <article className="harvest-stock-item" key={record.id}>{record.image_url ? <img src={record.image_url} alt={`${product.title} · ${record.weight_grams} g`} loading="lazy" /> : <img src={productImage(product, 700)} alt={product.title} loading="lazy" />}<div className="harvest-stock-copy"><time dateTime={record.found_on}>{new Date(`${record.found_on}T12:00:00`).toLocaleDateString(locale)}</time><div><span>{labels.weight}</span><strong>{record.weight_grams} g</strong></div><div><span>{labels.quantity}</span><strong>{record.quantity} {labels.pieces}</strong></div>{record.notes && <p>{record.notes}</p>}</div></article>)}</div></section>}<section className="section faq-section"><div className="faq-heading"><p className="eyebrow">{t.faqTitle}</p><h2>{t.faqTitle}</h2><Link className="text-link" to={pathFor(locale, 'faq')}>{t.learn}<ArrowRight size={15} /></Link></div><div className="faq-list">{faqItems(locale).map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section></>;
+  return <><HarvestStock locale={locale} t={t} productId={productId ?? undefined} onlyProduct /><section className="section faq-section"><div className="faq-heading"><p className="eyebrow">{t.faqTitle}</p><h2>{t.faqTitle}</h2><Link className="text-link" to={pathFor(locale, 'faq')}>{t.learn}<ArrowRight size={15} /></Link></div><div className="faq-list">{faqItems(locale).map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section></>;
 }
 
 function FaqPage({ locale, t }: { locale: Locale; t: Copy }) {

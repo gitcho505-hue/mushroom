@@ -1,17 +1,18 @@
-import { allPageKeys, articles, copy, faqItems, imageUrl, languageMeta, locales, pathFor, seoFor, truffleFor, type Locale, type PageKey } from './content';
+import { allPageKeys, articles, catalogProductPath, copy, faqItems, imageUrl, languageMeta, locales, pathFor, seoFor, truffleFor, type Locale, type PageKey } from './content';
+import { safeCatalogImage, type CatalogProduct } from './catalog';
 import { heroHarvestPhotos } from './harvest-photos';
 
 const siteUrl = (import.meta.env.VITE_SITE_URL || 'https://mushroom-beta-dusky.vercel.app').replace(/\/$/, '');
 const heroImage = heroHarvestPhotos[0].src;
 const absoluteImage = (path: string) => new URL(path, `${siteUrl}/`).href;
 
-export function structuredData(locale: Locale, key: PageKey, galleryPage = 1) {
-  const canonical = `${siteUrl}${pathFor(locale, key)}${key === 'gallery' && galleryPage > 1 ? `?page=${galleryPage}` : ''}`;
+export function structuredData(locale: Locale, key: PageKey, galleryPage = 1, managed?: CatalogProduct) {
+  const canonical = `${siteUrl}${managed && key.startsWith('product:') ? catalogProductPath(locale, managed.id, managed.slug_by_locale) : pathFor(locale, key)}${key === 'gallery' && galleryPage > 1 ? `?page=${galleryPage}` : ''}`;
   const title = seoFor(locale, key).title;
-  const product = key.startsWith('product:') ? truffleFor(key, locale) : undefined;
+  const product = managed ? { title: managed.title_by_locale[locale] || managed.title_by_locale.en || managed.title_by_locale.bg, description: managed.description_by_locale[locale] || managed.description_by_locale.en || '', season: managed.season_by_locale[locale] || managed.season_by_locale.en || '', image: managed.image_url } : key.startsWith('product:') ? truffleFor(key, locale) : undefined;
   const articleId = key.startsWith('article:') ? key.split(':')[1] : undefined;
   const article = articleId ? articles[locale][articleId] : undefined;
-  const image = absoluteImage(product ? imageUrl(product.image) : article ? imageUrl(article.image) : heroImage);
+  const image = absoluteImage(managed ? safeCatalogImage(managed.image_url, managed.id) : product ? imageUrl(product.image) : article ? imageUrl(article.image) : heroImage);
   const data: Record<string, unknown>[] = [
     { '@context': 'https://schema.org', '@type': 'Organization', name: 'Truffle Balkans', legalName: 'Esi Truffle EOOD', url: siteUrl, logo: `${siteUrl}/snimki/logo2.png`, description: 'Wild truffles selected in the Balkans.' },
     { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Truffle Balkans', url: siteUrl, inLanguage: languageMeta[locale].hreflang },
@@ -23,17 +24,20 @@ export function structuredData(locale: Locale, key: PageKey, galleryPage = 1) {
   return data;
 }
 
-export function renderHead(locale: Locale, key: PageKey, galleryPage = 1) {
-  const { title, description } = seoFor(locale, key);
+export function renderHead(locale: Locale, key: PageKey, galleryPage = 1, managed?: CatalogProduct) {
+  const base = seoFor(locale, key);
+  const title = managed ? `${managed.title_by_locale[locale] || managed.title_by_locale.en || managed.title_by_locale.bg} | Truffle Balkans` : base.title;
+  const description = managed ? managed.description_by_locale[locale] || managed.description_by_locale.en || '' : base.description;
   const query = key === 'gallery' && Number.isSafeInteger(galleryPage) && galleryPage > 1 ? `?page=${galleryPage}` : '';
-  const canonical = `${siteUrl}${pathFor(locale, key)}${query}`;
+  const route = (other: Locale) => managed && key.startsWith('product:') ? catalogProductPath(other, managed.id, managed.slug_by_locale) : pathFor(other, key);
+  const canonical = `${siteUrl}${route(locale)}${query}`;
   const product = key.startsWith('product:') ? truffleFor(key, locale) : undefined;
   const article = key.startsWith('article:') ? articles[locale][key.split(':')[1]] : undefined;
-  const image = absoluteImage(product ? imageUrl(product.image) : article ? imageUrl(article.image) : heroImage);
-  const preloadImage = product ? imageUrl(product.image, 1500) : article ? imageUrl(article.image, 1800) : key === 'home' ? heroImage : undefined;
-  const alternates = locales.map((other) => `<link rel="alternate" hreflang="${languageMeta[other].hreflang}" href="${siteUrl}${pathFor(other, key)}${query}" />`).join('\n    ');
-  const xDefault = `<link rel="alternate" hreflang="x-default" href="${siteUrl}${pathFor('bg', key)}${query}" />`;
-  const jsonLd = JSON.stringify(structuredData(locale, key, query ? galleryPage : 1)).replace(/</g, '\\u003c');
+  const image = absoluteImage(managed ? safeCatalogImage(managed.image_url, managed.id) : product ? imageUrl(product.image) : article ? imageUrl(article.image) : heroImage);
+  const preloadImage = managed ? safeCatalogImage(managed.image_url, managed.id, 1500) : product ? imageUrl(product.image, 1500) : article ? imageUrl(article.image, 1800) : key === 'home' ? heroImage : undefined;
+  const alternates = locales.map((other) => `<link rel="alternate" hreflang="${languageMeta[other].hreflang}" href="${siteUrl}${route(other)}${query}" />`).join('\n    ');
+  const xDefault = `<link rel="alternate" hreflang="x-default" href="${siteUrl}${route('bg')}${query}" />`;
+  const jsonLd = JSON.stringify(structuredData(locale, key, query ? galleryPage : 1, managed)).replace(/</g, '\\u003c');
   return `
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(description)}" />
@@ -59,10 +63,14 @@ function escapeHtml(value: string) {
   return value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char] ?? char);
 }
 
-export function sitemapXml() {
-  const entries = allPageKeys().flatMap((key) => locales.map((locale) => {
-    const alternates = locales.map((alternate) => `<xhtml:link rel="alternate" hreflang="${languageMeta[alternate].hreflang}" href="${siteUrl}${pathFor(alternate, key)}" />`).join('');
-    return `<url><loc>${siteUrl}${pathFor(locale, key)}</loc>${alternates}<xhtml:link rel="alternate" hreflang="x-default" href="${siteUrl}${pathFor('bg', key)}" /></url>`;
+export function sitemapXml(products?: CatalogProduct[]) {
+  const keys = allPageKeys().filter((key) => !products || !/^(product|truffle):/.test(key) || products.some((product) => product.id === key.split(':')[1]));
+  if (products) for (const product of products) if (!keys.includes(`product:${product.id}`)) keys.push(`product:${product.id}`);
+  const entries = keys.flatMap((key) => locales.map((locale) => {
+    const managed = products?.find((product) => key === `product:${product.id}`);
+    const route = (other: Locale) => managed ? catalogProductPath(other, managed.id, managed.slug_by_locale) : pathFor(other, key);
+    const alternates = locales.map((alternate) => `<xhtml:link rel="alternate" hreflang="${languageMeta[alternate].hreflang}" href="${siteUrl}${escapeHtml(route(alternate))}" />`).join('');
+    return `<url><loc>${siteUrl}${escapeHtml(route(locale))}</loc>${alternates}<xhtml:link rel="alternate" hreflang="x-default" href="${siteUrl}${escapeHtml(route('bg'))}" /></url>`;
   })).join('');
   return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${entries}</urlset>`;
 }

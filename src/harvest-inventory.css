@@ -10,6 +10,15 @@
 	gap: 10px;
 }
 
+.admin-harvest-translation { grid-column: 1 / -1; margin: 0; }
+.home-harvest-stock { margin: 0 0 48px; }
+.harvest-stock-image { display: block; min-width: 0; height: 100%; background: #e5e9dc; }
+.harvest-stock-image img { width: 100%; height: 100%; min-height: 220px; object-fit: contain; }
+.harvest-stock-product { font-family: var(--display); font-size: 21px; line-height: 1.25; }
+.harvest-stock-copy { min-width: 0; }
+.harvest-stock-copy div { flex-wrap: wrap; }
+.harvest-stock-details { color: #42513e; overflow-wrap: anywhere; }
+
 .admin-sidebar-heading {
 	justify-content: space-between;
 	margin: 20px 4px 8px;
