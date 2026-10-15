@@ -11,6 +11,7 @@ import './harvest-lightbox.css';
 import './product-detail.css';
 import './home-intro.css';
 import './footer-campaign.css';
+import './brand.css';
 
 const app = <React.StrictMode><BrowserRouter><Site /></BrowserRouter></React.StrictMode>;
 const root = document.getElementById('root')!;

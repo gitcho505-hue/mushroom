@@ -2,14 +2,6 @@
   border-bottom: 1px solid #d7a75c;
 }
 
-.site-header-home .brand img {
-  width: 126px;
-  height: 56px;
-  filter: none;
-}
-
-.site-header-home .brand span { display: none; }
-
 .site-header-home .header-cta,
 .site-header-home .mobile-nav-tools .button {
   border: 1px solid #d7a75c;

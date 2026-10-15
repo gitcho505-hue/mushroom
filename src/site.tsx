@@ -223,9 +223,8 @@ function Layout({ locale, pageKey, t, children }: { locale: Locale; pageKey: Pag
   return <>
     <a className="skip-link" href="#main">{localeUi[locale].skip}</a>
     <header className={`site-header${pageKey === 'home' ? ' site-header-home' : ''}`}>
-      <Link className="brand" to={pathFor(locale, 'home')} aria-label="Truffle Balkans home">
-        <img src="/images/brand-logo.png" width="55" height="55" alt="" />
-        <span><strong>TRUFFLE</strong><small>B A L K A N S</small></span>
+      <Link className="brand" to={pathFor(locale, 'home')} aria-label={`Balkan Truffles — ${t.nav.home}`}>
+        <img src="/snimki/logo1.png" width="790" height="316" alt="Balkan Truffles" />
       </Link>
       <button ref={menuToggle} type="button" className="icon-button mobile-menu-toggle" aria-label={menuOpen ? localeUi[locale].menuClose : localeUi[locale].menuOpen} aria-controls="main-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
       <nav id="main-navigation" className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label={localeUi[locale].navigation}>
@@ -253,7 +252,7 @@ function LanguagePicker({ locale, pageKey, compact = false }: { locale: Locale; 
 function Footer({ locale, t }: { locale: Locale; t: Copy }) {
   return <footer className="site-footer">
     <div className="footer-main">
-      <div className="footer-brand"><Link className="brand brand-light" to={pathFor(locale, 'home')}><img src="/images/brand-logo.png" width="50" height="50" alt="" /><span><strong>TRUFFLE</strong><small>B A L K A N S</small></span></Link><p>{t.footerText}</p><a className="social-link" href="https://www.instagram.com/" aria-label="Instagram"><MoveUpRight size={16} /> Instagram</a></div>
+      <div className="footer-brand"><Link className="brand brand-light" to={pathFor(locale, 'home')}><img src="/snimki/logo1.png" width="790" height="316" alt="Balkan Truffles" /></Link><p>{t.footerText}</p><a className="social-link" href="https://www.instagram.com/" aria-label="Instagram"><MoveUpRight size={16} /> Instagram</a></div>
       <div className="footer-column"><h2>{t.navMore}</h2>{(['products', 'wholesale', 'truffles', 'about', 'blog'] as const).map((item) => <Link key={item} to={pathFor(locale, item)}>{t.nav[item]}</Link>)}</div>
       <div className="footer-column"><h2>{t.nav.contact}</h2><Link to={pathFor(locale, 'contact')}>{t.nav.contact}</Link><Link to={pathFor(locale, 'faq')}>{t.faqTitle}</Link><p>{t.contactNote}</p></div>
       <div className="footer-column"><h2>{localeUi[locale].legal}</h2><Link to={pathFor(locale, 'privacy')}>{localeUi[locale].privacy}</Link><Link to={pathFor(locale, 'terms')}>{localeUi[locale].terms}</Link><Link to={pathFor(locale, 'cookies')}>{localeUi[locale].cookies}</Link><div className="footer-languages">{locales.map((lang) => <Link key={lang} to={pathFor(lang, 'home')}>{lang.toUpperCase()}</Link>)}</div></div>
