@@ -252,7 +252,7 @@ function LanguagePicker({ locale, pageKey, compact = false }: { locale: Locale; 
 function Footer({ locale, t }: { locale: Locale; t: Copy }) {
   return <footer className="site-footer">
     <div className="footer-main">
-      <div className="footer-brand"><Link className="brand brand-light" to={pathFor(locale, 'home')}><img src="/snimki/logo1.png" width="790" height="316" alt="Balkan Truffles" /></Link><p>{t.footerText}</p><a className="social-link" href="https://www.instagram.com/" aria-label="Instagram"><MoveUpRight size={16} /> Instagram</a></div>
+      <div className="footer-brand"><Link className="brand brand-light" to={pathFor(locale, 'home')}><img src="/snimki/logo2.png" width="828" height="828" alt="Balkan Truffles" /></Link><p>{t.footerText}</p><a className="social-link" href="https://www.instagram.com/" aria-label="Instagram"><MoveUpRight size={16} /> Instagram</a></div>
       <div className="footer-column"><h2>{t.navMore}</h2>{(['products', 'wholesale', 'truffles', 'about', 'blog'] as const).map((item) => <Link key={item} to={pathFor(locale, item)}>{t.nav[item]}</Link>)}</div>
       <div className="footer-column"><h2>{t.nav.contact}</h2><Link to={pathFor(locale, 'contact')}>{t.nav.contact}</Link><Link to={pathFor(locale, 'faq')}>{t.faqTitle}</Link><p>{t.contactNote}</p></div>
       <div className="footer-column"><h2>{localeUi[locale].legal}</h2><Link to={pathFor(locale, 'privacy')}>{localeUi[locale].privacy}</Link><Link to={pathFor(locale, 'terms')}>{localeUi[locale].terms}</Link><Link to={pathFor(locale, 'cookies')}>{localeUi[locale].cookies}</Link><div className="footer-languages">{locales.map((lang) => <Link key={lang} to={pathFor(lang, 'home')}>{lang.toUpperCase()}</Link>)}</div></div>

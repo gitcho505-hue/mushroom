@@ -21,11 +21,13 @@
 }
 
 .site-footer .brand {
-  padding: 8px 12px;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 
 .site-footer .brand img {
-  width: 210px;
+  width: 128px;
 }
 
 .admin-mark {
