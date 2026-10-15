@@ -23,6 +23,7 @@ import { newsletterCopy } from './newsletter-copy';
 import { whatsappLink } from './whatsapp';
 import { SeasonalProductCard, selectionCopy } from './seasonal-selection';
 import { RelatedSection } from './related-section';
+import { HarvestLightbox } from './harvest-lightbox';
 import './harvest-gallery.css';
 import './harvest-inventory.css';
 
@@ -79,10 +80,6 @@ function catalogProductIds(catalog: Record<string, CatalogProduct>, _loaded: boo
 
 function productImage(product: { image: string }, width: number) {
   return safeCatalogImage(product.image, product.image, width);
-}
-
-function formatProductPrice(price: number, currency: string, locale: Locale) {
-  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(price);
 }
 
 function updateManagedProductMeta(locale: Locale, product: CatalogProduct) {
@@ -376,24 +373,6 @@ function SectionHeading({ eyebrow, title, intro }: { eyebrow: string; title: str
   return <div className="section-heading"><p className="eyebrow">{eyebrow}</p><h2>{title}</h2>{intro && <p className="section-intro">{intro}</p>}</div>;
 }
 
-function ProductCard({ locale, t, id, number }: { locale: Locale; t: Copy; id: string; number?: string }) {
-  const catalog = useContext(CatalogContext);
-  const catalogLoaded = useContext(CatalogLoadedContext);
-  const harvests = useContext(HarvestContext).filter((record) => record.product_id === id);
-  const product = productFor(id, locale, catalog)!;
-  const harvestWeight = harvests.reduce((total, record) => total + record.weight_grams, 0);
-  const harvestCount = harvests.reduce((total, record) => total + record.quantity, 0);
-  const piecesLabel = { bg: 'бр.', en: 'pcs', it: 'pz', fr: 'pcs', de: 'Stk.' }[locale];
-  const offer = product.price_per_kg != null ? `${formatProductPrice(product.price_per_kg, product.currency ?? 'EUR', locale)} / kg` : product.price != null ? formatProductPrice(product.price, product.currency ?? 'EUR', locale) : t.inquire;
-  const productHref = catalogProductPath(locale, id, catalog[id]?.slug_by_locale);
-  return <article className="product-card">
-    <Link to={productHref} className="product-image"><img src={productImage(product, 820)} alt={`${product.title} — ${product.note}`} loading="lazy" width="820" height="940" /><span className="product-number">{number ?? '01'} / {String(catalogProductIds(catalog, catalogLoaded).length).padStart(2, '0')}</span><span className="product-arrow"><ArrowUpRight size={19} /></span></Link>
-    <div className="product-meta"><span>{product.season}</span><span>{product.note}</span></div>
-    <div className="catalog-offer-meta"><span className={product.available === false ? 'is-unavailable' : ''}>{product.available === false ? t.outOfStock : harvests.length ? `${harvestWeight} g · ${harvestCount} ${piecesLabel}` : product.available === true ? t.inStock : t.availability}</span>{product.weight_grams != null && <span>{product.weight_grams} g</span>}<strong>{offer}</strong></div>
-    <h3><Link to={productHref}>{product.title}</Link></h3><p>{product.description}</p><Link className="text-link product-link" to={pathFor(locale, 'wholesale')} state={{ productId: id }}>{t.inquire}<ArrowRight size={15} /></Link>
-  </article>;
-}
-
 function PageIntro({ eyebrow, title, text, id }: { eyebrow: string; title: string; text: string; id?: string }) {
   return <section className="page-intro" id={id}><p className="eyebrow"><span />{eyebrow}</p><h1>{title}</h1><p>{text}</p></section>;
 }
@@ -412,11 +391,18 @@ function ProductIndex({ locale, t }: { locale: Locale; t: Copy }) {
   const catalogLoaded = useContext(CatalogLoadedContext);
   const ids = catalogProductIds(catalog, catalogLoaded);
   const gallery = harvestGalleryCopy[locale];
+  const photos = ids.map((id) => {
+    const product = productFor(id, locale, catalog)!;
+    return { src: productImage(product, 1200), alt: product.title, title: product.title, width: 820, height: 1025 };
+  });
   return <>
     <PageIntro eyebrow={t.origin} title={t.productsTitle} text={t.productsIntro} />
-    <section className="section catalog-section">
+    <section className="section catalog-section catalog-selection">
       <div className="catalog-toolbar"><span>{t.availability}</span><span>{String(ids.length).padStart(2, '0')} — {t.allProducts}</span></div>
-      <div className="product-grid product-grid-four">{ids.map((id, index) => <ProductCard key={id} locale={locale} t={t} id={id} number={String(index + 1).padStart(2, '0')} />)}</div>
+      <div className="selection-grid catalog-grid">{ids.map((id, index) => {
+        const product = productFor(id, locale, catalog)!;
+        return <SeasonalProductCard key={id} locale={locale} t={t} id={id} product={product} href={catalogProductPath(locale, id, catalog[id]?.slug_by_locale)} image={productImage(product, 820)} variant="catalog" photo={<HarvestLightbox key={photos.map((photo) => photo.src).join('|')} locale={locale} items={photos} visibleRange={{ start: index, end: index + 1 }} title={t.nav.products} variant="catalog" />} />;
+      })}</div>
       <div className="availability-note"><Sparkles size={19} /><p><strong>{t.freshness}</strong><br />{t.contactNote}</p><Link className="text-link" to={pathFor(locale, 'wholesale')}>{t.cta}<ArrowRight size={15} /></Link></div>
     </section>
     <section className="section harvest-gallery" aria-labelledby="harvest-gallery-title">

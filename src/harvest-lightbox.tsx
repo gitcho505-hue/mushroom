@@ -5,7 +5,7 @@ import { localeUi, type Locale } from './i18n';
 
 export type LightboxPhoto = { src: string; alt: string; title: string; width: number; height: number };
 
-export function HarvestLightbox({ locale, photos: sourcePhotos = homeGalleryPhotos, items, visibleRange, title, imageLabel, variant = 'harvest' }: { locale: Locale; photos?: readonly string[]; items?: readonly LightboxPhoto[]; visibleRange?: { start: number; end: number }; title?: string; imageLabel?: string; variant?: 'harvest' | 'product' }) {
+export function HarvestLightbox({ locale, photos: sourcePhotos = homeGalleryPhotos, items, visibleRange, title, imageLabel, variant = 'harvest' }: { locale: Locale; photos?: readonly string[]; items?: readonly LightboxPhoto[]; visibleRange?: { start: number; end: number }; title?: string; imageLabel?: string; variant?: 'harvest' | 'product' | 'catalog' }) {
   const photos = items?.map((photo) => photo.src) ?? sourcePhotos;
   const gallery = { ...harvestGalleryCopy[locale], ...(title ? { title } : {}), ...(imageLabel ? { imageLabel } : {}) };
   const labels = galleryViewerCopy[locale];
@@ -66,16 +66,16 @@ export function HarvestLightbox({ locale, photos: sourcePhotos = homeGalleryPhot
   const visiblePhotos = photos.map((src, index) => ({ src, index })).slice(visibleRange?.start ?? 0, visibleRange?.end ?? photos.length);
   return <>
     {variant === 'product' && <button type="button" className="product-gallery-main" aria-label={labels.open + ': ' + gallery.imageLabel} aria-haspopup="dialog" aria-controls={viewerId} onClick={(event) => openPhoto(preview, event.currentTarget)}><img src={photos[preview]} alt={gallery.imageLabel} loading="eager" width="828" height="1100" /><span className="harvest-photo-zoom" aria-hidden="true"><Maximize2 size={20} /></span></button>}
-    <p className="harvest-gallery-hint" id={hintId}>{photos.length > 1 ? labels.hint : labels.open}</p>
-    {(variant !== 'product' || photos.length > 1) && <div className={variant === 'product' ? 'product-gallery-thumbs' : 'home-harvest-ribbon__grid'}>{visiblePhotos.map(({ src, index }) => <button
+    <p className={variant === 'catalog' ? 'sr-only' : 'harvest-gallery-hint'} id={hintId}>{photos.length > 1 ? labels.hint : labels.open}</p>
+    {(variant !== 'product' || photos.length > 1) && <div className={variant === 'product' ? 'product-gallery-thumbs' : variant === 'catalog' ? 'catalog-card__gallery' : 'home-harvest-ribbon__grid'}>{visiblePhotos.map(({ src, index }) => <button
       type="button"
-      className={variant === 'product' ? 'product-gallery-thumb' : 'home-harvest-ribbon__tile'}
-      key={src}
+      className={variant === 'product' ? 'product-gallery-thumb' : variant === 'catalog' ? 'catalog-card__photo' : 'home-harvest-ribbon__tile'}
+      key={`${index}:${src}`}
       aria-label={`${labels.open}: ${description(index)}`}
       aria-haspopup="dialog"
       aria-controls={viewerId}
       onClick={(event) => openPhoto(index, event.currentTarget)}
-    ><img src={src} alt={description(index)} title={caption(index)} loading="lazy" width={items?.[index]?.width ?? 828} height={items?.[index]?.height ?? 1100} /><span className="harvest-photo-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span><span className="harvest-photo-zoom" aria-hidden="true"><Maximize2 size={18} /></span></button>)}</div>}
+    ><img src={src} alt={description(index)} title={caption(index)} loading="lazy" width={items?.[index]?.width ?? 828} height={items?.[index]?.height ?? 1100} />{variant !== 'catalog' && <span className="harvest-photo-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>}<span className="harvest-photo-zoom" aria-hidden="true"><Maximize2 size={18} /></span></button>)}</div>}
     <dialog
       ref={dialog}
       className="harvest-lightbox"

@@ -1,4 +1,5 @@
 import { ArrowRight, ChevronDown } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { pathFor, type Copy, type Locale } from './content';
 import type { ProductDetailData } from './product-detail';
@@ -18,8 +19,8 @@ const species: Record<string, string> = {
   'white-truffle': 'Tuber magnatum',
 };
 
-export function SeasonalProductCard({ locale, t, id, product, href, image }: {
-  locale: Locale; t: Copy; id: string; product: ProductDetailData; href: string; image: string;
+export function SeasonalProductCard({ locale, t, id, product, href, image, variant = 'home', photo }: {
+  locale: Locale; t: Copy; id: string; product: ProductDetailData; href: string; image: string; variant?: 'home' | 'catalog'; photo?: ReactNode;
 }) {
   const labels = selectionCopy[locale];
   const price = (amount: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: product.currency ?? 'EUR' }).format(amount);
@@ -35,15 +36,20 @@ export function SeasonalProductCard({ locale, t, id, product, href, image }: {
     [labels.packPrice, product.price != null ? price(product.price) : null],
   ].filter(([, value]) => value);
 
-  return <article className="selection-card" data-product-id={id}>
-    <Link className="selection-card__photo" to={href} aria-label={product.title}>
+  return <article className={`selection-card${variant === 'catalog' ? ' selection-card--catalog' : ''}`} data-product-id={id}>
+    {photo ?? <Link className="selection-card__photo" to={href} aria-label={product.title}>
       <img src={image} alt={product.title} loading="lazy" width="820" height="1025" />
       <span aria-hidden="true"><ArrowRight size={20} /></span>
-    </Link>
+    </Link>}
     <div className="selection-card__content">
       <h3><Link to={href}>{product.title}</Link></h3>
       {species[id] && <p className="selection-card__species" lang="la">{species[id]}</p>}
-      <p className="selection-card__offer">{labels.offer}</p>
+      {variant === 'catalog' ? <>
+        <p className="catalog-card__season">{product.season || labels.offer}</p>
+        <div className="catalog-card__price">
+          {product.price_per_kg != null ? <><span>{labels.kiloPrice}</span><strong>{price(product.price_per_kg)}<small> / kg</small></strong></> : product.price != null ? <><span>{labels.packPrice}</span><strong>{price(product.price)}</strong></> : <strong>{labels.onRequest}</strong>}
+        </div>
+      </> : <p className="selection-card__offer">{labels.offer}</p>}
       <details className="selection-card__details">
         <summary>
           <span className="selection-card__show">{labels.details}</span>
