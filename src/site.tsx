@@ -328,10 +328,8 @@ function Home({ locale, t }: { locale: Locale; t: Copy }) {
       <div className="section-link"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div>
     </section>
     <HomeHarvestRibbon locale={locale} />
-    <section className="species-band"><div className="species-copy"><p className="eyebrow">{t.nav.truffles}</p><h2>{t.species}</h2><p>{t.speciesText}</p><Link className="text-link text-link-light" to={pathFor(locale, 'truffles')}>{t.learn}<ArrowRight size={16} /></Link></div><figure className="species-image"><img src="/snimki/IMG_7286.jpeg" alt={t.species} loading="lazy" width="828" height="1097" /></figure></section>
     <HomeStory t={t} />
     <KnowledgePreview locale={locale} t={t} />
-    <FaqPreview locale={locale} t={t} />
   </>;
 }
 
@@ -395,8 +393,8 @@ function ProductCard({ locale, t, id, number }: { locale: Locale; t: Copy; id: s
   </article>;
 }
 
-function PageIntro({ eyebrow, title, text }: { eyebrow: string; title: string; text: string }) {
-  return <section className="page-intro"><p className="eyebrow"><span />{eyebrow}</p><h1>{title}</h1><p>{text}</p></section>;
+function PageIntro({ eyebrow, title, text, id }: { eyebrow: string; title: string; text: string; id?: string }) {
+  return <section className="page-intro" id={id}><p className="eyebrow"><span />{eyebrow}</p><h1>{title}</h1><p>{text}</p></section>;
 }
 
 function WholesalePage({ locale, t }: { locale: Locale; t: Copy }) {
@@ -431,7 +429,11 @@ function TruffleIndex({ locale, t }: { locale: Locale; t: Copy }) {
   const catalog = useContext(CatalogContext);
   const catalogLoaded = useContext(CatalogLoadedContext);
   const ids = catalogProductIds(catalog, catalogLoaded);
-  return <><PageIntro eyebrow={t.origin} title={t.trufflesTitle} text={t.speciesText} /><section className="section catalog-section"><div className="truffle-list">{ids.map((id, index) => { const item = productFor(id, locale, catalog)!; const target = truffleFor(`truffle:${id}`, locale) ? pathFor(locale, `truffle:${id}`) : catalogProductPath(locale, id, catalog[id]?.slug_by_locale); return <Link to={target} className="truffle-list-item" key={id}><span className="list-count">{String(index + 1).padStart(2, '0')}</span><img src={productImage(item, 600)} alt={item.title} loading="lazy" width="600" height="400" /><div><span className="eyebrow">{item.season}</span><h2>{item.title}</h2><p>{item.description}</p></div><ArrowUpRight className="list-arrow" /></Link>; })}</div></section></>;
+  return <>
+    <section className="species-band"><div className="species-copy"><p className="eyebrow">{t.nav.truffles}</p><h2>{t.species}</h2><p>{t.speciesText}</p><a className="text-link text-link-light" href="#truffle-introduction">{t.learn}<ArrowRight size={16} /></a></div><figure className="species-image"><img src="/snimki/IMG_7286.jpeg" alt={t.species} loading="eager" width="828" height="1097" /></figure></section>
+    <PageIntro id="truffle-introduction" eyebrow={t.origin} title={t.trufflesTitle} text={t.speciesText} />
+    <section className="section catalog-section"><div className="truffle-list">{ids.map((id, index) => { const item = productFor(id, locale, catalog)!; const target = truffleFor(`truffle:${id}`, locale) ? pathFor(locale, `truffle:${id}`) : catalogProductPath(locale, id, catalog[id]?.slug_by_locale); return <Link to={target} className="truffle-list-item" key={id}><span className="list-count">{String(index + 1).padStart(2, '0')}</span><img src={productImage(item, 600)} alt={item.title} loading="lazy" width="600" height="400" /><div><span className="eyebrow">{item.season}</span><h2>{item.title}</h2><p>{item.description}</p></div><ArrowUpRight className="list-arrow" /></Link>; })}</div></section>
+  </>;
 }
 
 function DetailPage({ locale, pageKey, t }: { locale: Locale; pageKey: PageKey; t: Copy }) {
