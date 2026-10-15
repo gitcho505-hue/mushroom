@@ -21,6 +21,7 @@ import { homeIntroCopy } from './home-intro-copy';
 import { FooterCampaign } from './footer-campaign';
 import { newsletterCopy } from './newsletter-copy';
 import { whatsappLink } from './whatsapp';
+import { SeasonalProductCard, selectionCopy } from './seasonal-selection';
 import './harvest-gallery.css';
 import './harvest-inventory.css';
 
@@ -315,9 +316,17 @@ function Home({ locale, t }: { locale: Locale; t: Copy }) {
   const catalog = useContext(CatalogContext);
   const catalogLoaded = useContext(CatalogLoadedContext);
   const productIds = catalogProductIds(catalog, catalogLoaded);
+  const selection = selectionCopy[locale];
   return <>
     <HomeIntro locale={locale} />
-    <section id="seasonal" className="section featured-section"><SectionHeading eyebrow={t.origin} title={t.featured} intro={t.featuredIntro} /><div className="product-grid">{productIds.map((id, index) => <ProductCard key={id} locale={locale} t={t} id={id} number={`0${index + 1}`} />)}</div><div className="section-link"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div></section>
+    <section id="seasonal" className="section featured-section seasonal-selection">
+      <SectionHeading eyebrow={selection.eyebrow} title={selection.title} intro={selection.intro} />
+      <div className="selection-grid">{productIds.map((id) => {
+        const product = productFor(id, locale, catalog)!;
+        return <SeasonalProductCard key={id} locale={locale} t={t} id={id} product={product} href={catalogProductPath(locale, id, catalog[id]?.slug_by_locale)} image={productImage(product, 820)} />;
+      })}</div>
+      <div className="section-link"><Link className="text-link" to={pathFor(locale, 'products')}>{t.viewAll}<ArrowRight size={16} /></Link></div>
+    </section>
     <HomeHarvestRibbon locale={locale} />
     <section className="species-band"><div className="species-copy"><p className="eyebrow">{t.nav.truffles}</p><h2>{t.species}</h2><p>{t.speciesText}</p><Link className="text-link text-link-light" to={pathFor(locale, 'truffles')}>{t.learn}<ArrowRight size={16} /></Link></div><figure className="species-image"><img src="/snimki/IMG_7286.jpeg" alt={t.species} loading="lazy" width="828" height="1097" /></figure></section>
     <HomeStory t={t} />

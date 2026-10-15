@@ -23,6 +23,36 @@ test('public filtering rejects all visibility flags and children of hidden paren
   assert.equal(server.filterPublicCatalog([], records).harvests.length, 0);
 });
 
+test('home cards expose current CMS information in closed disclosures for each language', () => {
+  const localized = (field) => Object.fromEntries(server.locales.map((locale) => [locale, `${field}-${locale}`]));
+  const managed = {
+    ...products[0],
+    title_by_locale: localized('managed-title'), description_by_locale: localized('managed-description'),
+    body_by_locale: localized('managed-body'), season_by_locale: localized('managed-season'), note_by_locale: localized('managed-grade'),
+    origin: 'Managed origin', image_url: '/images/managed-photo.webp',
+    weight_grams: 75, stock_grams: 0, price: 25, price_per_kg: 300, currency: 'EUR',
+  };
+  for (const locale of server.locales) {
+    const html = server.render(server.pathFor(locale, 'home'), photos, { products: [managed, { ...products[1], is_hidden: true }], harvests: records });
+    assert.equal((html.match(/class="selection-card"/g) || []).length, 1);
+    assert.ok(!html.includes(`data-product-id="${products[1].id}"`));
+    assert.ok(!html.includes('data-harvest-id='));
+    assert.ok(html.includes('/images/managed-photo.webp'));
+    const disclosure = html.match(/<details class="selection-card__details">(.*?)<\/details>/s)?.[1];
+    assert.ok(disclosure, 'details must start closed');
+    for (const field of ['description', 'body', 'season', 'grade']) assert.ok(disclosure.includes(`managed-${field}-${locale}`));
+    for (const value of ['Managed origin', '75 g', '0 g', 25, 300]) {
+      const text = typeof value === 'number' ? new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(value) : value;
+      assert.ok(disclosure.includes(text), `missing ${text} in ${locale}`);
+    }
+    assert.ok(disclosure.includes(`href="${server.pathFor(locale, `product:${managed.id}`)}"`));
+  }
+  const changed = { ...managed, body_by_locale: localized('updated-body') };
+  const html = server.render('/bg/', photos, { products: [changed], harvests: [] });
+  assert.ok(html.includes('updated-body-bg'));
+  assert.ok(!html.includes('managed-body-bg'));
+});
+
 test('preset details translate automatically for all supported languages', () => {
   const expected = { bg: 'Първо качество · Едри · Почистени', en: 'First grade · Large · Cleaned', it: 'Prima qualità · Grandi · Puliti', fr: 'Premier choix · Grandes · Nettoyées', de: 'Erste Qualität · Groß · Gereinigt' };
   for (const [locale, text] of Object.entries(expected)) assert.equal(server.harvestDetails(record, locale), text);

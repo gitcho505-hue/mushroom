@@ -13,6 +13,7 @@ import './home-intro.css';
 import './footer-campaign.css';
 import './brand.css';
 import './gallery.css';
+import './seasonal-selection.css';
 
 const app = <React.StrictMode><BrowserRouter><Site /></BrowserRouter></React.StrictMode>;
 const root = document.getElementById('root')!;
